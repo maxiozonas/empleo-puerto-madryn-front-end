@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import type { JobPosting } from "@/lib/types"
+import { JobPosting } from "@/lib/types"
 import { Heart, MapPin, Calendar } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
