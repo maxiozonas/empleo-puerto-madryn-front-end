@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { signOut } from "next-auth/react";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -38,7 +39,7 @@ export const authOptions: NextAuthOptions = {
 
           const data = await response.json();
           account.backendToken = data.token;
-          account.userId = data.id; // Capturamos el ID del backend
+          account.userId = data.id;
           return true;
         } catch (error) {
           console.error("Error contacting backend:", error);
@@ -55,12 +56,34 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (token.backendToken) {
         session.backendToken = token.backendToken as string;
         session.user.id = token.id as string;
+        setInterval(async () => {
+          try {
+            const response = await fetch("http://localhost:8080/api/auth/validate-token", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token.backendToken}`,
+              },
+            });
+
+            if (!response.ok) {
+              console.log("Token ha expirado, cerrando sesión...");
+              await signOut({ redirect: true, callbackUrl: "/login" });
+            }
+          } catch (error) {
+            console.error("Error validating token:", error);
+            await signOut({ redirect: true, callbackUrl: "/login" });
+          }
+        }, 5 * 60 * 1000); // 5 minutos
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
   },
 };
 

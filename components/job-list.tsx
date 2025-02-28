@@ -4,9 +4,14 @@ import { useEffect, useState } from "react";
 import { JobCard } from "@/components/job-card";
 import { JobPosting } from "@/lib/types";
 
-export function JobList() {
+interface JobListProps {
+  searchTerm: string;
+  selectedCategory: string;
+}
+
+export function JobList({ searchTerm, selectedCategory }: JobListProps) {
   const [jobs, setJobs] = useState<JobPosting[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,46 +19,69 @@ export function JobList() {
       try {
         const response = await fetch("http://localhost:8080/api/ofertas", {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
         });
         if (!response.ok) {
-          const errorText = await response.text(); 
-          throw new Error(`Error: ${response.status} - ${response.statusText} - ${errorText}`);
+          throw new Error(await response.text());
         }
         const data = await response.json();
-        if (Array.isArray(data)) {
-          setJobs(data);
-        } else {
+        if (!Array.isArray(data)) {
           throw new Error("La respuesta del servidor no es un array válido");
         }
-      } catch (error) {
-        console.error("Error fetching jobs:", error);
-        setError(error instanceof Error ? error.message : "Error desconocido");
-      } finally {
-        setLoading(false);
-      }
+        setJobs(data);
+        setFilteredJobs(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error desconocido al cargar las ofertas");
+      } 
     };
 
     fetchJobs();
   }, []);
 
-  if (loading) {
-    return <div className="text-center">Cargando ofertas de empleo...</div>;
-  }
+  useEffect(() => {
+    const applyFilters = () => {
+      let result = [...jobs];
+
+      if (searchTerm.trim()) {
+        const term = searchTerm.toLowerCase().trim();
+        result = result.filter(
+          (job) =>
+            job.titulo.toLowerCase().includes(term) ||
+            job.descripcion.toLowerCase().includes(term) ||
+            job.empresaConsultora.toLowerCase().includes(term)
+        );
+      } else {
+        result = [...jobs];
+      }
+
+      // Filtro por categoría
+      if (selectedCategory !== "all") {
+        console.log("Filtrando por categoría:", selectedCategory); 
+        result = result.filter((job) => {
+          const matches = job.categoria.id === selectedCategory;
+          console.log(`Comparando ${job.categoria.id} con ${selectedCategory}: ${matches}`); 
+          return matches;
+        });
+      }
+
+      setFilteredJobs(result);
+    };
+
+    applyFilters();
+  }, [searchTerm, selectedCategory, jobs]);
+
 
   if (error) {
-    return <div className="text-center text-red-500">Error: {error}</div>;
+    return <div className="text-center text-red-500 py-8">{error}</div>;
   }
 
-  if (jobs.length === 0) {
-    return <div className="text-center">No hay ofertas disponibles.</div>;
+  if (filteredJobs.length === 0) {
+    return <div className="text-center py-8">No hay ofertas disponibles con los filtros seleccionados.</div>;
   }
 
   return (
-    <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {jobs.map((job) => (
+    <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      {filteredJobs.map((job) => (
         <JobCard key={job.id} job={job} />
       ))}
     </div>

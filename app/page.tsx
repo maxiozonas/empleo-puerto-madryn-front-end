@@ -1,14 +1,31 @@
+"use client";
+
+import { useState } from "react";
 import { JobList } from "@/components/job-list";
+import { SearchFilters } from "@/components/search-filters";
 
+export default function HomePage() {
+  const [filters, setFilters] = useState({
+    searchTerm: "",
+    selectedCategory: "all",
+  });
 
-export default function HomePage () {
+  const handleFilterChange = (newFilters: { searchTerm: string; selectedCategory: string }) => {
+    setFilters(newFilters);
+  };
+
   return (
-    <div className="space-y-8">
-      <section className="text-center space-y-4 max-w-3xl mx-auto px-4">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Encuenta tu proximo empleo en Puerto Madryn</h1>
-        <p className="text-muted-foreground text-base sm:text-lg">Explora las ultimas ofertas laborales de toda la ciudad</p>
+    <div className="space-y-8 px-4">
+      <section className="text-center space-y-4 max-w-3xl mx-auto">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+          Encuentra tu próximo empleo en Puerto Madryn
+        </h1>
+        <p className="text-muted-foreground text-base sm:text-lg">
+          Explora las últimas ofertas laborales de toda la ciudad
+        </p>
       </section>
-      <JobList />
+      <SearchFilters onFilterChange={handleFilterChange} />
+      <JobList searchTerm={filters.searchTerm} selectedCategory={filters.selectedCategory} />
     </div>
-  )
+  );
 }

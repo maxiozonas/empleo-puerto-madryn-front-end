@@ -2,155 +2,115 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCategorias } from "@/hooks/useCategories";
+import { createJobOffer } from "@/lib/api";
+import { useState } from "react";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
 
-type FormData = {
-  titulo: string;
-  descripcion: string;
-  empresaConsultora: string;
-  categoria: string;
-  formaPostulacion: string;
-  emailContacto: string;
-  linkPostulacion: string;
-  fechaCierre: string;
-};
+const formSchema = z.object({
+  titulo: z.string().min(1, "El título es requerido").max(150, "Máximo 150 caracteres"),
+  descripcion: z.string().min(1, "La descripción es requerida"),
+  empresaConsultora: z.string().min(1, "La empresa es requerida").max(150, "Máximo 150 caracteres"),
+  categoria: z.string().min(1, "La categoría es requerida"),
+  formaPostulacion: z.enum(["MAIL", "LINK"], { required_error: "La forma de postulación es requerida" }),
+  emailContacto: z.string().email("Formato de email inválido").optional().nullable(),
+  linkPostulacion: z.string().url("Debe ser una URL válida").optional().nullable(),
+  fechaCierre: z.string().optional().nullable(),
+}).refine(
+  (data) => {
+    if (data.formaPostulacion === "MAIL" && (!data.emailContacto || data.emailContacto.trim() === "")) {
+      return false;
+    }
+    if (data.formaPostulacion === "LINK" && (!data.linkPostulacion || data.linkPostulacion.trim() === "")) {
+      return false;
+    }
+    if (data.fechaCierre && new Date(data.fechaCierre) < new Date()) {
+      return false;
+    }
+    return true;
+  },
+  {
+    message: "Debe proporcionar email o link según la forma de postulación, y la fecha de cierre no puede ser pasada",
+    path: ["formaPostulacion"],
+  }
+);
+
+type FormData = z.infer<typeof formSchema>;
 
 export default function PublicarEmpleoPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
-  const [categorias, setCategorias] = useState<{ id: string; nombre: string }[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { categorias, error: categoriasError } = useCategorias();
+  const [formError, setFormError] = useState<string | null>(null);
+
+  useAuthCheck();
 
   const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       titulo: "",
       descripcion: "",
       empresaConsultora: "",
       categoria: "",
       formaPostulacion: "MAIL",
-      emailContacto: "",
-      linkPostulacion: "",
-      fechaCierre: "",
+      emailContacto: null,
+      linkPostulacion: null,
+      fechaCierre: null,
     },
   });
 
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-      return;
-    }
 
-    console.log("Session data:", session);
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
 
-    const fetchCategorias = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/categorias", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} - ${await response.text()}`);
-        }
-        const data = await response.json();
-        setCategorias(data);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-        setError("No se pudieron cargar las categorías");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategorias();
-  }, [status, router, session]);
-
-  if (status === "loading" || loading) {
-    return <div>Cargando...</div>;
+  if (categoriasError) {
+    return <div className="text-center text-red-500">{categoriasError}</div>;
   }
 
   const onSubmit = async (data: FormData) => {
-    setError(null);
-    if (!session || !session.user.id) {
-      setError("Usuario no autenticado o ID no disponible");
-      return;
-    }
-
-    
-    const fechaCierreISO = data.fechaCierre ? new Date(`${data.fechaCierre}T23:59:59`).toISOString() : null;
-
-    const requestBody = {
-      titulo: data.titulo,
-      descripcion: data.descripcion,
-      usuario: { id: session.user.id },
-      empresaConsultora: data.empresaConsultora,
-      fechaPublicacion: new Date().toISOString(),
-      fechaCierre: fechaCierreISO, 
-      formaPostulacion: data.formaPostulacion,
-      emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
-      linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
-      categoria: { id: data.categoria },
-    };
-    console.log("onSubmit triggered with data:", JSON.stringify(requestBody, null, 2));
+    setFormError(null);
     try {
-      const response = await fetch("http://localhost:8080/api/ofertas", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session.backendToken}`,
+      await createJobOffer(
+        {
+          titulo: data.titulo,
+          descripcion: data.descripcion,
+          usuarioId: session?.user.id ?? "",
+          empresaConsultora: data.empresaConsultora,
+          fechaCierre: data.fechaCierre ?? null,
+          formaPostulacion: data.formaPostulacion,
+          emailContacto: data.emailContacto ?? null,
+          linkPostulacion: data.linkPostulacion ?? null,
+          categoriaId: data.categoria,
         },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Backend error:", errorText);
-        throw new Error(`Error: ${response.status} - ${errorText}`);
-      }
-
-      console.log("Submission successful, redirecting to /");
+        session?.backendToken ?? ""
+      );
       router.push("/");
     } catch (err) {
-      console.error("Error submitting job:", err);
-      setError(err instanceof Error ? err.message : "Error desconocido");
+      setFormError(err instanceof Error ? err.message : "Error desconocido");
     }
   };
 
   return (
     <div className="mx-auto max-w-2xl py-8">
-      <div className="mb-8 space-y-4">
+      <header className="mb-8 space-y-4">
         <h1 className="text-3xl font-bold">Publicar empleo</h1>
         <p className="text-muted-foreground">
           Complete el formulario para publicar una nueva oferta de empleo
         </p>
-      </div>
+      </header>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="titulo"
@@ -164,7 +124,6 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="descripcion"
@@ -174,7 +133,7 @@ export default function PublicarEmpleoPage() {
                 <FormControl>
                   <Textarea
                     placeholder="Describe los requisitos y responsabilidades del puesto"
-                    className="min-h-[200px]"
+                    className="min-h-[100px]"
                     {...field}
                   />
                 </FormControl>
@@ -182,7 +141,6 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="empresaConsultora"
@@ -196,14 +154,13 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="categoria"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Categoría</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona una categoría" />
@@ -221,7 +178,6 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="formaPostulacion"
@@ -231,7 +187,7 @@ export default function PublicarEmpleoPage() {
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    value={field.value}
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
@@ -252,7 +208,6 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-
           {form.watch("formaPostulacion") === "MAIL" && (
             <FormField
               control={form.control}
@@ -261,14 +216,13 @@ export default function PublicarEmpleoPage() {
                 <FormItem>
                   <FormLabel>Email de contacto</FormLabel>
                   <FormControl>
-                    <Input placeholder="contacto@empresa.com" {...field} />
+                    <Input placeholder="contacto@empresa.com" {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           )}
-
           {form.watch("formaPostulacion") === "LINK" && (
             <FormField
               control={form.control}
@@ -277,14 +231,13 @@ export default function PublicarEmpleoPage() {
                 <FormItem>
                   <FormLabel>Link de postulación</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://..." {...field} />
+                    <Input placeholder="https://..." {...field} value={field.value ?? ""} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           )}
-
           <FormField
             control={form.control}
             name="fechaCierre"
@@ -292,19 +245,14 @@ export default function PublicarEmpleoPage() {
               <FormItem>
                 <FormLabel>Fecha de cierre (opcional)</FormLabel>
                 <FormControl>
-                  <Input type="date" {...field} />
+                  <Input type="date" {...field} value={field.value ?? ""} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
-          {error && <p className="text-red-500 text-center">{error}</p>}
-
-          <Button
-            type="submit"
-            className="w-full bg-[#00BA88] hover:bg-[#00A67A]"
-          >
+          {formError && <p className="text-red-500 text-center">{formError}</p>}
+          <Button type="submit" className="w-full">
             Publicar empleo
           </Button>
         </form>
