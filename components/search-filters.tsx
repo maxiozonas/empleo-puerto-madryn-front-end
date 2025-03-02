@@ -1,36 +1,46 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, X } from "lucide-react";
-import { useCategorias } from "@/hooks/useCategories";
+import { useCategories } from "@/lib/hooks/useCategories";
+import { Loader2 } from "lucide-react";
 
 interface SearchFiltersProps {
-  onFilterChange: (filters: { searchTerm: string; selectedCategory: string }) => void;
+  onFilterChange: (filters: { searchTerm?: string; selectedCategory?: string }) => void;
 }
 
 export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
-  const { categorias, error } = useCategorias();
+  const { data: categorias, error } = useCategories();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const activeFiltersCount = (searchTerm.trim() ? 1 : 0) + (selectedCategory !== "all" ? 1 : 0);
-
-  const handleFilterChange = () => {
-    console.log("Enviando filtros:", { searchTerm, selectedCategory }); // Depuración
+  useEffect(() => {
     onFilterChange({ searchTerm, selectedCategory });
-  };
+  }, [searchTerm, selectedCategory, onFilterChange]);
+
+  const activeFiltersCount = (searchTerm.trim() ? 1 : 0) + (selectedCategory !== "all" ? 1 : 0);
 
   const clearFilters = () => {
     setSearchTerm("");
     setSelectedCategory("all");
-    onFilterChange({ searchTerm: "", selectedCategory: "all" });
   };
 
-  if (error) return <div className="text-center text-red-500">{error}</div>;
+
+  if (error) {
+    return (
+      <div className="text-center text-red-500 py-4">
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
+  if (!categorias || categorias.length === 0) {
+    return true
+  }
 
   return (
     <div className="space-y-6">
@@ -42,23 +52,13 @@ export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
             <Input
               placeholder="Buscar empleos..."
               value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                handleFilterChange();
-              }}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
             />
           </div>
 
           {/* Filtro por categoría */}
-          <Select
-            value={selectedCategory}
-            onValueChange={(value) => {
-              console.log("Seleccionando categoría:", value); // Depuración
-              setSelectedCategory(value);
-              handleFilterChange();
-            }}
-          >
+          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
             <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Categoría" />
             </SelectTrigger>
@@ -80,44 +80,6 @@ export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
           )}
         </div>
       </div>
-
-      {/* Indicadores de filtros activos */}
-      {activeFiltersCount > 0 && (
-        <div className="flex flex-wrap gap-2">
-          {searchTerm.trim() && (
-            <Badge variant="secondary" className="text-sm">
-              Búsqueda: {searchTerm}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-4 w-4 ml-1 hover:bg-transparent"
-                onClick={() => {
-                  setSearchTerm("");
-                  handleFilterChange();
-                }}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </Badge>
-          )}
-          {selectedCategory !== "all" && (
-            <Badge variant="secondary" className="text-sm">
-              Categoría: {categorias.find((cat) => cat.id === selectedCategory)?.nombre || selectedCategory}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-4 w-4 ml-1 hover:bg-transparent"
-                onClick={() => {
-                  setSelectedCategory("all");
-                  handleFilterChange();
-                }}
-              >
-                <X className="h-3 w-3" />
-              </Button>
-            </Badge>
-          )}
-        </div>
-      )}
     </div>
   );
 }

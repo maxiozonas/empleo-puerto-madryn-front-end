@@ -3,15 +3,21 @@
 import { useState } from "react";
 import { JobList } from "@/components/job-list";
 import { SearchFilters } from "@/components/search-filters";
+import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
+import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function HomePage() {
-  const [filters, setFilters] = useState({
-    searchTerm: "",
-    selectedCategory: "all",
-  });
+  const { data: session, status } = useSession();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const handleFilterChange = (newFilters: { searchTerm: string; selectedCategory: string }) => {
-    setFilters(newFilters);
+  useAuthCheck();
+
+  const handleFilterChange = (newFilters: { searchTerm?: string; selectedCategory?: string }) => {
+    if (newFilters.searchTerm !== undefined) setSearchTerm(newFilters.searchTerm);
+    if (newFilters.selectedCategory !== undefined) setSelectedCategory(newFilters.selectedCategory);
   };
 
   return (
@@ -25,7 +31,7 @@ export default function HomePage() {
         </p>
       </section>
       <SearchFilters onFilterChange={handleFilterChange} />
-      <JobList searchTerm={filters.searchTerm} selectedCategory={filters.selectedCategory} />
+      <JobList searchTerm={searchTerm} selectedCategory={selectedCategory} />
     </div>
   );
 }

@@ -31,10 +31,10 @@ export function useAuthCheck() {
       }
     };
 
-    // Verificar inmediatamente y luego cada 5 minutos
+    
     checkToken();
-    const interval = setInterval(checkToken, 5 * 60 * 1000); // 5 minutos
+    const interval = setInterval(checkToken, 5 * 60 * 1000);
 
-    return () => clearInterval(interval); // Limpiar el intervalo al desmontar
+    return () => clearInterval(interval);
   }, [session, status]);
 }

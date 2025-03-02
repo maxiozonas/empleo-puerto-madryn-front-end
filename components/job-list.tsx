@@ -1,8 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { JobCard } from "@/components/job-card";
-import { JobPosting } from "@/lib/types";
+import { JobPosting } from "@/lib/types/iJobPosting";
+import { useJobPosts } from "@/lib/hooks/useJobPosts";
+import { Loader2 } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface JobListProps {
   searchTerm: string;
@@ -10,35 +13,12 @@ interface JobListProps {
 }
 
 export function JobList({ searchTerm, selectedCategory }: JobListProps) {
-  const [jobs, setJobs] = useState<JobPosting[]>([]);
+  const { data: jobs, isLoading, error, refetch } = useJobPosts();
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/api/ofertas", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
-        if (!response.ok) {
-          throw new Error(await response.text());
-        }
-        const data = await response.json();
-        if (!Array.isArray(data)) {
-          throw new Error("La respuesta del servidor no es un array válido");
-        }
-        setJobs(data);
-        setFilteredJobs(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Error desconocido al cargar las ofertas");
-      } 
-    };
+    if (!jobs) return;
 
-    fetchJobs();
-  }, []);
-
-  useEffect(() => {
     const applyFilters = () => {
       let result = [...jobs];
 
@@ -50,18 +30,10 @@ export function JobList({ searchTerm, selectedCategory }: JobListProps) {
             job.descripcion.toLowerCase().includes(term) ||
             job.empresaConsultora.toLowerCase().includes(term)
         );
-      } else {
-        result = [...jobs];
       }
 
-      // Filtro por categoría
       if (selectedCategory !== "all") {
-        console.log("Filtrando por categoría:", selectedCategory); 
-        result = result.filter((job) => {
-          const matches = job.categoria.id === selectedCategory;
-          console.log(`Comparando ${job.categoria.id} con ${selectedCategory}: ${matches}`); 
-          return matches;
-        });
+        result = result.filter((job) => job.categoria.id === selectedCategory);
       }
 
       setFilteredJobs(result);
@@ -70,12 +42,27 @@ export function JobList({ searchTerm, selectedCategory }: JobListProps) {
     applyFilters();
   }, [searchTerm, selectedCategory, jobs]);
 
-
-  if (error) {
-    return <div className="text-center text-red-500 py-8">{error}</div>;
+  if (isLoading) {
+    return (
+      <div className="text-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+        <p className="mt-2 text-muted-foreground">Cargando ofertas...</p>
+      </div>
+    );
   }
 
-  if (filteredJobs.length === 0) {
+  if (error) {
+    return (
+      <div className="text-center text-red-500 py-8">
+        <p>{error.message}</p>
+        <Button variant="outline" className="mt-4" onClick={() => refetch()}>
+          Reintentar
+        </Button>
+      </div>
+    );
+  }
+
+  if (!filteredJobs.length) {
     return <div className="text-center py-8">No hay ofertas disponibles con los filtros seleccionados.</div>;
   }
 

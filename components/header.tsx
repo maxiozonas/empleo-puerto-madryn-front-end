@@ -23,7 +23,6 @@ export default function Header() {
     }
   };
 
-  console.log(session?.user);
 
   return (
     <header className="border-b bg-white sticky top-0 z-50">

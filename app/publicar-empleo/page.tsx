@@ -11,10 +11,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useCategorias } from "@/hooks/useCategories";
-import { createJobOffer } from "@/lib/api";
+import { useCategories } from "@/lib/hooks/useCategories";
+import { useCreateJobOffer } from "@/lib/hooks/useCreateJobOffer";
+import { Loader2 } from "lucide-react";
+import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
-import { useAuthCheck } from "@/hooks/useAuthCheck";
 
 const formSchema = z.object({
   titulo: z.string().min(1, "El título es requerido").max(150, "Máximo 150 caracteres"),
@@ -49,8 +50,9 @@ type FormData = z.infer<typeof formSchema>;
 export default function PublicarEmpleoPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { categorias, error: categoriasError } = useCategorias();
-  const [formError, setFormError] = useState<string | null>(null);
+  const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategories();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useAuthCheck();
 
@@ -68,6 +70,15 @@ export default function PublicarEmpleoPage() {
     },
   });
 
+  
+  if (status === "loading" || categoriasLoading) {
+    return (
+      <div className="text-center py-8">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+        <p className="mt-2 text-muted-foreground">Cargando...</p>
+      </div>
+    );
+  }
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -75,13 +86,25 @@ export default function PublicarEmpleoPage() {
   }
 
   if (categoriasError) {
-    return <div className="text-center text-red-500">{categoriasError}</div>;
+    return (
+      <div className="text-center text-red-500 py-8">
+        <p>{categoriasError.message}</p>
+        <Button variant="outline" className="mt-4" onClick={() => router.refresh()}>
+          Reintentar
+        </Button>
+      </div>
+    );
+  }
+
+  if (!categorias || categorias.length === 0) {
+    return <div className="text-center py-8">No hay categorias disponibles.</div>;
   }
 
   const onSubmit = async (data: FormData) => {
-    setFormError(null);
+    setSubmitError(null);
+    setIsSubmitting(true);
     try {
-      await createJobOffer(
+      await useCreateJobOffer(
         {
           titulo: data.titulo,
           descripcion: data.descripcion,
@@ -97,7 +120,9 @@ export default function PublicarEmpleoPage() {
       );
       router.push("/");
     } catch (err) {
-      setFormError(err instanceof Error ? err.message : "Error desconocido");
+      setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -251,9 +276,16 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-          {formError && <p className="text-red-500 text-center">{formError}</p>}
-          <Button type="submit" className="w-full">
-            Publicar empleo
+          {submitError && <p className="text-red-500 text-center">{submitError}</p>}
+          <Button type="submit" className="w-full" disabled={isSubmitting}>
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Publicando...
+              </>
+            ) : (
+              "Publicar empleo"
+            )}
           </Button>
         </form>
       </Form>
