@@ -1,46 +1,46 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { JobCard } from "@/components/job-card";
-import { JobPosting } from "@/lib/types/iJobPosting";
-import { useJobPosts } from "@/lib/hooks/useJobPosts";
-import { Loader2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { useState, useEffect } from "react"
+import { JobCard } from "@/components/job-card"
+import type { JobPosting } from "@/lib/types/iJobPosting"
+import { useJobPosts } from "@/lib/hooks/useJobPosts"
+import { Loader2, Anchor } from "lucide-react"
+import { Button } from "./ui/button"
 
 interface JobListProps {
-  searchTerm: string;
-  selectedCategory: string;
+  searchTerm: string
+  selectedCategory: string
 }
 
 export function JobList({ searchTerm, selectedCategory }: JobListProps) {
-  const { data: jobs, isLoading, error, refetch } = useJobPosts();
-  const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
+  const { data: jobs, isLoading, error, refetch } = useJobPosts()
+  const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([])
 
   useEffect(() => {
-    if (!jobs) return;
+    if (!jobs) return
 
     const applyFilters = () => {
-      let result = [...jobs];
+      let result = [...jobs]
 
       if (searchTerm.trim()) {
-        const term = searchTerm.toLowerCase().trim();
+        const term = searchTerm.toLowerCase().trim()
         result = result.filter(
           (job) =>
             job.titulo.toLowerCase().includes(term) ||
             job.descripcion.toLowerCase().includes(term) ||
-            job.empresaConsultora.toLowerCase().includes(term)
-        );
+            job.empresaConsultora.toLowerCase().includes(term),
+        )
       }
 
       if (selectedCategory !== "all") {
-        result = result.filter((job) => job.categoria.id === selectedCategory);
+        result = result.filter((job) => job.categoria.id === selectedCategory)
       }
 
-      setFilteredJobs(result);
-    };
+      setFilteredJobs(result)
+    }
 
-    applyFilters();
-  }, [searchTerm, selectedCategory, jobs]);
+    applyFilters()
+  }, [searchTerm, selectedCategory, jobs])
 
   if (isLoading) {
     return (
@@ -48,22 +48,31 @@ export function JobList({ searchTerm, selectedCategory }: JobListProps) {
         <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
         <p className="mt-2 text-muted-foreground">Cargando ofertas...</p>
       </div>
-    );
+    )
   }
 
   if (error) {
     return (
-      <div className="text-center text-red-500 py-8">
+      <div className="text-center text-destructive py-8">
         <p>{error.message}</p>
-        <Button variant="outline" className="mt-4" onClick={() => refetch()}>
+        <Button
+          variant="outline"
+          className="mt-4 border-primary text-primary hover:bg-primary/10"
+          onClick={() => refetch()}
+        >
           Reintentar
         </Button>
       </div>
-    );
+    )
   }
 
   if (!filteredJobs.length) {
-    return <div className="text-center py-8">No hay ofertas disponibles con los filtros seleccionados.</div>;
+    return (
+      <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
+        <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
+        <p className="text-foreground">No hay ofertas disponibles con los filtros seleccionados.</p>
+      </div>
+    )
   }
 
   return (
@@ -72,5 +81,6 @@ export function JobList({ searchTerm, selectedCategory }: JobListProps) {
         <JobCard key={job.id} job={job} />
       ))}
     </div>
-  );
+  )
 }
+

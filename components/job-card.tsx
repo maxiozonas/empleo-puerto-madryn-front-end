@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import type { JobPosting } from "@/lib/types"
+import { JobPosting } from "@/lib/types/iJobPosting"
 import { Briefcase, Heart, MapPin, Calendar, ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
@@ -22,7 +22,7 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
   })
 
   return (
-    <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-secondary/30 bg-gradient-to-b from-white to-secondary/10">
       {/* Favorite button - now always visible but more prominent on hover */}
       <div className="absolute top-3 right-3 z-10">
         <TooltipProvider>
@@ -37,7 +37,7 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
                 <Heart
                   className={cn(
                     "h-5 w-5 transition-all",
-                    isFavorite ? "fill-primary stroke-primary" : "group-hover:stroke-primary",
+                    isFavorite ? "fill-accent stroke-accent" : "group-hover:stroke-accent",
                   )}
                 />
               </Button>
@@ -49,10 +49,10 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
 
       <CardHeader className="pb-2 pt-6">
         <div className="flex items-center gap-2 mb-1">
-          <div className="bg-primary/10 p-2 rounded-full">
+          <div className="bg-primary/20 p-2 rounded-full">
             <Briefcase className="h-5 w-5 text-primary" />
           </div>
-          <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
+          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
             {job.categoria.nombre}
           </Badge>
         </div>
@@ -62,13 +62,13 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
 
       <CardContent className="space-y-4 flex-grow pb-6">
         <div className="flex flex-wrap gap-4 text-sm">
-          <div className="flex items-center gap-1.5 bg-secondary/30 px-2.5 py-1 rounded-full">
-            <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-muted-foreground">Puerto Madryn</span>
+          <div className="flex items-center gap-1.5 bg-secondary/50 px-2.5 py-1 rounded-full">
+            <MapPin className="h-3.5 w-3.5 text-accent" />
+            <span className="text-accent-foreground font-medium">Puerto Madryn</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-secondary/30 px-2.5 py-1 rounded-full">
-            <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-            <span className="text-muted-foreground">{formattedDate}</span>
+          <div className="flex items-center gap-1.5 bg-secondary/50 px-2.5 py-1 rounded-full">
+            <Calendar className="h-3.5 w-3.5 text-accent" />
+            <span className="text-accent-foreground font-medium">{formattedDate}</span>
           </div>
         </div>
 
@@ -78,8 +78,12 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
       </CardContent>
 
       <CardFooter className="pt-2">
-        <Button asChild className="w-full group/button transition-all" variant="default">
-          <Link href={`/empleos/${job.id}`} className="flex items-center justify-center">
+        <Button
+          asChild
+          className="w-full group/button transition-all bg-ocean-gradient hover:bg-primary/90"
+          variant="default"
+        >
+          <Link href={`/detalles-empleo/${job.id}`} className="flex items-center justify-center">
             <span>Ver detalles</span>
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />
           </Link>

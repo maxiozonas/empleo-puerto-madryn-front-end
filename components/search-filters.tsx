@@ -43,7 +43,7 @@ export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mb-3">
       <div className="bg-white p-4 sm:p-6 rounded-lg border shadow-sm">
         <div className="flex flex-col sm:flex-row gap-4">
           {/* Buscador principal */}
