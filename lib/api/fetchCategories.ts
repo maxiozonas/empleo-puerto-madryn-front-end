@@ -1,8 +1,10 @@
 import { Category } from "../types/iCategory";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export async function fetchCategories(): Promise<Category[]> {
     try {
-      const response = await fetch("http://localhost:8080/api/categorias", {
+      const response = await fetch(`${apiUrl}/api/categorias`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

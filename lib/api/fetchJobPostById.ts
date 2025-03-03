@@ -1,8 +1,10 @@
 import { JobPosting } from "../types/iJobPosting";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
 export async function fetchJobPostById(id: string): Promise<JobPosting> {
   try {
-    const response = await fetch(`http://localhost:8080/api/ofertas/${id}`, {
+    const response = await fetch(`${apiUrl}/api/ofertas/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
