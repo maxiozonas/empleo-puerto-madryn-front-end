@@ -10,7 +10,7 @@ import { JobPosting } from "@/lib/types/iJobPosting";
 export default function JobDetailPage() {
   const router = useRouter();
   const { id } = useParams();
-  const [job, setJob] = useState<JobPosting | null>(null); // Usamos JobPosting en lugar de any
+  const [job, setJob] = useState<JobPosting | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +46,7 @@ export default function JobDetailPage() {
   };
 
   const handleBack = () => {
-    router.push("/ofertas-laborales");
+    router.push("/avisos");
   };
 
   const handleApply = () => {
@@ -78,7 +78,7 @@ export default function JobDetailPage() {
   const daysRemaining = calculateDaysRemaining(job.fechaCierre);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background py-8 px-4">
+    <div className="min-h-screen from-primary/5 to-background py-8 px-4">
       <div className="container mx-auto max-w-4xl">
         {/* Back button */}
         <Button

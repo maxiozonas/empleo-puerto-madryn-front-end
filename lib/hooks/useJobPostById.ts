@@ -1,10 +1,11 @@
-import { useQuery, QueryFunctionContext } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { JobPosting } from "../types/iJobPosting";
 import { fetchJobPostById } from "../api/fetchJobPostById";
 
-export function useJobPostById(id: string) {
+export function useJobPostById(id: string, token?: string) {
   return useQuery<JobPosting, Error>({
-    queryKey: ["jobPostById", id],
-    queryFn: ({ queryKey }: QueryFunctionContext<[string, string]>) => fetchJobPostById({ queryKey }),
+    queryKey: ["jobPost", id],
+    queryFn: () => fetchJobPostById(id),
+    enabled: !!id,
   });
 }

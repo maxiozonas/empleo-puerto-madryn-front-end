@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import { useSession, signIn, signOut } from "next-auth/react"
-import Link from "next/link"
-import { useState } from "react"
-import { Button } from "./ui/button"
-import { UserNav } from "./user-nav"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Anchor, Ship } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { UserNav } from "./user-nav";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, Anchor, Ship } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { data: session, status } = useSession()
-  const isAuthenticated = status === "authenticated"
-  const router = useRouter()
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const router = useRouter();
 
   const handlePublicarEmpleo = () => {
     if (!isAuthenticated) {
-      router.push("/login")
+      router.push("/login");
     } else {
-      router.push("/publicar-empleo")
+      router.push("/nuevo-aviso");
     }
-  }
+  };
 
   return (
-    <header className="border-b bg-gradient-to-r from-primary/10 to-secondary/20 sticky top-0 z-50 shadow-sm">
+    <header className="border-b bg-white from-primary/10 to-secondary/20 sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link
           href="/"
@@ -36,9 +36,12 @@ export default function Header() {
 
         {/* Versión Desktop */}
         <div className="hidden md:flex items-center gap-4">
+          <Button variant="ghost" asChild className="text-primary hover:text-primary/90">
+            <Link href="/avisos">Avisos</Link>
+          </Button>
           <Button className="bg-ocean-gradient hover:bg-primary/90" onClick={handlePublicarEmpleo}>
             <Ship className="mr-2 h-4 w-4" />
-            Publicar empleo
+            Publicar
           </Button>
           <UserNav isAuthenticated={isAuthenticated} />
         </div>
@@ -59,14 +62,25 @@ export default function Header() {
             </SheetHeader>
             <div className="flex flex-col gap-4 mt-8">
               <Button
+                variant="ghost"
+                asChild
+                className="w-full justify-start text-primary hover:text-primary/90"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/avisos");
+                }}
+              >
+                <Link href="/avisos">Avisos</Link>
+              </Button>
+              <Button
                 className="bg-ocean-gradient hover:bg-primary/90 w-full"
                 onClick={() => {
-                  setIsMenuOpen(false)
-                  handlePublicarEmpleo()
+                  setIsMenuOpen(false);
+                  handlePublicarEmpleo();
                 }}
               >
                 <Ship className="mr-2 h-4 w-4" />
-                Publicar empleo
+                Publicar
               </Button>
 
               {!isAuthenticated ? (
@@ -74,8 +88,8 @@ export default function Header() {
                   variant="outline"
                   className="w-full border-primary text-primary hover:bg-primary/10"
                   onClick={() => {
-                    setIsMenuOpen(false)
-                    signIn("google", { callbackUrl: "/" })
+                    setIsMenuOpen(false);
+                    signIn("google", { callbackUrl: "/" });
                   }}
                 >
                   Iniciar sesión
@@ -102,8 +116,8 @@ export default function Header() {
                     variant="outline"
                     className="w-full text-destructive hover:text-destructive border-destructive/30 hover:bg-destructive/10"
                     onClick={() => {
-                      setIsMenuOpen(false)
-                      signOut()
+                      setIsMenuOpen(false);
+                      signOut();
                     }}
                   >
                     Cerrar sesión
@@ -115,6 +129,5 @@ export default function Header() {
         </Sheet>
       </div>
     </header>
-  )
+  );
 }
-

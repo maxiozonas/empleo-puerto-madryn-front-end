@@ -32,7 +32,7 @@ export function UserNav({ isAuthenticated }: { isAuthenticated: boolean }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuItem asChild>
-          <Link href="/mis-publicaciones">Mis Publicaciones</Link>
+          <Link href="/mis-avisos">Mis avisos</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/favoritos">Mis Favoritos</Link>

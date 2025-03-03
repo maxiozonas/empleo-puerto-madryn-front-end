@@ -1,4 +1,3 @@
-// Actualizar la página de publicar empleo con colores de Puerto Madryn
 "use client"
 
 import { useSession } from "next-auth/react"

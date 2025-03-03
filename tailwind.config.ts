@@ -1,7 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ["class"],
-	content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}", "*.{js,ts,jsx,tsx,mdx}"],
+	content: [
+	  "./pages/**/*.{ts,tsx}",
+	  "./components/**/*.{ts,tsx}",
+	  "./app/**/*.{ts,tsx}",
+	  "./src/**/*.{ts,tsx}",
+	  "*.{js,ts,jsx,tsx,mdx}",
+	],
 	theme: {
 	  container: {
 		center: true,
@@ -12,19 +18,41 @@ module.exports = {
 	  },
 	  extend: {
 		colors: {
+		  // Colores principales inspirados en el mar patagónico
+		  primary: {
+			DEFAULT: "#1A5F7A", // Azul profundo del Golfo Nuevo
+			foreground: "#FFFFFF",
+		  },
+		  secondary: {
+			DEFAULT: "#86B6C6", // Azul claro de aguas costeras
+			foreground: "#1A1A1A",
+		  },
+		  // Colores de acento inspirados en la naturaleza y cultura local
+		  accent: {
+			DEFAULT: "#D17842", // Ocre rojizo de la meseta patagónica
+			foreground: "#FFFFFF",
+		  },
+		  // Color que representa la industria del aluminio (Aluar)
+		  industrial: {
+			DEFAULT: "#7D8491", // Gris metálico del aluminio
+			foreground: "#FFFFFF",
+		  },
+		  // Color que representa la fauna marina (ballenas)
+		  marine: {
+			DEFAULT: "#2E3A59", // Azul oscuro de las profundidades marinas
+			foreground: "#FFFFFF",
+		  },
+		  // Color que representa la herencia galesa
+		  heritage: {
+			DEFAULT: "#557B83", // Verde-azulado de las colinas galesas
+			foreground: "#FFFFFF",
+		  },
+		  // Colores de interfaz estándar
 		  border: "hsl(var(--border))",
 		  input: "hsl(var(--input))",
 		  ring: "hsl(var(--ring))",
 		  background: "hsl(var(--background))",
 		  foreground: "hsl(var(--foreground))",
-		  primary: {
-			DEFAULT: "hsl(var(--primary))",
-			foreground: "hsl(var(--primary-foreground))",
-		  },
-		  secondary: {
-			DEFAULT: "hsl(var(--secondary))",
-			foreground: "hsl(var(--secondary-foreground))",
-		  },
 		  destructive: {
 			DEFAULT: "hsl(var(--destructive))",
 			foreground: "hsl(var(--destructive-foreground))",
@@ -33,18 +61,19 @@ module.exports = {
 			DEFAULT: "hsl(var(--muted))",
 			foreground: "hsl(var(--muted-foreground))",
 		  },
-		  accent: {
-			DEFAULT: "hsl(var(--accent))",
-			foreground: "hsl(var(--accent-foreground))",
+		  card: {
+			DEFAULT: "hsl(var(--card))",
+			foreground: "hsl(var(--card-foreground))",
 		  },
 		  popover: {
 			DEFAULT: "hsl(var(--popover))",
 			foreground: "hsl(var(--popover-foreground))",
 		  },
-		  card: {
-			DEFAULT: "hsl(var(--card))",
-			foreground: "hsl(var(--card-foreground))",
-		  },
+		},
+		backgroundImage: {
+		  "ocean-gradient": "linear-gradient(to right, #1A5F7A, #86B6C6)", // Gradiente del mar patagónico
+		  "coastal-gradient": "linear-gradient(to right, #D17842, #E8C07D)", // Gradiente de la costa y arena
+		  "heritage-gradient": "linear-gradient(to right, #557B83, #86B6C6)", // Gradiente de herencia galesa
 		},
 		borderRadius: {
 		  lg: "var(--radius)",
@@ -60,23 +89,14 @@ module.exports = {
 			from: { height: "var(--radix-accordion-content-height)" },
 			to: { height: 0 },
 		  },
-		  "wave": {
-			'0%': { transform: 'translateX(0)' },
-			'50%': { transform: 'translateX(-10px)' },
-			'100%': { transform: 'translateX(0)' },
-		  },
 		},
 		animation: {
 		  "accordion-down": "accordion-down 0.2s ease-out",
 		  "accordion-up": "accordion-up 0.2s ease-out",
-		  "wave": "wave 3s ease-in-out infinite",
-		},
-		backgroundImage: {
-		  'ocean-gradient': 'linear-gradient(to right, hsl(200, 70%, 50%), hsl(220, 70%, 40%))',
-		  'sunset-gradient': 'linear-gradient(to right, hsl(25, 100%, 65%), hsl(350, 80%, 60%))',
 		},
 	  },
 	},
 	plugins: [require("tailwindcss-animate")],
   }
+  
   

@@ -1,29 +1,40 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { JobPosting } from "@/lib/types/iJobPosting"
-import { Briefcase, Heart, MapPin, Calendar, ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { JobPosting } from "@/lib/types/iJobPosting";
+import { Briefcase, Heart, MapPin, Calendar, ArrowRight, Edit, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface JobCardProps {
-  job: JobPosting
-  onToggleFavorite?: () => void
-  isFavorite?: boolean
-  showEditOptions?: boolean
+  job: JobPosting;
+  onToggleFavorite?: () => void;
+  isFavorite?: boolean;
+  showEditOptions?: boolean;
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
-export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOptions = false }: JobCardProps) {
+export function JobCard({
+  job,
+  onToggleFavorite,
+  isFavorite = false,
+  showEditOptions = false,
+  onEdit,
+  onDelete,
+}: JobCardProps) {
   const formattedDate = new Date(job.fechaPublicacion).toLocaleDateString("es-AR", {
     day: "numeric",
     month: "long",
     year: "numeric",
-  })
+  });
 
   return (
     <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-secondary/30 bg-gradient-to-b from-white to-secondary/10">
-      {/* Favorite button - now always visible but more prominent on hover */}
+      {/* Favorite button */}
       <div className="absolute top-3 right-3 z-10">
         <TooltipProvider>
           <Tooltip>
@@ -37,7 +48,7 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
                 <Heart
                   className={cn(
                     "h-5 w-5 transition-all",
-                    isFavorite ? "fill-accent stroke-accent" : "group-hover:stroke-accent",
+                    isFavorite ? "fill-accent stroke-accent" : "group-hover:stroke-accent"
                   )}
                 />
               </Button>
@@ -64,11 +75,11 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="flex items-center gap-1.5 bg-secondary/50 px-2.5 py-1 rounded-full">
             <MapPin className="h-3.5 w-3.5 text-accent" />
-            <span className="text-accent-foreground font-medium">Puerto Madryn</span>
+            <span className="text-neutral-800 font-medium">Puerto Madryn</span>
           </div>
           <div className="flex items-center gap-1.5 bg-secondary/50 px-2.5 py-1 rounded-full">
             <Calendar className="h-3.5 w-3.5 text-accent" />
-            <span className="text-accent-foreground font-medium">{formattedDate}</span>
+            <span className="text-neutral-800 font-medium">{formattedDate}</span>
           </div>
         </div>
 
@@ -77,10 +88,10 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
         </div>
       </CardContent>
 
-      <CardFooter className="pt-2">
+      <CardFooter className="pt-2 flex gap-2">
         <Button
           asChild
-          className="w-full group/button transition-all bg-ocean-gradient hover:bg-primary/90"
+          className="flex-1 group/button transition-all bg-ocean-gradient hover:bg-primary/90"
           variant="default"
         >
           <Link href={`/detalles-empleo/${job.id}`} className="flex items-center justify-center">
@@ -88,8 +99,29 @@ export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOpt
             <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />
           </Link>
         </Button>
+        {showEditOptions && (
+          <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onEdit}
+              className="flex items-center gap-2"
+            >
+              <Edit className="h-4 w-4" />
+              Editar
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onDelete}
+              className="flex items-center gap-2 text-destructive border-destructive/30 hover:bg-red-500 hover:text-neutral-800"
+            >
+              <Trash2 className="h-4 w-4" />
+              Eliminar
+            </Button>
+          </>
+        )}
       </CardFooter>
     </Card>
-  )
+  );
 }
-

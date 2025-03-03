@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Footer from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SessionProvider>
           <QueryClientProvider client={queryClient}>
             <Header />
-            <main className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-6 sm:py-8 lg:py-12">
+            <main className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-6 sm:py-2 lg:py-4">
               {children}
+              <Footer />
             </main>
           </QueryClientProvider>
         </SessionProvider>
