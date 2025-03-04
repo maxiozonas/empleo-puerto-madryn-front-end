@@ -4,14 +4,14 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { UserNav } from "./user-nav";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Anchor, Ship } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { UserNav } from "./user-nav";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const isAuthenticated = status === "authenticated";
   const router = useRouter();
 
@@ -102,7 +102,7 @@ export default function Header() {
                     className="w-full border-primary text-primary hover:bg-primary/10"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Link href="/mis-publicaciones">Mis Publicaciones</Link>
+                    <Link href="/mis-avisos">Mis Avisos</Link>
                   </Button>
                   <Button
                     asChild
@@ -110,7 +110,7 @@ export default function Header() {
                     className="w-full border-primary text-primary hover:bg-primary/10"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Link href="/favoritos">Mis Favoritos</Link>
+                    <Link href="/mis-favoritos">Mis Favoritos</Link>
                   </Button>
                   <Button
                     variant="outline"

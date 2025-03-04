@@ -4,17 +4,15 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Search, X } from "lucide-react";
-import { useCategories } from "@/lib/hooks/useCategories";
-import { Loader2 } from "lucide-react";
+import { useCategorias } from "@/lib/hooks/useCategorias";
 
 interface SearchFiltersProps {
   onFilterChange: (filters: { searchTerm?: string; selectedCategory?: string }) => void;
 }
 
 export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
-  const { data: categorias, error } = useCategories();
+  const { data: categorias, error } = useCategorias();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 

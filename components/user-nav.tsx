@@ -35,7 +35,7 @@ export function UserNav({ isAuthenticated }: { isAuthenticated: boolean }) {
           <Link href="/mis-avisos">Mis avisos</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/favoritos">Mis Favoritos</Link>
+          <Link href="/mis-favoritos">Mis Favoritos</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>Cerrar sesión</DropdownMenuItem>

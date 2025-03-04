@@ -1,6 +1,7 @@
 "use client";
 
-import { useJobPosts } from "@/lib/hooks/useJobPosts";
+
+import { useJobPosts } from "@/lib/hooks/useOfertas";
 import { Anchor, Fish, Compass, Building, Factory, Coffee } from "lucide-react";
 
 export function CategoriesSection() {

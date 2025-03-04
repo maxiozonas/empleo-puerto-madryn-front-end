@@ -1,21 +1,22 @@
-"use client"
+"use client";
 
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { useCategories } from "@/lib/hooks/useCategories"
-import { useCreateJobOffer } from "@/lib/hooks/useCreateJobOffer"
-import { Loader2, Anchor, Ship } from "lucide-react"
-import { useAuthCheck } from "@/lib/hooks/useAuthCheck"
-import { useState } from "react"
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { useCategorias } from "@/lib/hooks/useCategorias";
+import { createJobOffer } from "@/lib/api/ofertas";
+import { Loader2, Anchor, Ship } from "lucide-react";
+import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z
   .object({
@@ -31,32 +32,42 @@ const formSchema = z
   .refine(
     (data) => {
       if (data.formaPostulacion === "MAIL" && (!data.emailContacto || data.emailContacto.trim() === "")) {
-        return false
+        return false;
       }
       if (data.formaPostulacion === "LINK" && (!data.linkPostulacion || data.linkPostulacion.trim() === "")) {
-        return false
+        return false;
       }
       if (data.fechaCierre && new Date(data.fechaCierre) < new Date()) {
-        return false
+        return false;
       }
-      return true
+      return true;
     },
     {
       message: "Debe proporcionar email o link según la forma de postulación, y la fecha de cierre no puede ser pasada",
       path: ["formaPostulacion"],
-    },
-  )
+    }
+  );
 
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>;
 
 export default function PublicarEmpleoPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategories()
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
+  const createJobOfferMutation = useMutation({
+    mutationFn: ({ data, token }: { data: any; token: string }) => createJobOffer(data, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
+    },
+    onError: (err) => {
+      setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
+    },
+  });
 
-  useAuthCheck()
+  useAuthCheck();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -70,7 +81,7 @@ export default function PublicarEmpleoPage() {
       linkPostulacion: null,
       fechaCierre: null,
     },
-  })
+  });
 
   if (status === "loading" || categoriasLoading) {
     return (
@@ -78,12 +89,12 @@ export default function PublicarEmpleoPage() {
         <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
         <p className="mt-2 text-muted-foreground">Cargando...</p>
       </div>
-    )
+    );
   }
 
   if (status === "unauthenticated") {
-    router.push("/login")
-    return null
+    router.push("/login");
+    return null;
   }
 
   if (categoriasError) {
@@ -98,38 +109,43 @@ export default function PublicarEmpleoPage() {
           Reintentar
         </Button>
       </div>
-    )
+    );
   }
 
   if (!categorias || categorias.length === 0) {
-    return <div className="text-center py-8">No hay categorias disponibles.</div>
+    return <div className="text-center py-8">No hay categorías disponibles.</div>;
   }
 
   const onSubmit = async (data: FormData) => {
-    setSubmitError(null)
-    setIsSubmitting(true)
+    setSubmitError(null);
+    setIsSubmitting(true);
     try {
-      await useCreateJobOffer(
-        {
-          titulo: data.titulo,
-          descripcion: data.descripcion,
-          usuarioId: session?.user.id ?? "",
-          empresaConsultora: data.empresaConsultora,
-          fechaCierre: data.fechaCierre ?? null,
-          formaPostulacion: data.formaPostulacion,
-          emailContacto: data.emailContacto ?? null,
-          linkPostulacion: data.linkPostulacion ?? null,
-          categoriaId: data.categoria,
-        },
-        session?.backendToken ?? "",
-      )
-      router.push("/")
+      const createData = {
+        titulo: data.titulo,
+        descripcion: data.descripcion,
+        usuarioId: session?.user.id || "",
+        empresaConsultora: data.empresaConsultora,
+        fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
+        formaPostulacion: data.formaPostulacion,
+        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
+        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
+        categoriaId: data.categoria,
+      };
+
+      console.log("createData:", createData);
+
+      await createJobOfferMutation.mutateAsync({
+        data: createData,
+        token: session?.backendToken || "",
+      });
+
+      router.push("/");
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta")
+      console.error("Error en onSubmit:", err);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="mx-auto max-w-2xl py-8">
@@ -325,6 +341,5 @@ export default function PublicarEmpleoPage() {
         </form>
       </Form>
     </div>
-  )
+  );
 }
-

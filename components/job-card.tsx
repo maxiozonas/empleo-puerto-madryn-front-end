@@ -8,6 +8,8 @@ import { Briefcase, Heart, MapPin, Calendar, ArrowRight, Edit, Trash2 } from "lu
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useSession } from "next-auth/react";
+import { useAddFavorite, useRemoveFavorite, useIsFavorite } from "@/lib/hooks/useFavoritos";
 
 interface JobCardProps {
   job: JobPosting;
@@ -21,20 +23,55 @@ interface JobCardProps {
 export function JobCard({
   job,
   onToggleFavorite,
-  isFavorite = false,
+  isFavorite: initialIsFavorite = false,
   showEditOptions = false,
   onEdit,
   onDelete,
 }: JobCardProps) {
+  const { data: session } = useSession();
+  const token = session?.backendToken || "";
+  const { data: isFavorite, isLoading: isFavoriteLoading } = useIsFavorite(job.id, token);
+  const addFavoriteMutation = useAddFavorite();
+  const removeFavoriteMutation = useRemoveFavorite();
+
   const formattedDate = new Date(job.fechaPublicacion).toLocaleDateString("es-AR", {
     day: "numeric",
     month: "long",
     year: "numeric",
   });
 
+  const handleToggleFavorite = () => {
+    if (isFavoriteLoading || !token) return;
+
+    if (isFavorite) {
+      console.log("Removing favorite:", job.id);
+      removeFavoriteMutation.mutate(
+        { ofertaId: job.id, token },
+        {
+          onSuccess: () => {
+            console.log("Favorite removed successfully");
+            if (onToggleFavorite) onToggleFavorite();
+          },
+          onError: (error) => console.error("Error removing favorite:", error),
+        }
+      );
+    } else {
+      console.log("Adding favorite:", job.id);
+      addFavoriteMutation.mutate(
+        { ofertaId: job.id, token },
+        {
+          onSuccess: () => {
+            console.log("Favorite added successfully");
+            if (onToggleFavorite) onToggleFavorite();
+          },
+          onError: (error) => console.error("Error adding favorite:", error),
+        }
+      );
+    }
+  };
+
   return (
     <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-secondary/30 bg-gradient-to-b from-white to-secondary/10">
-      {/* Favorite button */}
       <div className="absolute top-3 right-3 z-10">
         <TooltipProvider>
           <Tooltip>
@@ -42,18 +79,24 @@ export function JobCard({
               <Button
                 variant="ghost"
                 size="icon"
-                className="bg-background/80 backdrop-blur-sm transition-transform group-hover:scale-110"
-                onClick={onToggleFavorite}
+                className={cn(
+                  "bg-background/80 backdrop-blur-sm transition-transform group-hover:scale-110",
+                  isFavorite ? "text-accent" : "text-gray-500 hover:text-accent"
+                )}
+                onClick={handleToggleFavorite}
+                disabled={isFavoriteLoading || !token || addFavoriteMutation.isPending || removeFavoriteMutation.isPending} // Cambiado a isPending
               >
                 <Heart
                   className={cn(
                     "h-5 w-5 transition-all",
-                    isFavorite ? "fill-accent stroke-accent" : "group-hover:stroke-accent"
+                    (isFavorite ?? initialIsFavorite) ? "fill-accent stroke-accent" : "stroke-current"
                   )}
                 />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>{isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}</TooltipContent>
+            <TooltipContent>
+              {(isFavorite ?? initialIsFavorite) ? "Quitar de favoritos" : "Agregar a favoritos"}
+            </TooltipContent>
           </Tooltip>
         </TooltipProvider>
       </div>
@@ -82,7 +125,6 @@ export function JobCard({
             <span className="text-neutral-800 font-medium">{formattedDate}</span>
           </div>
         </div>
-
         <div className="mt-4 pt-4 border-t border-border/50">
           <p className="text-sm text-muted-foreground line-clamp-3">{job.descripcion}</p>
         </div>
@@ -101,12 +143,7 @@ export function JobCard({
         </Button>
         {showEditOptions && (
           <>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onEdit}
-              className="flex items-center gap-2"
-            >
+            <Button variant="outline" size="sm" onClick={onEdit} className="flex items-center gap-2">
               <Edit className="h-4 w-4" />
               Editar
             </Button>

@@ -7,13 +7,13 @@ export function useAuthCheck() {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (status === "loading" || status === "unauthenticated" || !session?.backendToken) {
+    if (typeof window === "undefined" || status === "loading" || status === "unauthenticated" || !session?.backendToken) {
       return;
     }
 
     const checkToken = async () => {
       try {
-        const response = await fetch("http://localhost:8080/api/auth/validate-token", {
+        const response = await fetch("https://empleo-pm-back-end-app.onrender.com/api/auth/validate-token", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -35,6 +35,7 @@ export function useAuthCheck() {
     checkToken();
     const interval = setInterval(checkToken, 5 * 60 * 1000);
 
+    
     return () => clearInterval(interval);
-  }, [session, status]);
+  }, [session, status]); 
 }

@@ -2,12 +2,12 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useUserJobPosts } from "@/lib/hooks/useUserJobPosts";
 import { JobList } from "@/components/job-list";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useUserJobPosts } from "@/lib/hooks/useOfertas";
 
 export default function MisAvisosPage() {
   const { data: session, status } = useSession();
@@ -17,7 +17,7 @@ export default function MisAvisosPage() {
 
   const deleteMutation = useMutation({
     mutationFn: async (jobId: string) => {
-      const response = await fetch(`http://localhost:8080/api/ofertas/${jobId}`, {
+      const response = await fetch(`https://empleo-pm-back-end-app.onrender.com/api/ofertas/${jobId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

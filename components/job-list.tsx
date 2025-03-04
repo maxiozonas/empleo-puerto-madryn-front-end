@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { JobCard } from "@/components/job-card";
 import { JobPosting } from "@/lib/types/iJobPosting";
-import { useJobPosts } from "@/lib/hooks/useJobPosts";
 import { Loader2, Anchor } from "lucide-react";
 import { Button } from "./ui/button";
+import { useJobPosts } from "@/lib/hooks/useOfertas";
 
 interface JobListProps {
   searchTerm: string;
@@ -24,7 +24,7 @@ export function JobList({
   onEdit,
   onDelete,
 }: JobListProps) {
-  const { data: fetchedJobs, isLoading, error, refetch } = useJobPosts({ enabled: !externalJobs }); 
+  const { data: fetchedJobs, isLoading, error, refetch } = useJobPosts(); 
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
 
   useEffect(() => {

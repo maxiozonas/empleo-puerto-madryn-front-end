@@ -1,7 +1,8 @@
 "use client";
 
-import { useJobPosts } from "@/lib/hooks/useJobPosts";
+
 import { JobCard } from "@/components/job-card";
+import { useJobPosts } from "@/lib/hooks/useOfertas";
 import { Loader2 } from "lucide-react";
 
 export function FeaturedJobsSection() {

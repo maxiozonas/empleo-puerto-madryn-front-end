@@ -11,11 +11,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useCategories } from "@/lib/hooks/useCategories";
-import { useJobPostById } from "@/lib/hooks/useJobPostById";
-import { useUpdateJobOffer } from "@/lib/hooks/useUpdateJobOffer";
+import { useCategorias } from "@/lib/hooks/useCategorias";
+import { useJobPostById } from "@/lib/hooks/useOfertas";
+import { updateJobOffer } from "@/lib/api/ofertas";
 import { Loader2, Ship } from "lucide-react";
 import { useEffect, useState } from "react";
+import { JobPosting } from "@/lib/types/iJobPosting";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z
   .object({
@@ -53,10 +55,21 @@ export default function EditarAvisoPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { id } = useParams();
-  const { data: job, isLoading: jobLoading, error: jobError } = useJobPostById(id as string, session?.backendToken || "");
-  const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategories();
+  const { data: job, isLoading: jobLoading, error: jobError } = useJobPostById(id as string);
+  const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
+  const updateJobOfferMutation = useMutation({
+    mutationFn: ({ data, token }: { data: any; token: string }) => updateJobOffer(data, token),
+    onSuccess: (_, { data }) => {
+      queryClient.invalidateQueries({ queryKey: ["jobPost", id] });
+      queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
+    },
+    onError: (err) => {
+      setSubmitError(err instanceof Error ? err.message : "Error desconocido al actualizar la oferta");
+    },
+  });
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -121,31 +134,36 @@ export default function EditarAvisoPage() {
   }
 
   const onSubmit = async (data: FormData) => {
-    setSubmitError(null)
-    setIsSubmitting(true)
+    setSubmitError(null);
+    setIsSubmitting(true);
     try {
-      await useUpdateJobOffer(
-        {
-          id: id as string,
-          titulo: data.titulo,
-          descripcion: data.descripcion,
-          usuarioId: session?.user.id ?? "",
-          empresaConsultora: data.empresaConsultora,
-          fechaCierre: data.fechaCierre ?? null,
-          formaPostulacion: data.formaPostulacion,
-          emailContacto: data.emailContacto ?? null,
-          linkPostulacion: data.linkPostulacion ?? null,
-          categoriaId: data.categoria,
-        },
-        session?.backendToken ?? "",
-      )
-      router.push("/mis-avisos")
+      const updateData = {
+        id: id as string,
+        titulo: data.titulo,
+        descripcion: data.descripcion,
+        usuarioId: session?.user.id || "",
+        empresaConsultora: data.empresaConsultora,
+        fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
+        formaPostulacion: data.formaPostulacion,
+        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
+        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
+        categoriaId: data.categoria,
+      };
+
+      console.log("updateData:", updateData);
+
+      await updateJobOfferMutation.mutateAsync({
+        data: updateData,
+        token: session?.backendToken || "",
+      });
+
+      router.push("/mis-avisos");
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta")
+      console.error("Error en onSubmit:", err);
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="mx-auto max-w-2xl py-8">

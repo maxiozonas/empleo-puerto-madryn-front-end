@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Building, Calendar, Clock, Briefcase, User, Mail, ExternalLink, Loader2 } from "lucide-react";
-import { fetchJobPostById } from "@/lib/api/fetchJobPostById";
+
 import { JobPosting } from "@/lib/types/iJobPosting";
+import { fetchJobPostById } from "@/lib/api/ofertas";
 
 export default function JobDetailPage() {
   const router = useRouter();
