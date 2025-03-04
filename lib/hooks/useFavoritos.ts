@@ -5,22 +5,25 @@ export function useAddFavorite() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ ofertaId, token }: { ofertaId: string; token: string }) => addFavorite(ofertaId, token),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["favorites"] });
+    onSuccess: (_, { ofertaId, token }) => {
+      // Invalida las queries relevantes para actualizar inmediatamente
+      queryClient.invalidateQueries({ queryKey: ["favorites", token] });
+      queryClient.invalidateQueries({ queryKey: ["isFavorite", ofertaId, token] });
     },
   });
 }
 
 export function useRemoveFavorite() {
-    const queryClient = useQueryClient();
-    return useMutation({
-      mutationFn: ({ ofertaId, token }: { ofertaId: string; token: string }) => removeFavorite(ofertaId, token),
-      onSuccess: (_, { ofertaId, token }) => {
-        queryClient.invalidateQueries({ queryKey: ["favorites"] });
-        queryClient.invalidateQueries({ queryKey: ["isFavorite", ofertaId, token] }); // Invalida específicamente esta oferta
-      },
-    });
-  }
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ ofertaId, token }: { ofertaId: string; token: string }) => removeFavorite(ofertaId, token),
+    onSuccess: (_, { ofertaId, token }) => {
+      // Invalida las queries relevantes para actualizar inmediatamente
+      queryClient.invalidateQueries({ queryKey: ["favorites", token] });
+      queryClient.invalidateQueries({ queryKey: ["isFavorite", ofertaId, token] });
+    },
+  });
+}
 
 export function useUserFavorites(token: string) {
   return useQuery({

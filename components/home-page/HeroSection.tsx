@@ -56,11 +56,11 @@ export function HeroSection() {
             Donde el mar patagónico y las oportunidades laborales se encuentran
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90">
-              <Link href="/avisos">Ver ofertas laborales</Link>
+            <Button asChild size="lg" variant="outline" className="border-white text-neutral-800 hover:bg-white/10">
+              <Link href="/avisos">Ver avisos laborales</Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="border-white text-neutral-800 hover:bg-white/10">
-              <Link href="/nuevo-aviso">Publicar empleo</Link>
+              <Link href="/nuevo-aviso">Publicar aviso</Link>
             </Button>
           </div>
         </div>
