@@ -34,22 +34,29 @@ export default function Header() {
           <span className="bg-clip-text text-transparent bg-ocean-gradient">EmpleosMadryn</span>
         </Link>
 
-        {/* Versión Desktop */}
         <div className="hidden md:flex items-center gap-4">
-          <Button variant="ghost" asChild className="text-primary hover:text-primary/90">
+          <Button
+            asChild
+            className="text-primary hover:underline transition-colors"
+          >
             <Link href="/avisos">Avisos</Link>
+          </Button>
+          <Button
+            asChild
+            className="text-primary hover:underline transition-colors"
+          >
+            <Link href="/categorias">Categorías</Link>
           </Button>
           <Button className="bg-ocean-gradient hover:bg-primary/90" onClick={handlePublicarEmpleo}>
             <Ship className="mr-2 h-4 w-4" />
             Publicar
           </Button>
-          <UserNav isAuthenticated={isAuthenticated} />
+          <UserNav />
         </div>
 
-        {/* Versión Mobile */}
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon">
+            <Button size="icon">
               <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
@@ -62,7 +69,6 @@ export default function Header() {
             </SheetHeader>
             <div className="flex flex-col gap-4 mt-8">
               <Button
-                variant="ghost"
                 asChild
                 className="w-full justify-start text-primary hover:text-primary/90"
                 onClick={() => {
@@ -71,6 +77,16 @@ export default function Header() {
                 }}
               >
                 <Link href="/avisos">Avisos</Link>
+              </Button>
+              <Button
+                asChild
+                className="w-full justify-start text-primary hover:text-primary/90"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/categorias");
+                }}
+              >
+                <Link href="/categorias">Categorías</Link>
               </Button>
               <Button
                 className="bg-ocean-gradient hover:bg-primary/90 w-full"
@@ -110,7 +126,7 @@ export default function Header() {
                     className="w-full border-primary text-primary hover:bg-primary/10"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Link href="/mis-favoritos">Mis Favoritos</Link>
+                    <Link href="/favoritos">Mis Favoritos</Link>
                   </Button>
                   <Button
                     variant="outline"

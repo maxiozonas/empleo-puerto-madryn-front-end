@@ -24,3 +24,13 @@ export function useUserJobPosts(token: string) {
         enabled: !!token,
     });
 }
+
+export function useJobPostsByCategory(categoryId: string) {
+    return useQuery<JobPosting[], Error>({
+        queryKey: ["jobPostsByCategory", categoryId],
+        queryFn: async () => {
+            const allJobs = await fetchJobPosts();
+            return allJobs.filter((job) => job.categoria.id === categoryId);
+        },
+    });
+}

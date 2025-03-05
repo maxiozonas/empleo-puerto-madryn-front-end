@@ -14,21 +14,38 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPostById } from "@/lib/hooks/useOfertas";
 import { updateJobOffer } from "@/lib/api/ofertas";
-import { Loader2, Ship } from "lucide-react";
+import { ArrowLeft, Loader2, Ship } from "lucide-react";
 import { useEffect, useState } from "react";
-import { JobPosting } from "@/lib/types/iJobPosting";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const formSchema = z
   .object({
-    titulo: z.string().min(1, "El título es requerido").max(150, "Máximo 150 caracteres"),
-    descripcion: z.string().min(1, "La descripción es requerida"),
-    empresaConsultora: z.string().min(1, "La empresa es requerida").max(150, "Máximo 150 caracteres"),
-    categoria: z.string().min(1, "La categoría es requerida"),
-    formaPostulacion: z.enum(["MAIL", "LINK"], { required_error: "La forma de postulación es requerida" }),
-    emailContacto: z.string().email("Formato de email inválido").optional().nullable(),
-    linkPostulacion: z.string().url("Debe ser una URL válida").optional().nullable(),
-    fechaCierre: z.string().optional().nullable(),
+    titulo: z.string()
+      .min(1, "El título es obligatorio")
+      .max(150, "El título no puede superar los 150 caracteres"),
+    descripcion: z.string()
+      .min(1, "La descripción es obligatoria"),
+    empresaConsultora: z.string()
+      .min(1, "El nombre de la empresa es obligatorio")
+      .max(150, "El nombre de la empresa no puede superar los 150 caracteres"),
+    categoria: z.string()
+      .min(1, "Debes seleccionar una categoría"),
+    formaPostulacion: z.enum(["MAIL", "LINK"], {
+      required_error: "Debes seleccionar una forma de postulación",
+    }),
+    emailContacto: z.string()
+      .email("Debes ingresar un email válido")
+      .optional()
+      .nullable(),
+    linkPostulacion: z.string()
+      .url("Debes ingresar una URL válida (ej: https://example.com)")
+      .optional()
+      .nullable(),
+    fechaCierre: z.string()
+      .optional()
+      .nullable(),
   })
   .refine(
     (data) => {
@@ -44,7 +61,7 @@ const formSchema = z
       return true;
     },
     {
-      message: "Debe proporcionar email o link según la forma de postulación, y la fecha de cierre no puede ser pasada",
+      message: "Debes ingresar un email válido para postulación por email, una URL válida para postulación por enlace, y la fecha de cierre no puede ser anterior a hoy",
       path: ["formaPostulacion"],
     }
   );
@@ -58,6 +75,7 @@ export default function EditarAvisoPage() {
   const { data: job, isLoading: jobLoading, error: jobError } = useJobPostById(id as string);
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null); // Añadido para éxito
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
   const updateJobOfferMutation = useMutation({
@@ -65,11 +83,20 @@ export default function EditarAvisoPage() {
     onSuccess: (_, { data }) => {
       queryClient.invalidateQueries({ queryKey: ["jobPost", id] });
       queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
+      setSubmitSuccess("¡Oferta actualizada con éxito!");
+      setTimeout(() => router.push("/mis-avisos"), 2000);
     },
     onError: (err) => {
       setSubmitError(err instanceof Error ? err.message : "Error desconocido al actualizar la oferta");
     },
   });
+
+  useAuthCheck();
+
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -109,11 +136,6 @@ export default function EditarAvisoPage() {
     );
   }
 
-  if (status === "unauthenticated") {
-    router.push("/login");
-    return null;
-  }
-
   if (jobError || categoriasError || !job) {
     return (
       <div className="text-center text-destructive py-8">
@@ -135,6 +157,7 @@ export default function EditarAvisoPage() {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(null);
+    setSubmitSuccess(null);
     setIsSubmitting(true);
     try {
       const updateData = {
@@ -150,23 +173,30 @@ export default function EditarAvisoPage() {
         categoriaId: data.categoria,
       };
 
-      console.log("updateData:", updateData);
-
       await updateJobOfferMutation.mutateAsync({
         data: updateData,
         token: session?.backendToken || "",
       });
-
-      router.push("/mis-avisos");
-    } catch (err) {
-      console.error("Error en onSubmit:", err);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleBack = () => {
+    router.push("/");
+  };
+
   return (
     <div className="mx-auto max-w-2xl py-8">
+      <div className="flex items-center mb-6">
+        <Button
+          onClick={handleBack}
+          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          <span>Volver</span>
+        </Button>
+      </div>
       <header className="mb-8 space-y-4">
         <div className="flex justify-center mb-4">
           <div className="bg-primary/10 p-3 rounded-full">
@@ -342,7 +372,16 @@ export default function EditarAvisoPage() {
               </FormItem>
             )}
           />
-          {submitError && <p className="text-destructive text-center">{submitError}</p>}
+          {submitSuccess && (
+            <Alert variant="default" className="border-green-500 text-green-700">
+              <AlertDescription>{submitSuccess}</AlertDescription>
+            </Alert>
+          )}
+          {submitError && (
+            <Alert variant="destructive">
+              <AlertDescription>{submitError}</AlertDescription>
+            </Alert>
+          )}
           <Button type="submit" className="w-full bg-ocean-gradient hover:bg-primary/90" disabled={isSubmitting}>
             {isSubmitting ? (
               <>

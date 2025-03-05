@@ -28,10 +28,10 @@ export function JobCard({
   onEdit,
   onDelete,
 }: JobCardProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
-  const isOwnPost = job.usuarioPublicador.email === userEmail;
+  const isOwnPost = job.usuarioPublicador?.email === userEmail;
   const { data: isFavorite, isLoading: isFavoriteLoading } = useIsFavorite(job.id, token);
   const addFavoriteMutation = useAddFavorite();
   const removeFavoriteMutation = useRemoveFavorite();
@@ -46,36 +46,17 @@ export function JobCard({
     if (isFavoriteLoading || !token || isOwnPost) return;
 
     if (isFavorite) {
-      console.log("Removing favorite:", job.id);
-      removeFavoriteMutation.mutate(
-        { ofertaId: job.id, token },
-        {
-          onSuccess: () => {
-            console.log("Favorite removed successfully");
-            if (onToggleFavorite) onToggleFavorite();
-          },
-          onError: (error) => console.error("Error removing favorite:", error),
-        }
-      );
+      removeFavoriteMutation.mutate({ ofertaId: job.id, token });
     } else {
-      console.log("Adding favorite:", job.id);
-      addFavoriteMutation.mutate(
-        { ofertaId: job.id, token },
-        {
-          onSuccess: () => {
-            console.log("Favorite added successfully");
-            if (onToggleFavorite) onToggleFavorite();
-          },
-          onError: (error) => console.error("Error adding favorite:", error),
-        }
-      );
+      addFavoriteMutation.mutate({ ofertaId: job.id, token });
     }
   };
 
+  const canShowFavoriteButton = status === "authenticated" && !isOwnPost;
+
   return (
-    <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-secondary/30 bg-gradient-to-b from-white to-secondary/10">
-      {/* Botón de favoritos solo si no es una oferta propia */}
-      {!isOwnPost && (
+    <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-secondary/30 bg-gradient-to-b from-white to-secondary/10 min-w-[280px]">
+      {canShowFavoriteButton && (
         <div className="absolute top-3 right-3 z-10">
           <TooltipProvider>
             <Tooltip>
@@ -92,14 +73,53 @@ export function JobCard({
                 >
                   <Heart
                     className={cn(
-                      "h-5 w-5 transition-all",
-                      isFavorite ? "fill-accent stroke-accent" : "stroke-current hover:stroke-accent"
+                      "h-5 w-5 transition-all duration-200 ease-in-out",
+                      isFavorite ? "fill-accent stroke-accent scale-110" : "stroke-current hover:stroke-accent hover:scale-110"
                     )}
                   />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
                 {isFavorite ? "Quitar de favoritos" : "Agregar a favoritos"}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+      )}
+
+      {showEditOptions && (
+        <div className="absolute top-3 right-3 z-10 md:hidden">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={onEdit}
+                  className="mr-2 bg-background/80 backdrop-blur-sm hover:bg-primary/10"
+                >
+                  <Edit className="h-5 w-5 text-primary" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Editar</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={onDelete}
+                  className="bg-background/80 backdrop-blur-sm hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-5 w-5 text-destructive" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Eliminar</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -135,7 +155,7 @@ export function JobCard({
         </div>
       </CardContent>
 
-      <CardFooter className="pt-2 flex gap-2">
+      <CardFooter className="pt-2 flex gap-2 md:flex-row md:justify-between">
         <Button
           asChild
           className="flex-1 group/button transition-all bg-ocean-gradient hover:bg-primary/90"
@@ -147,8 +167,8 @@ export function JobCard({
           </Link>
         </Button>
         {showEditOptions && (
-          <>
-            <Button variant="outline" size="sm" onClick={onEdit} className="flex items-center gap-2">
+          <div className="hidden md:flex gap-2">
+            <Button variant="outline" size="sm" onClick={onEdit} className="flex items-center gap-2 ">
               <Edit className="h-4 w-4" />
               Editar
             </Button>
@@ -156,12 +176,12 @@ export function JobCard({
               variant="outline"
               size="sm"
               onClick={onDelete}
-              className="flex items-center gap-2 text-destructive border-destructive/30 hover:bg-red-500 hover:text-neutral-800"
+              className="flex items-center gap-2 text-destructive border-destructive/30 hover:bg-red-500 hover:text-neutral-800 min-w-[100px]"
             >
               <Trash2 className="h-4 w-4" />
               Eliminar
             </Button>
-          </>
+          </div>
         )}
       </CardFooter>
     </Card>

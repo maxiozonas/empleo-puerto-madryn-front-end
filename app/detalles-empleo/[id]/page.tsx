@@ -3,8 +3,22 @@
 import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Building, Calendar, Clock, Briefcase, User, Mail, ExternalLink, Loader2 } from "lucide-react";
-
+import {
+  ArrowLeft,
+  Calendar,
+  Clock,
+  Mail,
+  Loader2,
+  CheckCircle,
+  Copy,
+  MessageCircle, 
+  Facebook, 
+  ArrowRight, 
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { JobPosting } from "@/lib/types/iJobPosting";
 import { fetchJobPostById } from "@/lib/api/ofertas";
 
@@ -14,6 +28,7 @@ export default function JobDetailPage() {
   const [job, setJob] = useState<JobPosting | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const loadJob = async () => {
@@ -37,15 +52,6 @@ export default function JobDetailPage() {
     });
   };
 
-  const calculateDaysRemaining = (fechaCierre?: string) => {
-    if (!fechaCierre) return null;
-    const today = new Date();
-    const cierre = new Date(fechaCierre);
-    const diffTime = cierre.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays >= 0 ? diffDays : null;
-  };
-
   const handleBack = () => {
     router.push("/avisos");
   };
@@ -57,6 +63,29 @@ export default function JobDetailPage() {
       } else if (job.formaPostulacion === "LINK") {
         window.open(job.contactoPostulacion, "_blank");
       }
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const shareOnWhatsApp = () => {
+    if (typeof window !== "undefined") {
+      const url = encodeURIComponent(window.location.href);
+      const text = encodeURIComponent(`${job?.titulo} - ${job?.empresaConsultora}`);
+      window.open(`https://wa.me/?text=${text}%20${url}`, "_blank");
+    }
+  };
+
+  const shareOnFacebook = () => {
+    if (typeof window !== "undefined") {
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, "_blank");
     }
   };
 
@@ -76,155 +105,177 @@ export default function JobDetailPage() {
     );
   }
 
-  const daysRemaining = calculateDaysRemaining(job.fechaCierre);
-
   return (
-    <div className="min-h-screen from-primary/5 to-background py-8 px-4">
-      <div className="container mx-auto max-w-4xl">
-        {/* Back button */}
-        <Button
-          variant="ghost"
-          onClick={handleBack}
-          className="flex items-center text-primary hover:text-primary/80 mb-6 transition-colors"
-        >
-          <ArrowLeft className="h-5 w-5 mr-2" />
-          <span>Volver a empleos</span>
-        </Button>
+    <div className="min-h-screen bg-background py-8 px-4">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex items-center mb-6">
+          <Button
+            onClick={handleBack}
+            className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            <span>Volver</span>
+          </Button>
+        </div>
 
-        {/* Main content */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          {/* Header */}
-          <div className="bg-primary p-6 text-white">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="bg-white/20 text-white text-xs font-medium px-2.5 py-1 rounded-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="md:col-span-2">
+            <h1 className="text-3xl font-bold mb-2">{job.titulo}</h1>
+
+            <div className="flex items-center gap-2 mb-6">
+              <Badge variant="outline" className="bg-muted/50">
                 {job.categoria.nombre}
-              </span>
-              {daysRemaining !== null && (
-                <span
-                  className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                    daysRemaining < 3 ? "bg-destructive/20 text-destructive" : "bg-secondary/20 text-secondary-foreground"
-                  }`}
-                >
-                  {daysRemaining === 0 ? "Cierra hoy" : `${daysRemaining} días restantes`}
-                </span>
-              )}
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">{job.titulo}</h1>
-            <p className="text-white/90 text-lg">{job.empresaConsultora}</p>
-          </div>
-
-          {/* Content */}
-          <div className="p-6 md:p-8">
-            {/* Job details */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-b border-border pb-8">
-              <div className="flex items-start gap-3">
-                <div className="bg-primary/10 p-2 rounded-full mt-1">
-                  <Building className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">Empresa</h3>
-                  <p className="text-muted-foreground">{job.empresaConsultora}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="bg-primary/10 p-2 rounded-full mt-1">
-                  <Calendar className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">Fecha de publicación</h3>
-                  <p className="text-muted-foreground">{formatDate(job.fechaPublicacion)}</p>
-                </div>
-              </div>
-
-              {job.fechaCierre && (
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 p-2 rounded-full mt-1">
-                    <Clock className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-foreground">Fecha de cierre</h3>
-                    <p className="text-muted-foreground">{formatDate(job.fechaCierre)}</p>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-start gap-3">
-                <div className="bg-primary/10 p-2 rounded-full mt-1">
-                  <Briefcase className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">Categoría</h3>
-                  <p className="text-muted-foreground">{job.categoria.nombre}</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <div className="bg-primary/10 p-2 rounded-full mt-1">
-                  <User className="h-5 w-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-foreground">Publicado por</h3>
-                  <p className="text-muted-foreground">{job.usuarioPublicador.email}</p>
-                </div>
-              </div>
-
-              {job.contactoPostulacion && (
-                <div className="flex items-start gap-3">
-                  <div className="bg-primary/10 p-2 rounded-full mt-1">
-                    <Mail className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-foreground">Contacto</h3>
-                    <p className="text-muted-foreground">{job.contactoPostulacion}</p>
-                  </div>
-                </div>
-              )}
+              </Badge>
             </div>
 
-            {/* Job description */}
-            <div className="mb-10">
-              <h2 className="text-xl font-bold text-primary mb-4">Descripción del puesto</h2>
-              <div className="prose text-foreground max-w-none">
-                {job.descripcion.split("\n\n").map((paragraph: string, index: number) => (
-                  <div key={index} className="mb-4">
-                    {paragraph.includes(":") && paragraph.split(":")[0].trim().endsWith("s") ? (
-                      <>
-                        <h3 className="font-bold mb-2">{paragraph.split(":")[0]}</h3>
-                        <ul className="list-disc pl-5 space-y-1">
-                          {paragraph
-                            .split(":")[1]
-                            .split("\n- ")
-                            .filter(Boolean)
-                            .map((item: string, i: number) => (
-                              <li key={i}>{item.trim()}</li>
-                            ))}
-                        </ul>
-                      </>
-                    ) : (
-                      <p>{paragraph}</p>
-                    )}
-                  </div>
+            <div className="mb-8">
+              <h2 className="text-xl font-bold mb-4">Descripción</h2>
+              <div className="prose text-muted-foreground max-w-none whitespace-pre-wrap">
+                {job.descripcion.split("\n\n").map((paragraph, index) => (
+                  <p key={index} className="mb-4">
+                    {paragraph}
+                  </p>
                 ))}
               </div>
+              {job.formaPostulacion === "MAIL" && job.contactoPostulacion && (
+                <p className="text-muted-foreground mt-4">
+                  Enviar CV a: <span className="font-medium">{job.contactoPostulacion}</span>
+                </p>
+              )}
             </div>
 
-            {/* Application section */}
-            <div className="bg-primary/5 rounded-xl p-6 border border-primary/20">
-              <h2 className="text-xl font-bold text-primary mb-4">¿Cómo postular?</h2>
-              <p className="mb-6">
-                Para postularte a esta oferta laboral, haz clic en el botón de abajo.{" "}
-                {job.contactoPostulacion &&
-                  `También puedes contactar directamente a ${job.contactoPostulacion}.`}
-              </p>
-              <Button
-                onClick={handleApply}
-                className="w-full md:w-auto bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-              >
-                <span>Postular ahora</span>
-                <ExternalLink className="h-5 w-5" />
-              </Button>
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
+              <div className="flex items-start gap-2">
+                <span className="text-amber-500 text-lg">👍</span>
+                <div>
+                  <p className="text-amber-800 font-medium">
+                    Por favor, al momento de postularte indicá que encontraste el aviso en Empleo Puerto Madryn. Esto nos
+                    ayuda a conseguir que más empleadores publiquen en el sitio, ¡muchas gracias!
+                  </p>
+                </div>
+              </div>
             </div>
+
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+              <p className="text-sm text-gray-600">
+                Al buscar empleo NUNCA vas a necesitar pagar para postularte o acceder a una oferta, en todo momento
+                realizá si es posible una investigación previa del empleador y protegé tu información personal. No
+                descargues archivos sospechosos ni te reúnas en lugares o sitios de desconfianza.
+              </p>
+            </div>
+          </div>
+
+          <div className="md:col-span-1">
+            <Card className="overflow-hidden">
+              <CardContent className="p-0">
+                <div className="p-6">
+                  <div className="text-center mb-4">
+                    <h3 className="text-lg font-bold">{job.empresaConsultora}</h3>
+                    <div className="flex items-center justify-center gap-1 text-sm text-green-600">
+                      <CheckCircle className="h-4 w-4" />
+                      <span>Verificado</span>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={handleApply}
+                    className="w-full mb-6 group/button transition-all bg-ocean-gradient hover:bg-primary/90"
+                  >
+                    <span>Aplicar ahora</span>
+                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />
+                  </Button>
+
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Publicado el</h4>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span>{formatDate(job.fechaPublicacion)}</span>
+                      </div>
+                    </div>
+
+                    {job.fechaCierre && (
+                      <div>
+                        <h4 className="text-sm font-medium text-muted-foreground mb-1">Finaliza el</h4>
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4 text-muted-foreground" />
+                          <span>{formatDate(job.fechaCierre)}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-1">Forma postulación</h4>
+                      <div className="flex items-center gap-2">
+                        <Mail className="h-4 w-4 text-muted-foreground" />
+                        <span>{job.formaPostulacion === "MAIL" ? "Correo electrónico" : "Enlace externo"}</span>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div>
+                      <h4 className="text-sm font-medium text-muted-foreground mb-2">Compartir</h4>
+                      <div className="flex items-center gap-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-full h-9 w-9"
+                                onClick={copyToClipboard}
+                              >
+                                {copied ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copiar enlace</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-full h-9 w-9"
+                                onClick={shareOnWhatsApp}
+                              >
+                                <MessageCircle className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Compartir por WhatsApp</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                className="rounded-full h-9 w-9"
+                                onClick={shareOnFacebook}
+                              >
+                                <Facebook className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Compartir en Facebook</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

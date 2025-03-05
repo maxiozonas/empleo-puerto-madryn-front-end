@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { JobList } from "@/components/job-list";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUserFavorites } from "@/lib/hooks/useFavoritos";
 
@@ -36,8 +36,21 @@ export default function FavoritosPage() {
 
   const favoriteJobs = favoritos?.map((fav: any) => fav.ofertaEmpleo) || [];
 
+  const handleBack = () => {
+    router.push("/");
+  };
+
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container min-h-screen mx-auto py-8 px-4">
+      <div className="flex items-center mb-6">
+        <Button
+          onClick={handleBack}
+          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          <span>Volver</span>
+        </Button>
+      </div>
       <h1 className="text-3xl font-bold text-primary mb-6">Mis Favoritos</h1>
       {favoriteJobs.length > 0 ? (
         <JobList

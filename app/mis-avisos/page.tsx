@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { JobList } from "@/components/job-list";
-import { Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -66,9 +66,20 @@ export default function MisAvisosPage() {
       </div>
     );
   }
+  
+  const handleBack = () => {
+    router.push("/");
+  };
 
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto min-h-screen py-8 px-4">
+      <Button
+        onClick={handleBack}
+        className="flex items-center hover:underline"
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        <span>Volver</span>
+      </Button>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-primary">Mis Avisos</h1>
         <Button asChild className="bg-ocean-gradient hover:bg-primary/90">

@@ -73,7 +73,7 @@ export async function updateJobOffer(
       descripcion: string;
       usuarioId: string;
       empresaConsultora: string;
-      fechaCierre: string | null; // Ya viene en formato ISO o es null
+      fechaCierre: string | null;
       formaPostulacion: string;
       emailContacto: string | null;
       linkPostulacion: string | null;
@@ -88,7 +88,7 @@ export async function updateJobOffer(
       usuario: { id: data.usuarioId },
       empresaConsultora: data.empresaConsultora,
       fechaPublicacion: new Date().toISOString(),
-      fechaCierre: data.fechaCierre, // Usamos directamente el valor recibido
+      fechaCierre: data.fechaCierre,
       formaPostulacion: data.formaPostulacion as "MAIL" | "LINK",
       emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
       linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
@@ -119,7 +119,7 @@ export async function createJobOffer(
       descripcion: string;
       usuarioId: string;
       empresaConsultora: string;
-      fechaCierre: string | null; // Ya viene en formato ISO o es null
+      fechaCierre: string | null;
       formaPostulacion: string;
       emailContacto: string | null;
       linkPostulacion: string | null;
@@ -133,7 +133,7 @@ export async function createJobOffer(
       usuario: { id: data.usuarioId },
       empresaConsultora: data.empresaConsultora,
       fechaPublicacion: new Date().toISOString(),
-      fechaCierre: data.fechaCierre, // Usamos directamente el valor recibido
+      fechaCierre: data.fechaCierre, 
       formaPostulacion: data.formaPostulacion as "MAIL" | "LINK",
       emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
       linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
