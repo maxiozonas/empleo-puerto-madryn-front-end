@@ -77,7 +77,7 @@ export default function CategoriasPage() {
                         key={category.id}
                         className="overflow-hidden border-0 bg-background shadow-md hover:shadow-lg transition-shadow"
                     >
-                        <Link href={`/categoria/${category.id}`}>
+                        <Link href={`/categorias/${category.id}`}>
                             <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
                                 <div className="mb-4 text-primary">
                                     {categoryIcons[category.nombre] || <Briefcase className="h-12 w-12" />}

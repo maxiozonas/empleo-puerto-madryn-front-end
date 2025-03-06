@@ -126,7 +126,7 @@ export default function Header() {
                     className="w-full border-primary text-primary hover:bg-primary/10"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    <Link href="/favoritos">Mis Favoritos</Link>
+                    <Link href="/mis-favoritos">Mis Favoritos</Link>
                   </Button>
                   <Button
                     variant="outline"
