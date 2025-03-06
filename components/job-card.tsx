@@ -15,7 +15,7 @@ interface JobCardProps {
   showEditOptions?: boolean;
 }
 
-export function JobCard({ job, onToggleFavorite, isFavorite = false, showEditOptions = false }: JobCardProps) {
+export function JobCard({ job, onToggleFavorite, isFavorite = false}: JobCardProps) {
   const formattedDate = new Date(job.fechaPublicacion).toLocaleDateString("es-AR", {
     day: "numeric",
     month: "long",
