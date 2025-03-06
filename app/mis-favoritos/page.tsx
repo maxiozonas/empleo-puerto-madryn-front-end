@@ -6,6 +6,7 @@ import { JobList } from "@/components/job-list";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUserFavorites } from "@/lib/hooks/useFavoritos";
+import { JobPosting } from "@/lib/types/iJobPosting"; // Asegúrate de importar el tipo correcto
 
 export default function FavoritosPage() {
   const { data: session, status } = useSession();
@@ -34,7 +35,7 @@ export default function FavoritosPage() {
     );
   }
 
-  const favoriteJobs = favoritos?.map((fav: any) => fav.ofertaEmpleo) || [];
+  const favoriteJobs = favoritos?.map((fav: { ofertaEmpleo: JobPosting }) => fav.ofertaEmpleo) || [];
 
   const handleBack = () => {
     router.push("/");

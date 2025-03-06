@@ -75,12 +75,26 @@ export default function EditarAvisoPage() {
   const { data: job, isLoading: jobLoading, error: jobError } = useJobPostById(id as string);
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null); // Añadido para éxito
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
+
+  type UpdateJobOfferData = {
+    id: string;
+    titulo: string;
+    descripcion: string;
+    usuarioId: string;
+    empresaConsultora: string;
+    fechaCierre: string | null;
+    formaPostulacion: string;
+    emailContacto: string | null;
+    linkPostulacion: string | null;
+    categoriaId: string;
+  };
+
   const updateJobOfferMutation = useMutation({
-    mutationFn: ({ data, token }: { data: any; token: string }) => updateJobOffer(data, token),
-    onSuccess: (_, { data }) => {
+    mutationFn: ({ data, token }: { data: UpdateJobOfferData; token: string }) => updateJobOffer(data, token),
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPost", id] });
       queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
       setSubmitSuccess("¡Oferta actualizada con éxito!");
@@ -90,13 +104,6 @@ export default function EditarAvisoPage() {
       setSubmitError(err instanceof Error ? err.message : "Error desconocido al actualizar la oferta");
     },
   });
-
-  useAuthCheck();
-
-  if (status === "unauthenticated") {
-    router.push("/login");
-    return null;
-  }
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -126,6 +133,13 @@ export default function EditarAvisoPage() {
       });
     }
   }, [job, form]);
+
+  useAuthCheck();
+
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
 
   if (status === "loading" || jobLoading || categoriasLoading) {
     return (
@@ -160,7 +174,7 @@ export default function EditarAvisoPage() {
     setSubmitSuccess(null);
     setIsSubmitting(true);
     try {
-      const updateData = {
+      const updateData: UpdateJobOfferData = {
         id: id as string,
         titulo: data.titulo,
         descripcion: data.descripcion,
@@ -168,8 +182,8 @@ export default function EditarAvisoPage() {
         empresaConsultora: data.empresaConsultora,
         fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
         formaPostulacion: data.formaPostulacion,
-        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
-        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
+        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto ?? null : null,
+        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion ?? null : null,
         categoriaId: data.categoria,
       };
 

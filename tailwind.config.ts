@@ -47,6 +47,10 @@ module.exports = {
 			DEFAULT: "#557B83", // Verde-azulado de las colinas galesas
 			foreground: "#FFFFFF",
 		  },
+		  ghost: {
+			DEFAULT: "#557B83", // Verde-azulado de las colinas galesas
+			foreground: "#FFFFFF",
+		  },
 		  // Colores de interfaz estándar
 		  border: "hsl(var(--border))",
 		  input: "hsl(var(--input))",

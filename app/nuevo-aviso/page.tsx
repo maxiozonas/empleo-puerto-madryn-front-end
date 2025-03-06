@@ -72,27 +72,33 @@ export default function PublicarEmpleoPage() {
   const router = useRouter();
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null); 
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
+
+  type CreateJobOfferData = {
+    titulo: string;
+    descripcion: string;
+    usuarioId: string;
+    empresaConsultora: string;
+    fechaCierre: string | null;
+    formaPostulacion: string;
+    emailContacto: string | null;
+    linkPostulacion: string | null;
+    categoriaId: string;
+  };
+
   const createJobOfferMutation = useMutation({
-    mutationFn: ({ data, token }: { data: any; token: string }) => createJobOffer(data, token),
+    mutationFn: ({ data, token }: { data: CreateJobOfferData; token: string }) => createJobOffer(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
-      setSubmitSuccess("¡Oferta publicada con éxito!"); 
-      setTimeout(() => router.push("/"), 2000); 
+      setSubmitSuccess("¡Oferta publicada con éxito!");
+      setTimeout(() => router.push("/"), 2000);
     },
     onError: (err) => {
       setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
     },
   });
-
-  useAuthCheck();
-
-  if (status === "unauthenticated") {
-    router.push("/login");
-    return null;
-  }
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -107,6 +113,13 @@ export default function PublicarEmpleoPage() {
       fechaCierre: null,
     },
   });
+
+  useAuthCheck();
+
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
 
   if (status === "loading" || categoriasLoading) {
     return (
@@ -138,18 +151,18 @@ export default function PublicarEmpleoPage() {
 
   const onSubmit = async (data: FormData) => {
     setSubmitError(null);
-    setSubmitSuccess(null); 
+    setSubmitSuccess(null);
     setIsSubmitting(true);
     try {
-      const createData = {
+      const createData: CreateJobOfferData = {
         titulo: data.titulo,
         descripcion: data.descripcion,
         usuarioId: session?.user.id || "",
         empresaConsultora: data.empresaConsultora,
         fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
         formaPostulacion: data.formaPostulacion,
-        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
-        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
+        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto ?? null : null,
+        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion ?? null : null,
         categoriaId: data.categoria,
       };
 

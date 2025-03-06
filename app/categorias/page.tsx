@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPosts } from "@/lib/hooks/useOfertas";

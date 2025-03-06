@@ -33,11 +33,9 @@ export function useAuthCheck() {
       }
     };
 
-    
     checkToken();
     const interval = setInterval(checkToken, 5 * 60 * 1000);
 
-    
     return () => clearInterval(interval);
-  }, [session, status]); 
+  }, [session, status, apiUrl]);
 }

@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -73,6 +73,7 @@ export const authOptions: NextAuthOptions = {
     signIn: "/",
   },
 };
+
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

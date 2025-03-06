@@ -20,7 +20,7 @@ export function HeroSection() {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   return (
     <section className="relative h-[600px] overflow-hidden rounded-3xl shadow-xl w-full">

@@ -13,21 +13,12 @@ import { useAddFavorite, useRemoveFavorite, useIsFavorite } from "@/lib/hooks/us
 
 interface JobCardProps {
   job: JobPosting;
-  onToggleFavorite?: () => void;
-  isFavorite?: boolean;
   showEditOptions?: boolean;
   onEdit?: () => void;
   onDelete?: () => void;
 }
 
-export function JobCard({
-  job,
-  onToggleFavorite,
-  isFavorite: initialIsFavorite = false,
-  showEditOptions = false,
-  onEdit,
-  onDelete,
-}: JobCardProps) {
+export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobCardProps) {
   const { data: session, status } = useSession();
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
@@ -62,7 +53,6 @@ export function JobCard({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  variant="ghost"
                   size="icon"
                   className={cn(
                     "bg-background/80 backdrop-blur-sm transition-transform group-hover:scale-110",
