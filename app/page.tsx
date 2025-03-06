@@ -1,7 +1,6 @@
 "use client";
 
 import { HeroSection } from "@/components/home-page/HeroSection";
-import { CategoriesSection } from "@/components/home-page/CategoriesSection";
 import { FeaturedJobsSection } from "@/components/home-page/FeaturedJobSection";
 import { AboutSection } from "@/components/home-page/AboutSection";
 
