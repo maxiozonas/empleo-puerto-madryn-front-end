@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { JobPosting } from "../types/iJobPosting";
-import { fetchJobPostById, fetchJobPosts, fetchUserJobPosts } from "../api/ofertas";
+import { deleteJobOffer, fetchJobPostById, fetchJobPosts, fetchUserJobPosts } from "../api/ofertas";
 
 export function useJobPostById(id: string) {
     return useQuery<JobPosting, Error>({
@@ -31,6 +31,22 @@ export function useJobPostsByCategory(categoryId: string) {
         queryFn: async () => {
             const allJobs = await fetchJobPosts();
             return allJobs.filter((job) => job.categoria.id === categoryId);
+        },
+    });
+}
+
+export function useDeleteJobOffer() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ id, token }: { id: string; token: string }) => deleteJobOffer(id, token),
+        onSuccess: () => {
+            // Invalida las consultas relacionadas para actualizar la UI
+            queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
+            queryClient.invalidateQueries({ queryKey: ["userJobPosts"] }); // Invalida todas las consultas que comiencen con "userJobPosts"
+        },
+        onError: (err) => {
+            console.error("Error al eliminar la oferta:", err);
         },
     });
 }

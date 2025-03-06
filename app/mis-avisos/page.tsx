@@ -6,45 +6,14 @@ import { JobList } from "@/components/job-list";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useUserJobPosts } from "@/lib/hooks/useOfertas";
+import { useUserJobPosts, useDeleteJobOffer } from "@/lib/hooks/useOfertas";
 
 export default function MisAvisosPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const { data: jobs, isLoading, error } = useUserJobPosts(session?.backendToken || "");
-
-  const deleteMutation = useMutation({
-    mutationFn: async (jobId: string) => {
-      const response = await fetch(`https://empleo-pm-back-end-app.onrender.com/api/ofertas/${jobId}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${session?.backendToken}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error("Error al eliminar la publicación");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["userJobPosts", session?.backendToken] });
-    },
-    onError: (err) => {
-      alert(err instanceof Error ? err.message : "Error desconocido");
-    },
-  });
-
-  const handleEdit = (jobId: string) => {
-    router.push(`/editar-aviso/${jobId}`);
-  };
-
-  const handleDelete = (jobId: string) => {
-    if (confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {
-      deleteMutation.mutate(jobId);
-    }
-  };
+  const token = session?.backendToken || "";
+  const { data: jobs, isLoading, error } = useUserJobPosts(token);
+  const deleteMutation = useDeleteJobOffer(); // Usa el hook existente
 
   if (status === "loading" || isLoading) {
     return (
@@ -66,17 +35,36 @@ export default function MisAvisosPage() {
       </div>
     );
   }
-  
+
+  const handleEdit = (jobId: string) => {
+    router.push(`/editar-aviso/${jobId}`);
+  };
+
+  const handleDelete = (jobId: string) => {
+    if (confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {
+      console.log("Eliminando publicación con ID:", jobId); // Depuración
+      deleteMutation.mutate(
+        { id: jobId, token },
+        {
+          onError: (err) => {
+            console.error("Error al eliminar:", err);
+            alert(err instanceof Error ? err.message : "Error desconocido al eliminar la publicación");
+          },
+          onSuccess: () => {
+            console.log("Publicación eliminada con éxito");
+          },
+        }
+      );
+    }
+  };
+
   const handleBack = () => {
     router.push("/");
   };
 
   return (
     <div className="container mx-auto min-h-screen py-8 px-4">
-      <Button
-        onClick={handleBack}
-        className="flex items-center hover:underline"
-      >
+      <Button onClick={handleBack} className="flex items-center hover:underline">
         <ArrowLeft className="h-4 w-4 mr-2" />
         <span>Volver</span>
       </Button>
