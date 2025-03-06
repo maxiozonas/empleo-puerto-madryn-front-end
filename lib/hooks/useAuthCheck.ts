@@ -6,6 +6,8 @@ import { useSession, signOut } from "next-auth/react";
 export function useAuthCheck() {
   const { data: session, status } = useSession();
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     if (typeof window === "undefined" || status === "loading" || status === "unauthenticated" || !session?.backendToken) {
       return;
@@ -13,7 +15,7 @@ export function useAuthCheck() {
 
     const checkToken = async () => {
       try {
-        const response = await fetch("https://empleo-pm-back-end-app.onrender.com/api/auth/validate-token", {
+        const response = await fetch(`${apiUrl}/api/auth/validate-token`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

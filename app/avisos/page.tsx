@@ -29,7 +29,7 @@ export default function OfertasLaboralesPage() {
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
-          className="flex items-center hover:underline"
+          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           <span>Volver</span>
