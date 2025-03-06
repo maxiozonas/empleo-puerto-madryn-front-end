@@ -33,7 +33,7 @@ export function CategoriesSection() {
         {categoryCounts.map((category, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-4 flex flex-col items-center text-center border border-secondary/20 hover:border-secondary"
+            className="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center text-center border"
           >
             <div className="bg-primary/10 p-3 rounded-full mb-3">{category.icon}</div>
             <h3 className="font-medium text-foreground">{category.name}</h3>

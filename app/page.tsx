@@ -13,7 +13,6 @@ export default function HomePage() {
   return (
     <div className="space-y-">
       <HeroSection />
-      <CategoriesSection />
       <FeaturedJobsSection />
       <AboutSection />
     </div>
