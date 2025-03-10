@@ -60,7 +60,7 @@ export default function CategoriasPage() {
     };
 
     return (
-        <div className="container mx-auto py-12 px-4">
+        <div className="container mx-auto py-6 px-4">
             <div className="flex items-center mb-6">
                 <Button
                     onClick={handleBack}

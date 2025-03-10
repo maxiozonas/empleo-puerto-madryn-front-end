@@ -42,7 +42,6 @@ export default function MisAvisosPage() {
 
   const handleDelete = (jobId: string) => {
     if (confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {
-      console.log("Eliminando publicación con ID:", jobId); // Depuración
       deleteMutation.mutate(
         { id: jobId, token },
         {
@@ -63,11 +62,16 @@ export default function MisAvisosPage() {
   };
 
   return (
-    <div className="container mx-auto min-h-screen py-8 px-4">
-      <Button onClick={handleBack} className="flex items-center hover:underline">
-        <ArrowLeft className="h-4 w-4 mr-2" />
-        <span>Volver</span>
-      </Button>
+    <div className="container mx-auto min-h-screen py-6 px-4">
+      <div className="flex items-center mb-6">
+        <Button
+          onClick={handleBack}
+          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          <span>Volver</span>
+        </Button>
+      </div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-primary">Mis Avisos</h1>
         <Button asChild className="bg-ocean-gradient hover:bg-primary/90">

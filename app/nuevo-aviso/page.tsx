@@ -23,12 +23,31 @@ const formSchema = z
   .object({
     titulo: z.string()
       .min(1, "El título es obligatorio")
-      .max(150, "El título no puede superar los 150 caracteres"),
+      .max(150, "El título no puede superar los 150 caracteres")
+      .trim()
+      .refine((val) => val.length > 0 && val.trim().length > 0, {
+        message: "El título no puede ser solo espacios",
+      })
+      .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
+        message: "El título no puede contener caracteres especiales raros",
+      }),
     descripcion: z.string()
-      .min(1, "La descripción es obligatoria"),
+      .min(1, "La descripción es obligatoria")
+      .max(5000, "La descripción no puede superar los 5000 caracteres")
+      .trim()
+      .refine((val) => val.length > 0 && val.trim().length > 0, {
+        message: "La descripción no puede ser solo espacios",
+      }),
     empresaConsultora: z.string()
       .min(1, "El nombre de la empresa es obligatorio")
-      .max(150, "El nombre de la empresa no puede superar los 150 caracteres"),
+      .max(150, "El nombre de la empresa no puede superar los 150 caracteres")
+      .trim()
+      .refine((val) => val.length > 0 && val.trim().length > 0, {
+        message: "La empresa no puede ser solo espacios",
+      })
+      .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
+        message: "La empresa no puede contener caracteres especiales raros",
+      }),
     categoria: z.string()
       .min(1, "Debes seleccionar una categoría"),
     formaPostulacion: z.enum(["MAIL", "LINK"], {
@@ -40,11 +59,15 @@ const formSchema = z
       .nullable(),
     linkPostulacion: z.string()
       .url("Debes ingresar una URL válida (ej: https://example.com)")
+      .trim()
+      .refine((val) => !val || (val.length > 0 && val.trim().length > 0), {
+        message: "El link no puede ser solo espacios",
+      })
       .optional()
       .nullable(),
     fechaCierre: z.string()
       .optional()
-      .nullable(),
+      .nullable(), 
   })
   .refine(
     (data) => {
@@ -180,7 +203,7 @@ export default function PublicarEmpleoPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl py-8">
+    <div className="mx-auto max-w-2xl py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}

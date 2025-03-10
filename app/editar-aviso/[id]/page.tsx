@@ -201,7 +201,7 @@ export default function EditarAvisoPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl py-8">
+    <div className="mx-auto max-w-2xl py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}

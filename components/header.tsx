@@ -8,10 +8,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Menu, Anchor, Ship } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UserNav } from "./user-nav";
+import Image from "next/image";
+import { ChevronDown } from "lucide-react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const router = useRouter();
 
@@ -21,6 +23,29 @@ export default function Header() {
     } else {
       router.push("/nuevo-aviso");
     }
+  };
+
+  const UserNavMobile = () => {
+    if (!isAuthenticated || !session?.user) return null;
+
+    return (
+      <div className="flex items-center gap-2 p-2 bg-secondary/10 rounded-lg mb-4">
+        {session.user.image ? (
+          <Image
+            src={session.user.image}
+            alt={session.user.name || "Perfil de usuario"}
+            width={32}
+            height={32}
+            className="rounded-full object-cover"
+          />
+        ) : (
+          <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+            <span className="text-gray-500 text-sm">{session.user.name?.[0] || "U"}</span>
+          </div>
+        )}
+        <span className="text-sm font-medium truncate">{session.user.name || "Usuario"}</span>
+      </div>
+    );
   };
 
   return (
@@ -67,10 +92,13 @@ export default function Header() {
             <SheetHeader>
               <SheetTitle className="text-primary">Menú</SheetTitle>
             </SheetHeader>
-            <div className="flex flex-col gap-4 mt-8">
+            {/* Información del usuario en mobile */}
+            <UserNavMobile />
+            <div className="flex flex-col gap-4 mt-4">
               <Button
                 asChild
-                className="w-full justify-start text-primary hover:text-primary/90"
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary/10"
                 onClick={() => {
                   setIsMenuOpen(false);
                   router.push("/avisos");
@@ -80,7 +108,8 @@ export default function Header() {
               </Button>
               <Button
                 asChild
-                className="w-full justify-start text-primary hover:text-primary/90"
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary/10"
                 onClick={() => {
                   setIsMenuOpen(false);
                   router.push("/categorias");

@@ -45,7 +45,7 @@ export default function CategoryPage() {
 
   return (
 
-    <div className="container min-h-screen mx-auto py-12 px-4">
+    <div className="container min-h-screen mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
