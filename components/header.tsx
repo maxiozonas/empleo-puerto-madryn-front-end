@@ -9,7 +9,6 @@ import { Menu, Anchor, Ship } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { UserNav } from "./user-nav";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
