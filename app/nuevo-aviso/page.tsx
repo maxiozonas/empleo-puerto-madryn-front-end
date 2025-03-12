@@ -176,11 +176,15 @@ export default function PublicarEmpleoPage() {
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
+    console.log("Data:", data);
     try {
+      console.log("Session data:", session);
+      console.log("User ID:", session?.user?.id);
+      
       const createData: CreateJobOfferData = {
         titulo: data.titulo,
         descripcion: data.descripcion,
-        usuarioId: session?.user.id || "",
+        usuarioId: session?.user?.id || "",
         empresaConsultora: data.empresaConsultora,
         fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
         formaPostulacion: data.formaPostulacion,
@@ -188,6 +192,8 @@ export default function PublicarEmpleoPage() {
         linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion ?? null : null,
         categoriaId: data.categoria,
       };
+
+      console.log("Create data:", createData);
 
       await createJobOfferMutation.mutateAsync({
         data: createData,
@@ -197,6 +203,7 @@ export default function PublicarEmpleoPage() {
       setIsSubmitting(false);
     }
   };
+
 
   const handleBack = () => {
     router.push("/");
