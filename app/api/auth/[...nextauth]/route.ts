@@ -44,8 +44,10 @@ const authOptions: NextAuthOptions = {
           }
 
           const data = await response.json();
+          console.log("Respuesta de /api/auth/google:", data);
           account.backendToken = data.token;
-          account.userId = data.id;
+          account.userId = data.usuarioId;
+          console.log("usuario id:", data.usuarioId);
           return true;
         } catch (error) {
           console.error("Error contacting backend:", error);
@@ -66,6 +68,7 @@ const authOptions: NextAuthOptions = {
         session.backendToken = token.backendToken as string;
         session.user.id = token.id as string;
       }
+      console.log("session", session);
       return session;
     },
   },

@@ -92,6 +92,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function PublicarEmpleoPage() {
   const { data: session, status } = useSession();
+  console.log("session", session);
   const router = useRouter();
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -176,7 +177,7 @@ export default function PublicarEmpleoPage() {
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
-    console.log("Data:", data);
+    console.log("Form data:", data);
     try {
       console.log("Session data:", session);
       console.log("User ID:", session?.user?.id);
