@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { JobPosting } from "@/lib/types/iJobPosting";
-import { Briefcase, Heart, MapPin, Calendar, ArrowRight, Edit, Trash2 } from "lucide-react";
+import { Heart, MapPin, Calendar, ArrowRight, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";

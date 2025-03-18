@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 import Link from "next/link";
-import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Compass, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, ArrowRight, Wrench, Truck } from "lucide-react";
+import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, ArrowRight, Wrench, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function CategoriasPage() {
