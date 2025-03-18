@@ -19,7 +19,7 @@ export function UserNav() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center gap-4 hover">
+      <div className="flex items-center gap-4 hover:underline">
         <Button onClick={() => signIn("google")}>
           Iniciar sesión
         </Button>

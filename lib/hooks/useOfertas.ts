@@ -41,9 +41,8 @@ export function useDeleteJobOffer() {
     return useMutation({
         mutationFn: ({ id, token }: { id: string; token: string }) => deleteJobOffer(id, token),
         onSuccess: () => {
-            // Invalida las consultas relacionadas para actualizar la UI
             queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
-            queryClient.invalidateQueries({ queryKey: ["userJobPosts"] }); // Invalida todas las consultas que comiencen con "userJobPosts"
+            queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
         },
         onError: (err) => {
             console.error("Error al eliminar la oferta:", err);

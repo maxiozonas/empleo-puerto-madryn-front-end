@@ -68,7 +68,6 @@ const authOptions: NextAuthOptions = {
         session.backendToken = token.backendToken as string;
         session.user.id = token.id as string;
       }
-      console.log("session", session);
       return session;
     },
   },

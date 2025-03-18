@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 import Link from "next/link";
-import { Loader2, Anchor, Fish, Factory, Building, Compass, Coffee, Book, HeartPulse, Hammer, Laptop, Briefcase, ArrowRight, ArrowLeft } from "lucide-react";
+import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Compass, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, ArrowRight, Wrench, Truck } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export default function CategoriasPage() {
@@ -38,16 +38,28 @@ export default function CategoriasPage() {
     }
 
     const categoryIcons: { [key: string]: React.ReactNode } = {
-        "Turismo": <Anchor className="h-6 w-6" />,
-        "Pesca": <Fish className="h-6 w-6" />,
-        "Industria": <Factory className="h-6 w-6" />,
-        "Comercio": <Building className="h-6 w-6" />,
-        "Servicios": <Compass className="h-6 w-6" />,
-        "Gastronomía": <Coffee className="h-6 w-6" />,
-        "Educación": <Book className="h-6 w-6" />,
-        "Salud": <HeartPulse className="h-6 w-6" />,
-        "Construcción": <Hammer className="h-6 w-6" />,
-        "Tecnología": <Laptop className="h-6 w-6" />,
+        "Turismo": <Anchor className="h-6 w-6" />,              
+        "Ventas": <CircleDollarSign className="h-6 w-6" />,     
+        "Pesca": <Fish className="h-6 w-6" />,                  
+        "Marketing": <Briefcase className="h-6 w-6" />,        
+        "Tecnología": <Laptop className="h-6 w-6" />,           
+        "Deporte": <BicepsFlexed className="h-6 w-6" />,        
+        "Ingeniería": <Factory className="h-6 w-6" />,          
+        "Diseño": <SquareChartGantt className="h-6 w-6" />,     
+        "Producción": <Building className="h-6 w-6" />,         
+        "Logística": <Warehouse className="h-6 w-6" />,         
+        "Atención al Cliente": <BookUser className="h-6 w-6" />, 
+        "Finanzas": <ChartArea className="h-6 w-6" />,          
+        "Administración": <Waypoints className="h-6 w-6" />,    
+        "Recursos Humanos": <Handshake className="h-6 w-6" />,  
+        "Educación": <Book className="h-6 w-6" />,              
+        "Salud": <HeartPulse className="h-6 w-6" />,            
+        "Construcción": <Hammer className="h-6 w-6" />,         
+        "Servicios": <Wrench className="h-6 w-6" />,            
+        "Chofer": <Truck className="h-6 w-6" />,                
+        "Gastronomía": <Coffee className="h-6 w-6" />,          
+        "Comercio": <Building className="h-6 w-6" />,           
+        "Industria": <Factory className="h-6 w-6" />            
     };
 
     const jobCountByCategory = allJobs?.reduce((acc, job) => {
@@ -58,6 +70,8 @@ export default function CategoriasPage() {
     const handleBack = () => {
         router.push("/");
     };
+
+    console.log("categories", categories?.map(category => category.nombre));
 
     return (
         <div className="container mx-auto py-6 px-4">

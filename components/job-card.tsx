@@ -118,9 +118,6 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
 
       <CardHeader className="pb-2 pt-6">
         <div className="flex items-center gap-2 mb-1">
-          <div className="bg-primary/20 p-2 rounded-full">
-            <Briefcase className="h-5 w-5 text-primary" />
-          </div>
           <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
             {job.categoria.nombre}
           </Badge>

@@ -23,9 +23,7 @@ export function HeroSection() {
   }, [images.length]);
 
   return (
-    <><div>
-      <p className="text-secondary-foreground"> Aun estamos en desarrollo, si estan aqui es porque se les dio acceso mediante el link. Esto con el objetivo de obtener feedback. Muchas gracias.</p>
-    </div><section className="relative h-[600px] overflow-hidden rounded-3xl shadow-xl w-full">
+    <section className="relative h-[600px] overflow-hidden rounded-3xl shadow-xl w-full">
         {images.map((src, index) => (
           <div
             key={index}
@@ -64,6 +62,6 @@ export function HeroSection() {
             </div>
           </div>
         </div>
-      </section></>
+      </section>
   );
 }
