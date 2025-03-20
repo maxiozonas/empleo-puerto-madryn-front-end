@@ -92,7 +92,6 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function PublicarEmpleoPage() {
   const { data: session, status } = useSession();
-  console.log("session", session);
   const router = useRouter();
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const [submitError, setSubmitError] = useState<string | null>(null);

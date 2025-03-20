@@ -59,7 +59,7 @@ export default function Header() {
         </Link>
 
         <div className="hidden md:flex items-center gap-4">
-          <Button
+            <Button
             asChild
             className="text-primary hover:underline transition-colors"
           >
@@ -70,6 +70,18 @@ export default function Header() {
             className="text-primary hover:underline transition-colors"
           >
             <Link href="/categorias">Categorías</Link>
+          </Button>
+          <Button
+            asChild
+            className="text-primary hover:underline transition-colors"
+          >
+            <Link href="/sobre-nosotros">Sobre Nosotros</Link>
+          </Button>
+          <Button
+            asChild
+            className="text-primary hover:underline transition-colors"
+          >
+            <Link href="/contactanos">Contáctanos </Link>
           </Button>
           <Button className="bg-ocean-gradient hover:bg-primary/90" onClick={handlePublicarEmpleo}>
             <Ship className="mr-2 h-4 w-4" />
@@ -94,6 +106,17 @@ export default function Header() {
             {/* Información del usuario en mobile */}
             <UserNavMobile />
             <div className="flex flex-col gap-4 mt-4">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary/10"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  router.push("/sobre-nosotros");
+                }}
+              >
+                <Link href="/sobre-nosotros">Quienes Somos</Link>
+              </Button>
               <Button
                 asChild
                 variant="outline"
