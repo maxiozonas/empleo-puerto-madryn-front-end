@@ -38,16 +38,14 @@ export default function AboutUs() {
         </Button>
       </div>
       <div className="flex flex-col items-center gap-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-8">
+        <h1 className="text-3xl font-bold text-center text-primary gap-4">
           Sobre Nosotros
         </h1>
-        <p className="text-lg sm:text-xl text-muted-foreground ">
+        <p className="text-muted-foreground ">
           Somos dos amigos que, motivados por una necesidad observada en Puerto Madryn, decidimos unir nuestras habilidades y entusiasmo para crear esta página web. Nuestro objetivo principal es facilitar la búsqueda y creación de oportunidades laborales en la región, un área donde identificamos una carencia que queríamos abordar. Este proyecto nace no solo como una solución práctica para conectar a la comunidad con el empleo, sino también como una oportunidad para poner en práctica nuestros conocimientos y contribuir al bienestar de nuestra ciudad. <br />
-          Con dedicación y compromiso, buscamos ofrecer una herramienta útil que apoye el desarrollo económico y social de Puerto Madryn.
-        </p>
-        <p className="text-lg sm:text-xl text-muted-foreground">
+          Con dedicación y compromiso, buscamos ofrecer una herramienta útil que apoye el desarrollo económico y social de Puerto Madryn. <br /> <br />
           Esperamos que esta plataforma sea de gran ayuda para todos. ¡Gracias por ser parte de este esfuerzo y bienvenidos a nuestra comunidad!
-        </p>
+        </p>        
       </div>
       <div className="flex flex-col items-center gap-4 mt-16 md:flex-row md:justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -105,8 +103,8 @@ export default function AboutUs() {
           </div>          
         </div>
         <div className="text-center mr-4">
-            <p className="text-lg sm:text-xl text-muted-foreground">Máximo Ozonas</p>
-            <p className="text-sm text-muted-foreground">Técnico en Programación</p>
+            <p className="font-bold text-muted-foreground">Máximo Ozonas</p>
+            <p className="text-muted-foreground">Técnico en Programación</p>
           </div>
 
         <div className="flex flex-col items-center gap-4">
@@ -128,9 +126,9 @@ export default function AboutUs() {
               <Image
                 src={icons.instagram}
                 alt="Instagram de Juan Ignacio" 
-                className="h-8 w-8"
-                width={32}
-                height={32}
+                className="h-6 w-6"
+                width={24}
+                height={24}
                />
             </a>
             <a
@@ -142,9 +140,9 @@ export default function AboutUs() {
                 <Image
                     src={icons.linkedin}
                     alt="LinkedIn de Juan Ignacio" 
-                    className="h-8 w-8"
-                    width={32}
-                    height={32}
+                    className="h-6 w-6"
+                    width={24}
+                    height={24}
                 />
             </a>
             <a
@@ -164,7 +162,7 @@ export default function AboutUs() {
           </div>
         </div>
         <div className="text-center">
-            <p className="text-lg sm:text-xl text-muted-foreground">Juan Ignacio Rodríguez Mariani</p>
+            <p className="font-bold text-muted-foreground">Juan Ignacio Rodríguez Mariani</p>
             <p className="text-sm text-muted-foreground">Estudiante de Ingeniería en Sistemas de Información</p>
           </div>
       </div>
