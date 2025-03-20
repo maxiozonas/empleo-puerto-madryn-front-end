@@ -52,7 +52,7 @@ export function HeroSection() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Descubre tu futuro profesional en Puerto Madryn
             </h1>
-            <p className="text-white/90 text-lg sm:text-xl mb-8">
+            <p className="text-white/90 text-lg sm:text-xl mb-8 text-center">
               Donde el mar patagónico y las oportunidades laborales se encuentran
             </p>
             <div className="flex flex-wrap gap-4">

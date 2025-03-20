@@ -27,7 +27,7 @@ export default function AboutUs() {
   };
 
   return (
-    <section className="container mx-auto min-h-screen py-16 bg-primary/5">
+    <section className="container mx-auto min-h-screen py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -38,19 +38,20 @@ export default function AboutUs() {
         </Button>
       </div>
       <div className="flex flex-col items-center gap-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-primary mb-8">
+        <h1 className="text-3xl font-bold text-primary mb-2">
           Sobre Nosotros
         </h1>
-        <p className="text-lg sm:text-xl text-muted-foreground ">
+        <p className="text-muted-foreground text-justify">
           Somos dos amigos que, motivados por una necesidad observada en Puerto Madryn, decidimos unir nuestras habilidades y entusiasmo para crear esta página web. Nuestro objetivo principal es facilitar la búsqueda y creación de oportunidades laborales en la región, un área donde identificamos una carencia que queríamos abordar. Este proyecto nace no solo como una solución práctica para conectar a la comunidad con el empleo, sino también como una oportunidad para poner en práctica nuestros conocimientos y contribuir al bienestar de nuestra ciudad. <br />
           Con dedicación y compromiso, buscamos ofrecer una herramienta útil que apoye el desarrollo económico y social de Puerto Madryn.
         </p>
-        <p className="text-lg sm:text-xl text-muted-foreground">
+        <p className="text-muted-foreground">
           Esperamos que esta plataforma sea de gran ayuda para todos. ¡Gracias por ser parte de este esfuerzo y bienvenidos a nuestra comunidad!
         </p>
       </div>
-      <div className="flex flex-col items-center gap-4 mt-16 md:flex-row md:justify-center">
-        <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-12 mt-16 md:flex-row md:justify-center">
+        {/* Máximo Ozonas */}
+        <div className="flex flex-col items-center gap-2">
           <div className="relative w-48 h-48">
             <Image
               src={images.maxifoto}
@@ -59,7 +60,11 @@ export default function AboutUs() {
               className="rounded-full object-cover"
             />
           </div>
-          <div className="flex justify-center gap-4">
+          <div className="text-center">
+            <p className="text-lg font-semibold text-muted-foreground">Máximo Ozonas</p>
+            <p className="text-sm text-muted-foreground">Técnico en Programación</p>
+          </div>
+          <div className="flex justify-center gap-3">
             <a
               href="https://instagram.com/maxiozonas"
               target="_blank"
@@ -68,11 +73,11 @@ export default function AboutUs() {
             >
               <Image
                 src={icons.instagram}
-                alt="Instagram de Máximo" 
-                className="h-8 w-8"
-                width={32}
-                height={32}
-               />
+                alt="Instagram de Máximo"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
             </a>
             <a
               href="https://linkedin.com/in/maximoozonas"
@@ -82,11 +87,11 @@ export default function AboutUs() {
             >
               <Image
                 src={icons.linkedin}
-                alt="LinkedIn de Máximo" 
-                className="h-8 w-8"
-                width={32}
-                height={32}
-               />
+                alt="LinkedIn de Máximo"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
             </a>
             <a
               href="https://github.com/MaxiOzonas"
@@ -94,22 +99,19 @@ export default function AboutUs() {
               rel="noopener noreferrer"
               className="hover:opacity-75 transition-opacity"
             >
-                <Image
-                    src={icons.github}
-                    alt="GitHub de Máximo" 
-                    className="h-8 w-8"
-                    width={32}
-                    height={32}
-                 />
+              <Image
+                src={icons.github}
+                alt="GitHub de Máximo"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
             </a>
-          </div>          
-        </div>
-        <div className="text-center mr-4">
-            <p className="text-lg sm:text-xl text-muted-foreground">Máximo Ozonas</p>
-            <p className="text-sm text-muted-foreground">Técnico en Programación</p>
           </div>
+        </div>
 
-        <div className="flex flex-col items-center gap-4">
+        {/* Juan Ignacio Rodríguez Mariani */}
+        <div className="flex flex-col items-center gap-2">
           <div className="relative w-48 h-48">
             <Image
               src={images.juanifoto}
@@ -118,7 +120,11 @@ export default function AboutUs() {
               className="rounded-full object-cover"
             />
           </div>
-          <div className="flex justify-center gap-4">
+          <div className="text-center">
+            <p className="text-lg font-semibold text-muted-foreground">Juan Ignacio Rodríguez Mariani</p>
+            <p className="text-sm text-muted-foreground">Estudiante de Ingeniería en Sistemas de Información</p>
+          </div>
+          <div className="flex justify-center gap-3">
             <a
               href="https://instagram.com/juanirmariani"
               target="_blank"
@@ -127,11 +133,11 @@ export default function AboutUs() {
             >
               <Image
                 src={icons.instagram}
-                alt="Instagram de Juan Ignacio" 
-                className="h-8 w-8"
-                width={32}
-                height={32}
-               />
+                alt="Instagram de Juan Ignacio"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
             </a>
             <a
               href="https://linkedin.com/in/juan-ignacio-rodriguez-mariani"
@@ -139,13 +145,13 @@ export default function AboutUs() {
               rel="noopener noreferrer"
               className="hover:opacity-75 transition-opacity"
             >
-                <Image
-                    src={icons.linkedin}
-                    alt="LinkedIn de Juan Ignacio" 
-                    className="h-8 w-8"
-                    width={32}
-                    height={32}
-                />
+              <Image
+                src={icons.linkedin}
+                alt="LinkedIn de Juan Ignacio"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
             </a>
             <a
               href="https://github.com/JuaniRMariani"
@@ -153,20 +159,16 @@ export default function AboutUs() {
               rel="noopener noreferrer"
               className="hover:opacity-75 transition-opacity"
             >
-                <Image
-                    src={icons.github}
-                    alt="GitHub de Juan Ignacio" 
-                    className="h-8 w-8"
-                    width={32}
-                    height={32}
-                />
+              <Image
+                src={icons.github}
+                alt="GitHub de Juan Ignacio"
+                width={24}
+                height={24}
+                className="h-6 w-6"
+              />
             </a>
           </div>
         </div>
-        <div className="text-center">
-            <p className="text-lg sm:text-xl text-muted-foreground">Juan Ignacio Rodríguez Mariani</p>
-            <p className="text-sm text-muted-foreground">Estudiante de Ingeniería en Sistemas de Información</p>
-          </div>
       </div>
     </section>
   );
