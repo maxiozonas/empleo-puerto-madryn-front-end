@@ -5,14 +5,17 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Anchor } from "lucide-react";
+import aguaImage from "@/lib/public/images/agua.jpg";
+import ballenaImage from "@/lib/public/images/ballena.jpg";
+import playaImage from "@/lib/public/images/playa.jpg";
 
 export function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const images = [
-    "https://images.unsplash.com/photo-1526085714137-8c2402e21151?q=80&w=2071&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1583030225577-329fe6cc80d6?q=80&w=1200&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1523295029613-4b96e13a8c21?q=80&w=2071&auto=format&fit=crop",
+    aguaImage,
+    ballenaImage,
+    playaImage,
   ];
 
   useEffect(() => {
