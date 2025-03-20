@@ -5,9 +5,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Anchor } from "lucide-react";
-import aguaImage from "@/lib/public/images/agua.jpg";
-import ballenaImage from "@/lib/public/images/ballena.jpg";
-import playaImage from "@/lib/public/images/playa.jpg";
+import aguaImage from "/public/lib/agua.jpg"
+import ballenaImage from "/public/lib/ballena.jpg"
+import playaImage from "/public/lib/playa.jpg"
+
 
 export function HeroSection() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
