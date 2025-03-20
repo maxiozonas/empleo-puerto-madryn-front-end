@@ -47,7 +47,7 @@ export default function AboutUs() {
         </p>
         <p className="text-muted-foreground">
           Esperamos que esta plataforma sea de gran ayuda para todos. ¡Gracias por ser parte de este esfuerzo y bienvenidos a nuestra comunidad!
-        </p>
+        </p>        
       </div>
       <div className="flex flex-col items-center gap-12 mt-16 md:flex-row md:justify-center">
         {/* Máximo Ozonas */}
