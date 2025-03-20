@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { JobPosting } from "@/lib/types/iJobPosting";
 import { fetchJobPostById } from "@/lib/api/ofertas";
+import ReactMarkdown from 'react-markdown';
 
 export default function JobDetailPage() {
   const router = useRouter();
@@ -130,12 +131,10 @@ export default function JobDetailPage() {
 
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">Descripción</h2>
-              <div className="prose text-muted-foreground max-w-none whitespace-pre-wrap">
-                {job.descripcion.split("\n\n").map((paragraph, index) => (
-                  <p key={index} className="mb-4">
-                    {paragraph}
-                  </p>
-                ))}
+              <div className="prose prose-sm md:prose-base text-muted-foreground max-w-none">
+                <ReactMarkdown>
+                  {job.descripcion}
+                </ReactMarkdown>
               </div>
               {job.formaPostulacion === "MAIL" && job.contactoPostulacion && (
                 <p className="text-muted-foreground mt-4">

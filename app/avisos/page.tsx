@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { JobList } from "@/components/job-list";
-import { SearchFilters } from "@/components/search-filters";
+import { JobList } from "@/components/ofertas/job-list";
+import { SearchFilters } from "@/components/ofertas/search-filters";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { JobList } from "@/components/job-list";
+import { JobList } from "@/components/ofertas/job-list";
 import { useJobPostsByCategory } from "@/lib/hooks/useOfertas";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { ArrowLeft, Loader2 } from "lucide-react";

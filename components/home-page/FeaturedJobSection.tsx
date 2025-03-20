@@ -1,7 +1,7 @@
 "use client";
 
 
-import { JobCard } from "@/components/job-card";
+import { JobCard } from "@/components/ofertas/job-card";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 import { Loader2 } from "lucide-react";
 

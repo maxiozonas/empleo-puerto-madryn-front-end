@@ -27,7 +27,7 @@ export function HeroSection() {
   }, [images.length]);
 
   return (
-    <section className="relative h-[600px] overflow-hidden rounded-3xl shadow-xl w-full">
+    <section className="relative h-[500px] overflow-hidden rounded-3xl shadow-xl w-full">
         {images.map((src, index) => (
           <div
             key={index}
@@ -53,7 +53,7 @@ export function HeroSection() {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
               Descubre tu futuro profesional en Puerto Madryn
             </h1>
-            <p className="text-white/90 text-lg sm:text-xl mb-8 text-center">
+            <p className="text-white/90 text-lg sm:text-xl mb-8">
               Donde el mar patagónico y las oportunidades laborales se encuentran
             </p>
             <div className="flex flex-wrap gap-4">

@@ -3,10 +3,10 @@
 import type React from "react";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
+import Header from "@/components/navbar/header";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Footer from "@/components/footer";
+import Footer from "@/components/home-page/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 

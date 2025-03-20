@@ -46,12 +46,12 @@ export function UserNav() {
             ) : (
               <div className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center">
                 <span className="text-gray-500 text-sm">
-                  {session?.user?.name?.[0] || "U"}
+                  {session.user.name?.split(' ')[0]?.[0] || "U"}
                 </span>
               </div>
             )}
             <span className="text-sm font-medium truncate max-w-[100px]">
-              {session.user?.name || "Usuario"}
+              {session.user?.name?.split(' ')[0] || "Usuario"}
             </span>
           </span>
           <ChevronDown className="h-4 w-4" />

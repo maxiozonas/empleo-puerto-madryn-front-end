@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { JobCard } from "@/components/job-card";
+import { JobCard } from "@/components/ofertas/job-card";
 import { JobPosting } from "@/lib/types/iJobPosting";
 import { Loader2, Anchor } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 
 interface JobListProps {
