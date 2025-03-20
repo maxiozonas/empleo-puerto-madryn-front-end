@@ -161,7 +161,7 @@ export default function ContactUs() {
                   <FormLabel className="text-primary font-medium">Email</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="contacto@empresa.com"
+                      placeholder="contacto@ejemplo.com"
                       {...field}
                       value={field.value ?? ""}
                       className="border-primary/20 focus-visible:ring-primary"

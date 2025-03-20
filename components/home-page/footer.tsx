@@ -16,10 +16,16 @@ export default function Footer() {
     router.push("/politica-privacidad"); 
   };
 
+  const handleAboutUsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    router.push("/sobre-nosotros");
+  }
+
   const handlePublishClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     router.push("/nuevo-aviso"); 
   };
+  
 
   return (
     <div className="border-t mt-6 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
@@ -41,6 +47,14 @@ export default function Footer() {
           className="hover:text-blue-600 transition-colors cursor-pointer"
         >
           Política Privacidad
+        </a>
+        <span>·</span>
+        <a
+          href="#"
+          onClick={handleAboutUsClick}
+          className="hover:text-blue-600 transition-colors cursor-pointer"
+        >
+          Sobre Nosotros
         </a>
         <span>·</span>
         <a

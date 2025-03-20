@@ -70,13 +70,7 @@ export default function Header() {
         className="text-primary hover:underline transition-colors"
       >
         <Link href="/categorias">Categorías</Link>
-      </Button>
-      <Button
-        asChild
-        className="text-primary hover:underline transition-colors"
-      >
-        <Link href="/sobre-nosotros">Sobre Nosotros</Link>
-      </Button>
+      </Button>    
       <Button
         asChild
         className="text-primary hover:underline transition-colors"
@@ -126,17 +120,6 @@ export default function Header() {
             }}
           >
             <Link href="/categorias">Categorías</Link>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-primary text-primary hover:bg-primary/10"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/sobre-nosotros");
-            }}
-          >
-            <Link href="/sobre-nosotros">Sobre Nosotros</Link>
           </Button>
           <Button
             asChild

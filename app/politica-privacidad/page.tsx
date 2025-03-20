@@ -26,7 +26,7 @@ export default function PoliticaPrivacidadPage() {
       <h1 className="text-3xl font-bold text-primary mb-6">Términos y Condiciones</h1>
       <section className="space-y-6 text-gray-700">
         <h2 className="text-2xl font-semibold">Política de Privacidad</h2>
-        <p>El sitio web <strong>EmpleosPuertoMadryn</strong> es propiedad de EmpleosPuertoMadryn, que actúa como controlador de datos de tus datos personales.</p>
+        <p>El sitio web <strong>EmpleosPuertoMadryn</strong> es propiedad de EmpleosPuertoMadryn, que actúa como controlador de tus datos personales.</p>
         <p>Hemos adoptado esta Política de Privacidad, que establece cómo procesamos la información recopilada por EmpleosPuertoMadryn y explica las razones por las cuales necesitamos recopilar ciertos datos personales sobre ti. Por lo tanto, te recomendamos leer esta Política de Privacidad antes de utilizar el sitio web de EmpleosPuertoMadryn.</p>
         <p>Nos tomamos muy en serio la protección de tus datos personales y nos comprometemos a garantizar su confidencialidad y seguridad.</p>
 
@@ -35,7 +35,7 @@ export default function PoliticaPrivacidadPage() {
 
         <h3 className="text-xl font-semibold">¿Por qué procesamos tus datos?</h3>
         <p>Nuestra principal prioridad es la seguridad de los datos de nuestros usuarios. Por ello, procesamos únicamente los datos mínimos necesarios para mantener y operar el sitio web de manera efectiva. La información recopilada automáticamente se utiliza para identificar posibles casos de abuso y para generar estadísticas sobre el uso de la plataforma. Estas estadísticas no se agrupan de forma que permitan identificar a un usuario específico.</p>
-        <p>Puedes visitar nuestro sitio web sin revelar tu identidad ni proporcionar datos que permitan identificarte como individuo. Sin embargo, si deseas utilizar ciertas funcionalidades, como publicar una oferta de empleo, suscribirte a nuestro boletín o contactarnos, podrías proporcionarnos datos personales como tu correo electrónico, nombre, apellido, ciudad de residencia o información de tu empresa. Puedes elegir no compartir tus datos personales, pero esto podría limitar tu acceso a algunas funciones del sitio. Por ejemplo, no podrías publicar avisos ni recibir notificaciones personalizadas. Si tienes dudas sobre qué información es obligatoria, puedes contactarnos en <strong>empleospmadryn@gmail.com</strong>.</p>
+        <p>Puedes visitar nuestro sitio web sin revelar tu identidad ni proporcionar datos que permitan identificarte como individuo. Sin embargo, si deseas utilizar ciertas funcionalidades, como publicar una oferta de empleo, suscribirte a nuestro boletín o contactarnos, podrías proporcionarnos datos personales como tu correo electrónico, nombre, apellido, ciudad de residencia o información de tu empresa. Puedes elegir no compartir tus datos personales, pero esto podría limitar tu acceso a algunas funciones del sitio. Por ejemplo, no podrías publicar avisos ni recibir notificaciones personalizadas. Si tienes dudas sobre qué información es obligatoria, puedes contactarnos en <strong>empleospuertomadryn@gmail.com</strong>.</p>
 
         <h3 className="text-xl font-semibold">Tus derechos</h3>
         <p>Si resides en Europa, cuentas con los siguientes derechos relacionados con tus datos personales:</p>
