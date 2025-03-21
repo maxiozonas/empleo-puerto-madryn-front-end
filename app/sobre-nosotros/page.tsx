@@ -27,7 +27,7 @@ export default function AboutUs() {
   };
 
   return (
-    <section className="container mx-auto min-h-screen py-6 px-4">
+    <section className="container mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -37,15 +37,15 @@ export default function AboutUs() {
           <span>Volver</span>
         </Button>
       </div>
-      <div className="flex flex-col items-center gap-8">
-        <h1 className="text-3xl font-bold text-primary mb-2">
+      <div className="flex flex-col gap-8">
+        <h1 className="text-3xl font-bold text-center text-primary mb-2">
           Sobre Nosotros
         </h1>
         <p className="text-muted-foreground text-justify">
           Somos dos amigos que, motivados por una necesidad observada en Puerto Madryn, decidimos unir nuestras habilidades y entusiasmo para crear esta página web. Nuestro objetivo principal es facilitar la búsqueda y creación de oportunidades laborales en la región, un área donde identificamos una carencia que queríamos abordar. Este proyecto nace no solo como una solución práctica para conectar a la comunidad con el empleo, sino también como una oportunidad para poner en práctica nuestros conocimientos y contribuir al bienestar de nuestra ciudad. <br />
-          Con dedicación y compromiso, buscamos ofrecer una herramienta útil que apoye el desarrollo económico y social de Puerto Madryn.
+          Con dedicación y compromiso, buscamos ofrecer una herramienta útil que apoye el desarrollo económico y social de esta ciudad.
         </p>
-        <p className="text-muted-foreground">
+        <p className="text-muted-foreground text-justify">
           Esperamos que esta plataforma sea de gran ayuda para todos. ¡Gracias por ser parte de este esfuerzo y bienvenidos a nuestra comunidad!
         </p>        
       </div>

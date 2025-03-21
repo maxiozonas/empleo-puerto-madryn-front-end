@@ -8,16 +8,11 @@ export async function createMessage(
         lastName: string;
         email: string;
         message: string;
-    },
-    token: string
+    },    
 ): Promise<Message> {
 
-    const response = await fetch(`${apiUrl}/api/contactar`, {
+    const response = await fetch(`${apiUrl}/api/contacto`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        },
         body: JSON.stringify(data),
     });
 

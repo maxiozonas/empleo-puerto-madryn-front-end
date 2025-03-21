@@ -45,7 +45,7 @@ export default function ContactUs() {
   };
 
   const createMessageMutation = useMutation({
-    mutationFn: ({ data, token }: { data: CreateMessageData; token: string }) => createMessage(data, token),
+    mutationFn: ({ data }: { data: CreateMessageData; token: string }) => createMessage(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
       setSubmitSuccess("¡Oferta publicada con éxito!");
@@ -161,7 +161,7 @@ export default function ContactUs() {
                   <FormLabel className="text-primary font-medium">Email</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="contacto@empresa.com"
+                      placeholder="contacto@ejemplo.com"
                       {...field}
                       value={field.value ?? ""}
                       className="border-primary/20 focus-visible:ring-primary"
