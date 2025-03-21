@@ -17,14 +17,38 @@ import { createMessage } from "@/lib/api/contactar";
 
 const formSchema = z
   .object({
-    titulo: z.string().nonempty("Debes ingresar un nombre"),
-    empresaConsultora: z.string().nonempty("Debes ingresar un apellido"),
-    emailContacto: z.string().email("Debes ingresar un email válido"),
-    descripcion: z.string().nonempty("Debes ingresar un mensaje"),
-  })
-  .refine((data) => data.descripcion.length <= 500, {
-    message: "El mensaje no puede superar los 500 caracteres",}
-  );
+    nombre: z.string()
+      .min(1, { message: "El nombre es obligatorio" })
+      .max(30, { message: "El nombre no puede superar los 30 caracteres" })
+      .trim()
+      .refine((val) => val.length > 0 && val.trim().length > 0, {
+        message: "El nombre no puede ser solo espacios",
+      })
+      .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
+        message: "El nombre no puede contener caracteres especiales raros",
+      }),
+    apellido: z.string()
+      .min(1, { message: "El apellido es obligatorio" })
+      .max(30, { message: "El apellido no puede superar los 30 caracteres" })
+      .trim()
+      .refine((val) => val.length > 0 && val.trim().length > 0, {
+        message: "El apellido no puede ser solo espacios",
+      })
+      .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
+        message: "El apellido no puede contener caracteres especiales raros",
+      }),
+    email: z.string()
+      .email({ message: "Email inválido" })
+      .min(1, { message: "El email es obligatorio" })
+      .max(50, { message: "El email no puede superar los 50 caracteres" }),
+    mensaje: z.string()
+      .min(1, { message: "El mensaje es obligatorio" })
+      .max(5000, { message: "El mensaje no puede superar los 5000 caracteres" })
+      .trim()
+      .refine((val) => val.length > 0 && val.trim().length > 0, {
+        message: "El mensaje no puede ser solo espacios",
+      }),
+  });
 
 type FormData = z.infer<typeof formSchema>;
 
@@ -57,10 +81,10 @@ export default function ContactUs() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      titulo: "", 
-      empresaConsultora: "", 
-      emailContacto: "", 
-      descripcion: "", 
+      nombre: "",
+      apellido: "",
+      email: "",
+      mensaje: "",
     },
   });
 
@@ -72,10 +96,10 @@ export default function ContactUs() {
     setIsSubmitting(true);
     try {
       const createData: CreateMessageData = {
-        nombre: data.titulo,
-        apellido: data.empresaConsultora,
-        email: data.emailContacto,
-        mensaje: data.descripcion,
+        nombre: data.nombre,
+        apellido: data.apellido,
+        email: data.email,
+        mensaje: data.mensaje,
       };
 
       await createMessageMutation.mutateAsync(createData);
@@ -112,7 +136,7 @@ export default function ContactUs() {
         >
           <FormField
             control={form.control}
-            name="titulo"
+            name="nombre"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-medium">Nombre</FormLabel>
@@ -129,7 +153,7 @@ export default function ContactUs() {
           />
           <FormField
             control={form.control}
-            name="empresaConsultora"
+            name="apellido"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-medium">Apellido</FormLabel>
@@ -146,7 +170,7 @@ export default function ContactUs() {
           />
           <FormField
               control={form.control}
-              name="emailContacto"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-primary font-medium">Email</FormLabel>
@@ -163,7 +187,7 @@ export default function ContactUs() {
             />
           <FormField
             control={form.control}
-            name="descripcion"
+            name="mensaje"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-medium">Mensaje</FormLabel>

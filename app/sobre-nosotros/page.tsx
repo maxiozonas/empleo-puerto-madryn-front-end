@@ -42,7 +42,7 @@ export default function AboutUs() {
           Sobre Nosotros
         </h1>
         <p className="text-muted-foreground text-justify">
-          Somos dos amigos que, motivados por una necesidad observada en Puerto Madryn, decidimos unir nuestras habilidades y entusiasmo para crear esta página web. Nuestro objetivo principal es facilitar la búsqueda y creación de oportunidades laborales en la región, un área donde identificamos una carencia que queríamos abordar. Este proyecto nace no solo como una solución práctica para conectar a la comunidad con el empleo, sino también como una oportunidad para poner en práctica nuestros conocimientos y contribuir al bienestar de nuestra ciudad. <br />
+          Somos dos amigos que, motivados por una necesidad observada en Puerto Madryn, decidimos unir nuestras habilidades y entusiasmo para crear esta página web. Nuestro objetivo principal es facilitar la búsqueda y creación de oportunidades laborales en la región, un área donde identificamos una carencia que queríamos abordar. Este proyecto nace no solo como una solución práctica para conectar a la comunidad con el empleo, sino también como una oportunidad para poner en práctica nuestros conocimientos y contribuir al bienestar de la ciudad. <br />
           Con dedicación y compromiso, buscamos ofrecer una herramienta útil que apoye el desarrollo económico y social de esta ciudad.
         </p>
         <p className="text-muted-foreground text-justify">
