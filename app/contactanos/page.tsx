@@ -45,7 +45,7 @@ export default function ContactUs() {
   };
 
   const createMessageMutation = useMutation({
-    mutationFn: ({ data, token }: { data: CreateMessageData; token: string }) => createMessage(data, token),
+    mutationFn: ({ data }: { data: CreateMessageData; token: string }) => createMessage(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
       setSubmitSuccess("¡Oferta publicada con éxito!");
