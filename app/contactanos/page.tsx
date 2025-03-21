@@ -30,7 +30,6 @@ const formSchema = z
 type FormData = z.infer<typeof formSchema>;
 
 export default function ContactUs() {
-  const { data: session } = useSession();
   const router = useRouter();
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
@@ -38,28 +37,31 @@ export default function ContactUs() {
   const queryClient = useQueryClient();
 
   type CreateMessageData = {
-    name: string;
-    lastName: string;
+    nombre: string;
+    apellido: string;
     email: string;
-    message: string;
-  };
+    mensaje: string;
+  }
 
   const createMessageMutation = useMutation({
-    mutationFn: ({ data }: { data: CreateMessageData; token: string }) => createMessage(data),
+    mutationFn: (data: CreateMessageData) => createMessage(data), 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
-      setSubmitSuccess("¡Oferta publicada con éxito!");
+      setSubmitSuccess("¡Mensaje enviado con éxito!"); 
       setTimeout(() => router.push("/"), 2000);
     },
     onError: (err) => {
-      setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
+      setSubmitError(err instanceof Error ? err.message : "Error desconocido al enviar el mensaje");
     },
   });
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      
+      titulo: "", 
+      empresaConsultora: "", 
+      emailContacto: "", 
+      descripcion: "", 
     },
   });
 
@@ -69,29 +71,19 @@ export default function ContactUs() {
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
-    console.log("Form data:", data);
     try {
-      console.log("Session data:", session);
-      console.log("User ID:", session?.user?.id);
-      
       const createData: CreateMessageData = {
-        name: data.titulo,
-        lastName: data.empresaConsultora,
+        nombre: data.titulo,
+        apellido: data.empresaConsultora,
         email: data.emailContacto,
-        message: data.descripcion,
+        mensaje: data.descripcion,
       };
 
-      console.log("Create data:", createData);
-
-      await createMessageMutation.mutateAsync({
-        data: createData,
-        token: session?.backendToken || "",
-      });
+      await createMessageMutation.mutateAsync(createData);
     } finally {
       setIsSubmitting(false);
     }
   };
-
 
   const handleBack = () => {
     router.push("/");
@@ -163,7 +155,6 @@ export default function ContactUs() {
                     <Input
                       placeholder="contacto@ejemplo.com"
                       {...field}
-                      value={field.value ?? ""}
                       className="border-primary/20 focus-visible:ring-primary"
                     />
                   </FormControl>

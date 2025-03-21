@@ -1,30 +1,23 @@
-import { Message } from "../types/iMessage";
-
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function createMessage(
-    data: {
-        name: string;
-        lastName: string;
-        email: string;
-        message: string;
-    },    
-): Promise<Message> {
-
+export async function createMessage(data: {
+    nombre: string;
+    apellido: string;
+    email: string;
+    mensaje: string;
+}): Promise<string> {
     const response = await fetch(`${apiUrl}/api/contacto`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
         body: JSON.stringify(data),
     });
 
+    const responseText = await response.text();
     if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Error ${response.status}: ${errorText}`);
+        throw new Error(`Error ${response.status}: ${responseText}`);
     }
 
-    const responseData = await response.json();
-    if (typeof responseData !== "object" || responseData === null) {
-        throw new Error("La respuesta del servidor no es un objeto válido");
-    }
-
-    return responseData as Message;
+    return responseText;
 }

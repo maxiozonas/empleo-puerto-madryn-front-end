@@ -1,6 +1,6 @@
 export interface Message {
-    name: string;
-    lastName: string;
+    nombre: string;
+    apellido: string;
     email: string;
-    message: string;
+    mensaje: string;
 }
