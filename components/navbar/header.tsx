@@ -1,37 +1,40 @@
-"use client";
+"use client"
 
-import { useSession, signIn, signOut } from "next-auth/react";
-import Link from "next/link";
-import { useState } from "react";
-import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Anchor, Ship } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { UserNav } from "./user-nav";
-import Image from "next/image";
+import { useSession, signIn, signOut } from "next-auth/react"
+import Link from "next/link"
+import { useState } from "react"
+import { Button } from "../ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Menu, Anchor, Ship } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { UserNav } from "./user-nav"
+import logoImage from "/public/lib/logo.jpeg"
+import Image from "next/image"
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: session, status } = useSession();
-  const isAuthenticated = status === "authenticated";
-  const router = useRouter();
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { data: session, status } = useSession()
+  const isAuthenticated = status === "authenticated"
+  const router = useRouter()
+
+  const logo = logoImage;
 
   const handlePublicarEmpleo = () => {
     if (!isAuthenticated) {
-      router.push("/login");
+      router.push("/login")
     } else {
-      router.push("/nuevo-aviso");
+      router.push("/nuevo-aviso")
     }
-  };
+  }
 
   const UserNavMobile = () => {
-    if (!isAuthenticated || !session?.user) return null;
+    if (!isAuthenticated || !session?.user) return null
 
     return (
       <div className="flex items-center justify-center gap-2 p-2 bg-secondary/10 rounded-lg mb-4">
         {session.user.image ? (
           <Image
-            src={session.user.image}
+            src={session.user.image || "/placeholder.svg"}
             alt={session.user.name || "Perfil de usuario"}
             width={32}
             height={32}
@@ -39,13 +42,13 @@ export default function Header() {
           />
         ) : (
           <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500 text-sm">{session.user.name?.split(' ')[0]?.[0] || "U"}</span>
+            <span className="text-gray-500 text-sm">{session.user.name?.split(" ")[0]?.[0] || "U"}</span>
           </div>
         )}
-        <span className="text-sm font-medium truncate">{session.user.name?.split(' ')[0] || "Usuario"}</span>
+        <span className="text-sm font-medium truncate">{session.user.name?.split(" ")[0] || "Usuario"}</span>
       </div>
-    );
-  };
+    )
+  }
 
   return (
     <header className="border-b bg-white from-primary/10 to-secondary/20 sticky top-0 z-50 shadow-sm">
@@ -54,140 +57,132 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
         >
-          <Anchor className="h-6 w-6" />
+          <Anchor className="h-6 w-6 text-primary" />
           <span className="bg-clip-text text-transparent bg-ocean-gradient">EmpleosMadryn</span>
         </Link>
 
-    <div className="hidden md:flex items-center gap-4">
-      <Button
-        asChild
-        className="text-primary hover:underline transition-colors"
-      >
-        <Link href="/avisos">Avisos</Link>
-      </Button>
-      <Button
-        asChild
-        className="text-primary hover:underline transition-colors"
-      >
-        <Link href="/categorias">Categorías</Link>
-      </Button>    
-      <Button
-        asChild
-        className="text-primary hover:underline transition-colors"
-      >
-        <Link href="/contactanos">Contáctanos </Link>
-      </Button>
-      <Button className="bg-ocean-gradient hover:bg-primary/90" onClick={handlePublicarEmpleo}>
-        <Ship className="mr-2 h-4 w-4" />
-        Publicar
-      </Button>
-      <UserNav />
-    </div>
-    <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-      <SheetTrigger asChild className="md:hidden">
-        <Button size="icon">
-              <Menu className="h-6 w-6" />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="right"
-        className="w-full sm:w-[400px] bg-white rounded-lg"
-      >
-            <SheetHeader>
-          <SheetTitle className="text-primary">Menú</SheetTitle>
-        </SheetHeader>
-        {/* Información del usuario en mobile */}
-        <UserNavMobile />
-        <div className="flex flex-col gap-4 mt-4">
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-primary text-primary hover:bg-primary/10"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/avisos");
-            }}
-          >
+        <div className="hidden md:flex flex-1 items-center justify-center gap-6">
+          <Button asChild className="text-primary hover:underline">
             <Link href="/avisos">Avisos</Link>
           </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-primary text-primary hover:bg-primary/10"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/categorias");
-            }}
-          >
+          <Button asChild className="text-primary hover:underline">
             <Link href="/categorias">Categorías</Link>
           </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="w-full border-primary text-primary hover:bg-primary/10"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/contactanos");
-            }}
-          >
+          <Button asChild className="text-primary hover:underline">
             <Link href="/contactanos">Contáctanos</Link>
           </Button>
-          <Button
-            className="bg-ocean-gradient hover:bg-primary/90 w-full"
-            onClick={() => {
-              setIsMenuOpen(false);
-              handlePublicarEmpleo();
-            }}
-          >
+        </div>
+
+        <div className="hidden md:flex items-center gap-4">
+          <Button className="bg-ocean-gradient hover:bg-primary/90" onClick={handlePublicarEmpleo}>
             <Ship className="mr-2 h-4 w-4" />
             Publicar
           </Button>
-
-          {!isAuthenticated ? (
-            <Button
-              variant="outline"
-              className="w-full border-primary text-primary hover:bg-primary/10"
-              onClick={() => {
-                setIsMenuOpen(false);
-                signIn("google", { callbackUrl: "/" });
-              }}
-            >
-              Iniciar sesión
+          <UserNav />
+        </div>
+        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <SheetTrigger asChild className="md:hidden">
+            <Button size="icon">
+              <Menu className="h-6 w-6" />
             </Button>
-          ) : (
-            <>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-full sm:w-[400px] bg-white rounded-lg">
+            <SheetHeader>
+              <SheetTitle className="text-primary">Menú</SheetTitle>
+            </SheetHeader>
+            {/* Información del usuario en mobile */}
+            <UserNavMobile />
+            <div className="flex flex-col gap-4 mt-4">
               <Button
                 asChild
                 variant="outline"
                 className="w-full border-primary text-primary hover:bg-primary/10"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Link href="/mis-avisos">Mis Avisos</Link>
-              </Button>
-              <Button
-                asChild
-                variant="outline"
-                className="w-full border-primary text-primary hover:bg-primary/10"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Link href="/mis-favoritos">Mis Favoritos</Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="w-full text-destructive hover:text-destructive border-destructive/30 hover:bg-destructive/10"
                 onClick={() => {
-                  setIsMenuOpen(false);
-                  signOut();
+                  setIsMenuOpen(false)
+                  router.push("/avisos")
                 }}
               >
-                Cerrar sesión
+                <Link href="/avisos">Avisos</Link>
               </Button>
-            </>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary/10"
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  router.push("/categorias")
+                }}
+              >
+                <Link href="/categorias">Categorías</Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-primary text-primary hover:bg-primary/10"
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  router.push("/contactanos")
+                }}
+              >
+                <Link href="/contactanos">Contáctanos</Link>
+              </Button>
+              <Button
+                className="bg-ocean-gradient hover:bg-primary/90 w-full"
+                onClick={() => {
+                  setIsMenuOpen(false)
+                  handlePublicarEmpleo()
+                }}
+              >
+                <Ship className="mr-2 h-4 w-4" />
+                Publicar
+              </Button>
+
+              {!isAuthenticated ? (
+                <Button
+                  variant="outline"
+                  className="w-full border-primary text-primary hover:bg-primary/10"
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    signIn("google", { callbackUrl: "/" })
+                  }}
+                >
+                  Iniciar sesión
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-primary text-primary hover:bg-primary/10"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Link href="/mis-avisos">Mis Avisos</Link>
+                  </Button>
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="w-full border-primary text-primary hover:bg-primary/10"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Link href="/mis-favoritos">Mis Favoritos</Link>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full text-destructive hover:text-destructive border-destructive/30 hover:bg-destructive/10"
+                    onClick={() => {
+                      setIsMenuOpen(false)
+                      signOut()
+                    }}
+                  >
+                    Cerrar sesión
+                  </Button>
+                </>
+              )}
+            </div>
+          </SheetContent>
+        </Sheet>
       </div>
     </header>
-  );
+  )
 }
+
