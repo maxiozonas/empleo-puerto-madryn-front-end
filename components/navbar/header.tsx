@@ -7,8 +7,7 @@ import { Button } from "../ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Menu, Anchor, Ship } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { UserNav } from "./user-nav"
-import logoImage from "/public/lib/logo.jpeg"
+import { UserNav } from "./User-nav"
 import Image from "next/image"
 
 export default function Header() {
@@ -16,8 +15,6 @@ export default function Header() {
   const { data: session, status } = useSession()
   const isAuthenticated = status === "authenticated"
   const router = useRouter()
-
-  const logo = logoImage;
 
   const handlePublicarEmpleo = () => {
     if (!isAuthenticated) {

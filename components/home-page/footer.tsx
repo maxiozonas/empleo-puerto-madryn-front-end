@@ -1,6 +1,5 @@
-"use client"; // Asegúrate de que sea un componente del lado del cliente
+"use client";
 
-import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -26,13 +25,7 @@ export default function Footer() {
     e.preventDefault();
     router.push("/sobre-nosotros");
   }
-
-  const handlePublishClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    router.push("/nuevo-aviso"); 
-  };
   
-
   return (
     <div className="border-t mt-6 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
       <div className="mb-4 md:mb-0 flex">

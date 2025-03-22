@@ -11,7 +11,7 @@ import {
 import { useSession, signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react"; // Añadido para la flecha hacia abajo
+import { ChevronDown } from "lucide-react";
 
 export function UserNav() {
   const { data: session, status } = useSession();
