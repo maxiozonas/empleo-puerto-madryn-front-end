@@ -2,9 +2,15 @@
 
 import { Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Footer() {
   const router = useRouter();
+
+  const icons = {
+    instagram: "/icons/instagram.svg",
+    facebook: "/icons/facebook.svg",
+  };
 
   const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault(); 
@@ -29,8 +35,36 @@ export default function Footer() {
 
   return (
     <div className="border-t mt-6 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
-      <div className="mb-4 md:mb-0">
-        Hecho con <Heart className="inline h-4 w-4 text-red-500 fill-red-500" /> por Máximo y Juan Ignacio.
+      <div className="mb-4 md:mb-0 flex">
+        <h2 className="bg-clip-text text-transparent bg-ocean-gradient mr-4">
+          Empleos Madryn
+        </h2>
+        <a
+          href="https://www.instagram.com/madrynempleos"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+            <Image
+                src={icons.instagram}
+                alt="Instagram Madryn Empleos"
+                width={24}
+                height={24}
+                className="h-5 w-5 mr-3"
+            />
+        </a>
+        <a
+          href="https://www.facebook.com/profile.php?id=61574532959697&locale=es_LA"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+            <Image
+                src={icons.facebook}
+                alt="Facebook Madryn Empleos"
+                width={24}
+                height={24}
+                className="h-5 w-5"
+            />
+        </a>
       </div>
       <div className="flex flex-wrap justify-center md:justify-end gap-4">
         <a
@@ -55,14 +89,6 @@ export default function Footer() {
           className="hover:text-blue-600 transition-colors cursor-pointer"
         >
           Sobre Nosotros
-        </a>
-        <span>·</span>
-        <a
-          href="#"
-          onClick={handlePublishClick}
-          className="hover:text-blue-600 transition-colors cursor-pointer"
-        >
-          Publicar
         </a>
       </div>
     </div>
