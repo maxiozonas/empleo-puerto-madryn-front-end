@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { Button } from "../ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Anchor, Ship } from "lucide-react"
+import { Menu, Ship } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { UserNav } from "./User-nav"
 import Image from "next/image"
@@ -49,12 +49,12 @@ export default function Header() {
 
   return (
     <header className="border-b bg-white from-primary/10 to-secondary/20 sticky top-0 z-50 shadow-sm">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4">      
         <Link
           href="/"
-          className="flex items-center gap-2 text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
+          className="flex items-center text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
         >
-          <Anchor className="h-6 w-6 text-primary" />
+          <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={128} height={128} className="h-16 w-16" />
           <span className="bg-clip-text text-transparent bg-ocean-gradient">EmpleosMadryn</span>
         </Link>
 
