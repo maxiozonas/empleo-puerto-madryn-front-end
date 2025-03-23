@@ -55,7 +55,7 @@ export default function Header() {
           className="flex items-center gap-2 text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
         >
           <Anchor className="h-6 w-6 text-primary" />
-          <span className="bg-clip-text text-transparent bg-ocean-gradient">EmpleosMadryn</span>
+          <span className="bg-clip-text text-primary">EmpleosMadryn</span>
         </Link>
 
         <div className="hidden md:flex flex-1 items-center justify-center gap-6">

@@ -29,7 +29,7 @@ export default function Footer() {
   return (
     <div className="border-t mt-6 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
       <div className="mb-4 md:mb-0 flex">
-        <h2 className="bg-clip-text text-transparent bg-ocean-gradient mr-4">
+        <h2 className="bg-clip-text text-primary mr-4">
           Empleos Madryn
         </h2>
         <a
