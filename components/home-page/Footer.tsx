@@ -9,6 +9,7 @@ export default function Footer() {
   const icons = {
     instagram: "/icons/instagram.svg",
     facebook: "/icons/facebook.svg",
+    cafecito: "/icons/cafecito.png",
   };
 
   const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -29,7 +30,7 @@ export default function Footer() {
   return (
     <div className="border-t mt-6 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
       <div className="mb-4 md:mb-0 flex">
-        <h2 className="bg-clip-text text-primary mr-4">
+        <h2 className="bg-clip-text text-primary mr-4 text-lg">
           Empleos Madryn
         </h2>
         <a
@@ -42,7 +43,7 @@ export default function Footer() {
                 alt="Instagram Madryn Empleos"
                 width={24}
                 height={24}
-                className="h-5 w-5 mr-3"
+                className="h-6 w-6 mr-3"
             />
         </a>
         <a
@@ -55,10 +56,25 @@ export default function Footer() {
                 alt="Facebook Madryn Empleos"
                 width={24}
                 height={24}
-                className="h-5 w-5"
+                className="h-6 w-6 mr-3"
             />
-        </a>
+        </a>        
       </div>
+      <div className="mb-4 md:mb-0 flex">
+          <a
+              href="https://cafecito.app/madrynempleos"
+              target="_blank"
+              rel="noopener noreferrer"
+          >
+            <Image
+                  src={icons.cafecito}
+                  alt="Cafecito Madryn Empleos"
+                  width={516} 
+                  height={516}
+                  className="h-8 w-full"
+            />
+          </a>
+      </div>      
       <div className="flex flex-wrap justify-center md:justify-end gap-4">
         <a
           href="#"
