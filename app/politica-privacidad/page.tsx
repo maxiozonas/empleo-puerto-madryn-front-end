@@ -38,7 +38,7 @@ export default function PoliticaPrivacidadPage() {
 
         <h3 className="text-xl font-semibold">Información personal que recopilamos</h3>
         <p>
-          Cuando visitas Empleos Madryn, recopilamos automáticamente cierta información sobre tu dispositivo, como datos sobre tu navegador web, dirección IP, zona horaria y algunas de las cookies instaladas en tu equipo. Además, mientras navegas por el sitio, registramos información sobre las páginas individuales que visitas, las ofertas de empleo que consultas, los sitios web o términos de búsqueda que te dirigieron a nuestra plataforma, y cómo interactúas con ella. A esta información recopilada automáticamente la denominamos "Información del dispositivo".
+          Cuando visitas Empleos Madryn, recopilamos automáticamente cierta información sobre tu dispositivo, como datos sobre tu navegador web, dirección IP, zona horaria y algunas de las cookies instaladas en tu equipo. Además, mientras navegas por el sitio, registramos información sobre las páginas individuales que visitas, las ofertas de empleo que consultas, los sitios web o términos de búsqueda que te dirigieron a nuestra plataforma, y cómo interactúas con ella. A esta información recopilada automáticamente la denominamos &quot;Información del dispositivo&quot;.
         </p>
         <p>
           Asimismo, podemos recopilar datos personales que nos proporciones voluntariamente (como nombre, apellido, correo electrónico, información de contacto, etc.) durante el registro, la publicación de una oferta de empleo o el uso de otras funcionalidades, con el fin de cumplir con nuestros servicios.
@@ -46,7 +46,7 @@ export default function PoliticaPrivacidadPage() {
 
         <h3 className="text-xl font-semibold">Uso de cookies</h3>
         <p>
-          Utilizamos cookies para mejorar tu experiencia en nuestro sitio. Al navegar, puedes aceptar o rechazar las cookies no esenciales a través de nuestro banner de consentimiento. Las cookies esenciales son necesarias para el funcionamiento del sitio y no requieren consentimiento.
+          Utilizamos cookies para mejorar tu experiencia en nuestro sitio. Al navegar, puedes aceptar o rechazar las cookies no esenciales a través de nuestro banner de consentimiento. Las cookies esenciales son necesarias para el funcionamiento del sitio y no requieren consentimiento. Para más información, consulta nuestra <a href='/politica-cookies' className="text-primary underline">Política de Cookies</a>.
         </p>
 
         <h3 className="text-xl font-semibold">¿Por qué procesamos tus datos?</h3>

@@ -10,7 +10,7 @@ export function AboutSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-3xl font-bold text-primary mb-4">Trabajar en Puerto Madryn</h2>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-muted-foreground mb-6 text-justify">
               Puerto Madryn es una ciudad costera ubicada en la provincia de Chubut, Patagonia Argentina. Reconocida por
               su belleza natural, es un importante centro industrial, pesquero y turístico.
             </p>
@@ -21,7 +21,7 @@ export function AboutSection() {
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground">Polo Industrial</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-justify">
                     Sede de Aluar, la mayor productora de aluminio de Latinoamérica.
                   </p>
                 </div>
@@ -32,7 +32,7 @@ export function AboutSection() {
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground">Turismo</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-justify">
                     Destino mundial para el avistamiento de ballenas y fauna marina.
                   </p>
                 </div>
@@ -43,7 +43,7 @@ export function AboutSection() {
                 </div>
                 <div>
                   <h3 className="font-medium text-foreground">Pesca</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-justify">
                     Importante centro pesquero con procesamiento de productos marinos.
                   </p>
                 </div>
@@ -57,10 +57,10 @@ export function AboutSection() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/50 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"></div>
             <div className="absolute bottom-0 left-0 right-0 p-6">
               <h3 className="text-white font-bold text-xl mb-2">Calidad de vida</h3>
-              <p className="text-white/90">
+              <p className="text-white/90 text-justify">
                 Una ciudad que combina oportunidades laborales con un entorno natural privilegiado.
               </p>
             </div>

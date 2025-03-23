@@ -55,7 +55,7 @@ export default function Header() {
           className="flex items-center text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
         >
           <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={128} height={128} className="h-16 w-16" />
-          <span className="bg-clip-text text-transparent bg-ocean-gradient">EmpleosMadryn</span>
+          <span className="bg-clip-text">EmpleosMadryn</span>
         </Link>
 
         <div className="hidden md:flex flex-1 items-center justify-center gap-6">
@@ -71,7 +71,7 @@ export default function Header() {
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-          <Button className="bg-ocean-gradient hover:bg-primary/90" onClick={handlePublicarEmpleo}>
+          <Button className="bg-ocean-gradient text-white hover:bg-primary/90" onClick={handlePublicarEmpleo}>
             <Ship className="mr-2 h-4 w-4" />
             Publicar
           </Button>
@@ -124,7 +124,7 @@ export default function Header() {
                 <Link href="/contactanos">Contáctanos</Link>
               </Button>
               <Button
-                className="bg-ocean-gradient hover:bg-primary/90 w-full"
+                className="bg-ocean-gradient text-white hover:bg-primary/90 w-full"
                 onClick={() => {
                   setIsMenuOpen(false)
                   handlePublicarEmpleo()

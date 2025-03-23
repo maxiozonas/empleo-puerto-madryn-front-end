@@ -121,7 +121,7 @@ export default function JobDetailPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
-            <h1 className="text-3xl font-bold mb-2">{job.titulo}</h1>
+            <h1 className="text-3xl font-bold mb-2 text-justify">{job.titulo}</h1>
 
             <div className="flex items-center gap-2 mb-6">
               <Badge variant="outline" className="bg-muted/50">
@@ -131,7 +131,7 @@ export default function JobDetailPage() {
 
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">Descripción</h2>
-              <div className="prose prose-sm md:prose-base text-muted-foreground max-w-none">
+              <div className="prose prose-sm md:prose-base text-muted-foreground max-w-none text-justify">
                 <ReactMarkdown>
                   {job.descripcion}
                 </ReactMarkdown>
@@ -145,9 +145,8 @@ export default function JobDetailPage() {
 
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6">
               <div className="flex items-start gap-2">
-                <span className="text-amber-500 text-lg">👍</span>
                 <div>
-                  <p className="text-amber-800 font-medium">
+                  <p className="text-amber-800 text-sm font-medium text-justify">
                     Por favor, al momento de postularte indicá que encontraste el aviso en Empleo Puerto Madryn. Esto nos
                     ayuda a conseguir que más empleadores publiquen en el sitio, ¡muchas gracias!
                   </p>
@@ -156,7 +155,7 @@ export default function JobDetailPage() {
             </div>
 
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-600 text-justify">
                 Al buscar empleo NUNCA vas a necesitar pagar para postularte o acceder a una oferta, en todo momento
                 realizá si es posible una investigación previa del empleador y protegé tu información personal. No
                 descargues archivos sospechosos ni te reúnas en lugares o sitios de desconfianza.
@@ -178,7 +177,7 @@ export default function JobDetailPage() {
 
                   <Button
                     onClick={handleApply}
-                    className="w-full mb-6 group/button transition-all bg-ocean-gradient hover:bg-primary/90"
+                    className="w-full mb-6 group/button transition-all bg-ocean-gradient text-white hover:bg-primary/90"
                   >
                     <span>Aplicar ahora</span>
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />

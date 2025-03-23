@@ -145,7 +145,7 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
       <CardFooter className="pt-2 flex gap-2 md:flex-row md:justify-between">
         <Button
           asChild
-          className="flex-1 group/button transition-all bg-ocean-gradient hover:bg-primary/90"
+          className="flex-1 group/button transition-all text-white bg-ocean-gradient hover:bg-primary/70"
           variant="default"
         >
           <Link href={`/detalles-empleo/${job.id}`} className="flex items-center justify-center">
