@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Anchor } from "lucide-react";
 import aguaImage from "/public/lib/agua.jpg"
 import ballenaImage from "/public/lib/ballena.jpg"
 import playaImage from "/public/lib/playa.jpg"
@@ -45,8 +44,8 @@ export function HeroSection() {
         <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-12 z-20 container mx-auto">
           <div className="max-w-2xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="bg-white/20 backdrop-blur-sm p-2 rounded-full">
-                <Anchor className="h-6 w-6 text-white" />
+              <div className="bg-white/20 backdrop-blur-sm rounded-full">
+                <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={128} height={128} className="h-16 w-16" />
               </div>
               <h2 className="text-white font-medium">EmpleosMadryn</h2>
             </div>
