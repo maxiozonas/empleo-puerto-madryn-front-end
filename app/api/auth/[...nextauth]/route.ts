@@ -1,11 +1,18 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+
+const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      authorization: {
+        params: {
+          prompt: "select_account",
+        },
+      },
     }),
   ],
   callbacks: {
@@ -17,7 +24,7 @@ export const authOptions: NextAuthOptions = {
         }
 
         try {
-          const response = await fetch("http://localhost:8080/api/auth/google", {
+          const response = await fetch(`${apiUrl}/api/auth/google`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -37,8 +44,10 @@ export const authOptions: NextAuthOptions = {
           }
 
           const data = await response.json();
+          console.log("Respuesta de /api/auth/google:", data);
           account.backendToken = data.token;
-          account.userId = data.id; // Capturamos el ID del backend
+          account.userId = data.usuarioId;
+          console.log("usuario id:", data.usuarioId);
           return true;
         } catch (error) {
           console.error("Error contacting backend:", error);
@@ -55,12 +64,21 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      if (session.user) {
+      if (token.backendToken) {
         session.backendToken = token.backendToken as string;
         session.user.id = token.id as string;
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/",
+  },
+  
+  session: {
+    strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60, 
+    updateAge: 24 * 60 * 60, 
   },
 };
 

@@ -7,10 +7,11 @@ export interface JobPosting {
   };
   empresaConsultora: string;
   fechaPublicacion: string;
-  fechaCierre?: string | null;
-  formaPostulacion: string;
-  contactoPostulacion?: string | null;
+  fechaCierre?: string | null; 
+  formaPostulacion: "MAIL" | "LINK";
+  contactoPostulacion?: string | null; 
   categoria: {
+    id: string;
     nombre: string;
   };
 }

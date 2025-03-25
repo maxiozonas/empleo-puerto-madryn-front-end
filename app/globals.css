@@ -4,37 +4,67 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Color principal inspirado en el mar patagónico */
-    --primary: 199 89% 48%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+
+    --primary: 200 63% 29%;
     --primary-foreground: 210 40% 98%;
 
-    /* Color secundario inspirado en la arena costera */
-    --secondary: 32 95% 90%;
-    --secondary-foreground: 32 95% 20%;
+    --secondary: 199 36% 65%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 17 68% 54%;
+    --accent-foreground: 210 40% 98%;
 
-    --accent: 199 89% 96%;
-    --accent-foreground: 199 89% 28%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 199 89% 48%;
+    --ring: 200 63% 29%;
 
     --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+
+    --primary: 200 63% 29%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 199 36% 65%;
+    --secondary-foreground: 222 47% 11%;
+
+    --accent: 17 68% 54%;
+    --accent-foreground: 210 40% 98%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 200 63% 29%;
   }
 }
 
@@ -47,15 +77,24 @@
   }
 }
 
-
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Clases personalizadas para elementos específicos de Puerto Madryn */
+.text-whale-watching {
+  @apply text-primary;
 }
 
+.bg-aluminum-industry {
+  @apply bg-industrial;
+}
+
+.bg-patagonian-coast {
+  @apply bg-coastal-gradient;
+}
+
+.text-welsh-heritage {
+  @apply text-heritage;
+}
+
+.bg-marine-life {
+  @apply bg-marine;
+}
 
