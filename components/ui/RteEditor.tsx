@@ -3,7 +3,6 @@
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import style from '../contacto.module.css';
-import TextAlign from '@tiptap/extension-text-align';
 import Underline from "@tiptap/extension-underline";
 import {
     FaBold,
@@ -37,10 +36,7 @@ const TipTap = ({ content, onChange }: TipTapProps) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
-            Underline.configure(),
-            TextAlign.configure({
-                types: ['heading', 'paragraph']
-            }),
+            Underline.configure(),            
         ],
         content: content || "<p>Escribe tu mensaje aquí...</p>",
         editorProps: {
