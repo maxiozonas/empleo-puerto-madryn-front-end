@@ -1,0 +1,57 @@
+/* pages/contactUs.module.css */
+.editorContent{
+  min-height: 150px;
+  padding: 1rem;
+}
+
+.editorContent h1 {
+    font-size: 2.5rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+  
+  .editorContent h2 {
+    font-size: 1.8rem;
+    color: #34495e;
+    margin-bottom: 0.8rem;
+  }
+
+  .editorContent h3 {
+    font-size: 1.5rem;
+    color: #34495e;
+    margin-bottom: 0.6rem;
+  }
+
+  .editorContent h4 {
+    font-size: 1.2rem;
+    color: #34495e;
+    margin-bottom: 0.4rem;
+  }
+
+  .editorContent p {
+    font-size: 1rem;
+    color: #34495e;
+    margin-bottom: 0.5rem;
+  }
+
+  
+  .editorContent ul {
+    list-style-type: disc;
+    margin-left: 20px;
+  }
+
+  .editorContent ul li {
+    margin-bottom: 0.5rem;
+    margin-left: 20px;
+  }
+
+  .editorContent ol {
+    list-style-type: decimal;
+    margin-left: 20px;
+  }
+
+  .editorContent ol li {
+    margin-bottom: 0.5rem;
+    margin-left: 20px;
+  }
+  
