@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPostById } from "@/lib/hooks/useOfertas";
 import { updateJobOffer } from "@/lib/api/ofertas";
-import { ArrowLeft, Loader2, Ship } from "lucide-react";
+import { ArrowLeft, Loader2, Ship, X } from "lucide-react"; // Importamos el ícono X
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
@@ -68,7 +68,16 @@ const formSchema = z
       .nullable(),
     fechaCierre: z.string()
       .optional()
-      .nullable(), 
+      .nullable(),
+    logo: z
+      .instanceof(File)
+      .optional()
+      .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
+        message: "El archivo no puede superar los 5MB",
+      })
+      .refine((file) => !file || ["image/png", "image/jpeg", "image/jpg"].includes(file.type), {
+        message: "Solo se permiten imágenes en formato PNG, JPEG o JPG",
+      }),
   })
   .refine(
     (data) => {
@@ -100,6 +109,7 @@ export default function EditarAvisoPage() {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [existingLogoUrl, setExistingLogoUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
   type UpdateJobOfferData = {
@@ -113,6 +123,8 @@ export default function EditarAvisoPage() {
     emailContacto: string | null;
     linkPostulacion: string | null;
     categoriaId: string;
+    logo?: File | null;
+    logoUrl?: string | null;
   };
 
   const updateJobOfferMutation = useMutation({
@@ -139,6 +151,7 @@ export default function EditarAvisoPage() {
       emailContacto: null,
       linkPostulacion: null,
       fechaCierre: null,
+      logo: undefined,
     },
   });
 
@@ -153,7 +166,9 @@ export default function EditarAvisoPage() {
         emailContacto: job.formaPostulacion === "MAIL" ? job.contactoPostulacion : null,
         linkPostulacion: job.formaPostulacion === "LINK" ? job.contactoPostulacion : null,
         fechaCierre: job.fechaCierre ? new Date(job.fechaCierre).toISOString().split("T")[0] : null,
+        logo: undefined,
       });
+      setExistingLogoUrl(job.logoUrl || null);
     }
   }, [job, form]);
 
@@ -208,6 +223,8 @@ export default function EditarAvisoPage() {
         emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto ?? null : null,
         linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion ?? null : null,
         categoriaId: data.categoria,
+        logo: data.logo ?? null,
+        logoUrl: existingLogoUrl,
       };
 
       await updateJobOfferMutation.mutateAsync({
@@ -258,6 +275,64 @@ export default function EditarAvisoPage() {
                     className="border-primary/20 focus-visible:ring-primary"
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="logo"
+            render={({ field: { onChange, value, ...field } }) => (
+              <FormItem>
+                <FormLabel className="text-primary font-medium">Logo de la empresa (opcional)</FormLabel>
+                {existingLogoUrl && !value && (
+                  <div className="mt-2 flex items-center space-x-2">
+                    <span className="text-sm text-muted-foreground">
+                      Logo actual: {existingLogoUrl.split("_").pop()}
+                    </span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="text-destructive border-destructive hover:bg-destructive/10"
+                      onClick={() => {
+                        setExistingLogoUrl(null); 
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      onChange(file);
+                    }}
+                    className="border-primary/20 focus-visible:ring-primary"
+                    {...field}
+                  />
+                </FormControl>
+                {value && (
+                  <div className="mt-2 flex items-center space-x-2">
+                    <span className="text-sm text-muted-foreground">{value.name}</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="text-destructive border-destructive hover:bg-destructive"
+                      onClick={() => {
+                        onChange(undefined);
+                        const input = document.querySelector('input[name="logo"]') as HTMLInputElement;
+                        if (input) input.value = "";
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
                 <FormMessage />
               </FormItem>
             )}

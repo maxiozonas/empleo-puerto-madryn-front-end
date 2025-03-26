@@ -10,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "next-auth/react";
 import { useAddFavorite, useRemoveFavorite, useIsFavorite } from "@/lib/hooks/useFavoritos";
+import Image from "next/image";
+import logo from "@/public/lib/logo.jpeg"
 
 interface JobCardProps {
   job: JobPosting;
@@ -127,9 +129,15 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
       )}
 
       <CardHeader className="pb-2 pt-6">
-        <div className="flex items-center gap-2 mb-1">
+        <div className="flex justify-between items-center gap-2 mb-1">
+          <Image
+            src={job.logoUrl ? `${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}` : logo}
+            alt={job.empresaConsultora || "Logo de la empresa"}
+            width={60}
+            height={60}
+            className="rounded-full object-contain"
+          />
           <Badge
-            variant="outline"
             className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-full"
           >
             {job.categoria.nombre}
@@ -142,7 +150,7 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
       </CardHeader>
 
       <CardContent className="space-y-4 flex-grow pb-6">
-        <div className="flex flex-wrap gap-4 text-sm">
+        <div className="flex flex-col gap-4 text-sm">
           <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full">
             <MapPin className="h-3.5 w-3.5 text-primary" />
             <span className="text-neutral-800 font-medium">Puerto Madryn</span>
@@ -153,7 +161,7 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
           </div>
         </div>
         <div className="mt-4 pt-4 border-t border-gray-200">
-          <p className="text-sm text-gray-500 line-clamp-3 text-justify">{job.descripcion}</p>
+          <p className="text-sm text-gray-500 line-clamp-3 line-height-1.5 text-justify">{job.descripcion}</p>
         </div>
       </CardContent>
 

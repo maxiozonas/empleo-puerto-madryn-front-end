@@ -14,4 +14,5 @@ export interface JobPosting {
     id: string;
     nombre: string;
   };
+  logoUrl?: string | null;
 }

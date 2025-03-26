@@ -78,10 +78,14 @@ export async function updateJobOffer(
     emailContacto: string | null;
     linkPostulacion: string | null;
     categoriaId: string;
+    logo?: File | null;
+    logoUrl?: string | null;
   },
   token: string
 ): Promise<JobPosting> {
-  const requestBody = {
+  const formData = new FormData();
+
+  const ofertaData = {
     id: data.id,
     titulo: data.titulo,
     descripcion: data.descripcion,
@@ -95,13 +99,20 @@ export async function updateJobOffer(
     categoria: { id: data.categoriaId },
   };
 
+  formData.append("oferta", JSON.stringify(ofertaData));
+
+  if (data.logo) {
+    formData.append("logo", data.logo);
+  }
+
+  formData.append("logoUrl", data.logoUrl ?? "null");
+
   const response = await fetch(`${apiUrl}/api/ofertas/${data.id}`, {
     method: "PUT",
     headers: {
-      "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
     },
-    body: JSON.stringify(requestBody),
+    body: formData,
   });
 
   if (!response.ok) {
@@ -124,10 +135,13 @@ export async function createJobOffer(
     emailContacto: string | null;
     linkPostulacion: string | null;
     categoriaId: string;
+    logo?: File | null;
   },
   token: string
 ): Promise<JobPosting> {
-  const requestBody = {
+  const formData = new FormData();
+
+  const ofertaData = {
     titulo: data.titulo,
     descripcion: data.descripcion,
     usuario: { id: data.usuarioId },
@@ -140,13 +154,20 @@ export async function createJobOffer(
     categoria: { id: data.categoriaId },
   };
 
+  console.log("Datos enviados al backend:", ofertaData); // Depuración
+
+  formData.append("oferta", JSON.stringify(ofertaData));
+
+  if (data.logo) {
+    formData.append("logo", data.logo);
+  }
+
   const response = await fetch(`${apiUrl}/api/ofertas`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
     },
-    body: JSON.stringify(requestBody),
+    body: formData,
   });
 
   if (!response.ok) {

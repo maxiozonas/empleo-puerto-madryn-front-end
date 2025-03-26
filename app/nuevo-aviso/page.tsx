@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { createJobOffer } from "@/lib/api/ofertas";
-import { Loader2, Anchor, ArrowLeft } from "lucide-react";
+import { Loader2, Anchor, ArrowLeft, X } from "lucide-react"; // Importamos el ícono X
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -67,7 +67,16 @@ const formSchema = z
       .nullable(),
     fechaCierre: z.string()
       .optional()
-      .nullable(), 
+      .nullable(),
+    logo: z
+      .instanceof(File)
+      .optional()
+      .refine((file) => !file || file.size <= 5 * 1024 * 1024, {
+        message: "El archivo no puede superar los 5MB",
+      })
+      .refine((file) => !file || ["image/png", "image/jpeg", "image/jpg"].includes(file.type), {
+        message: "Solo se permiten imágenes en formato PNG, JPEG o JPG",
+      }),
   })
   .refine(
     (data) => {
@@ -109,6 +118,7 @@ export default function PublicarEmpleoPage() {
     emailContacto: string | null;
     linkPostulacion: string | null;
     categoriaId: string;
+    logo: File | null;
   };
 
   const createJobOfferMutation = useMutation({
@@ -134,6 +144,7 @@ export default function PublicarEmpleoPage() {
       emailContacto: null,
       linkPostulacion: null,
       fechaCierre: null,
+      logo: undefined,
     },
   });
 
@@ -176,11 +187,7 @@ export default function PublicarEmpleoPage() {
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
-    console.log("Form data:", data);
     try {
-      console.log("Session data:", session);
-      console.log("User ID:", session?.user?.id);
-      
       const createData: CreateJobOfferData = {
         titulo: data.titulo,
         descripcion: data.descripcion,
@@ -191,6 +198,7 @@ export default function PublicarEmpleoPage() {
         emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto ?? null : null,
         linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion ?? null : null,
         categoriaId: data.categoria,
+        logo: data.logo ?? null,
       };
 
       console.log("Create data:", createData);
@@ -203,7 +211,6 @@ export default function PublicarEmpleoPage() {
       setIsSubmitting(false);
     }
   };
-
 
   const handleBack = () => {
     router.push("/");
@@ -244,6 +251,46 @@ export default function PublicarEmpleoPage() {
                     className="border-primary/20 focus-visible:ring-primary"
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="logo"
+            render={({ field: { onChange, value, ...field } }) => (
+              <FormItem>
+                <FormLabel className="text-primary font-medium">Logo de la empresa (opcional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/png, image/jpeg, image/jpg"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      onChange(file);
+                    }}
+                    className="border-primary/20 cursor-pointer focus-visible:ring-primary"
+                    {...field}
+                  />
+                </FormControl>
+                {value && (
+                  <div className="mt-2 flex items-center space-x-2">
+                    <span className="text-sm text-muted-foreground">{value.name}</span>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="text-destructive border-destructive hover:bg-destructive"
+                      onClick={() => {
+                        onChange(undefined);
+                        const input = document.querySelector('input[name="logo"]') as HTMLInputElement;
+                        if (input) input.value = "";
+                      }}
+                    >
+                      <X className="h-6 w-6" />
+                    </Button>
+                  </div>
+                )}
                 <FormMessage />
               </FormItem>
             )}
