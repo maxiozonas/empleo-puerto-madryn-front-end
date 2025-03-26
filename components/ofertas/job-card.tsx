@@ -10,6 +10,12 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "next-auth/react";
 import { useAddFavorite, useRemoveFavorite, useIsFavorite } from "@/lib/hooks/useFavoritos";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit"; 
+import Underline from "@tiptap/extension-underline";
+import style from '../contacto.module.css';
+import { useEffect } from "react";
+
 
 interface JobCardProps {
   job: JobPosting;
@@ -26,6 +32,31 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
   const { data: isFavorite, isLoading: isFavoriteLoading } = useIsFavorite(job.id, token);
   const addFavoriteMutation = useAddFavorite();
   const removeFavoriteMutation = useRemoveFavorite();
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline.configure(), 
+    ],
+    editorProps: {
+      attributes: {
+          class: style.editorContent,
+      },
+  },
+    content: "", 
+    editable: false, 
+    immediatelyRender: false,
+  });
+
+  useEffect(() => {
+    if (editor) {
+      editor.commands.setContent(job.descripcion);
+    }
+  }, [editor, job.descripcion]);
+
+  if (!editor) {
+      return null;
+  }
 
   const calculateDaysAgo = (date: string) => {
     const publicationDate = new Date(date);
@@ -153,7 +184,7 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
           </div>
         </div>
         <div className="mt-4 pt-4 border-t border-gray-200">
-          <p className="text-sm text-gray-500 line-clamp-3 text-justify">{job.descripcion}</p>
+          <EditorContent editor={editor} className="line-clamp-3" />
         </div>
       </CardContent>
 
