@@ -11,9 +11,9 @@ import {
   Loader2,
   CheckCircle,
   Copy,
-  MessageCircle, 
-  Facebook, 
-  ArrowRight, 
+  MessageCircle,
+  Facebook,
+  ArrowRight,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +21,10 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { JobPosting } from "@/lib/types/iJobPosting";
 import { fetchJobPostById } from "@/lib/api/ofertas";
-import ReactMarkdown from 'react-markdown';
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit"; 
+import Underline from "@tiptap/extension-underline";
+import style from '../../../components/contacto.module.css';
 
 export default function JobDetailPage() {
   const router = useRouter();
@@ -31,11 +34,29 @@ export default function JobDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Underline.configure(), 
+    ],
+    editorProps: {
+      attributes: {
+          class: style.editorContent,
+      },
+  },
+    content: "", 
+    editable: false, 
+    immediatelyRender: false,
+  });
+
   useEffect(() => {
     const loadJob = async () => {
       try {
         const data = await fetchJobPostById(id as string);
         setJob(data);
+        if (editor && data) {
+          editor.commands.setContent(data.descripcion);
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error desconocido");
       } finally {
@@ -43,7 +64,7 @@ export default function JobDetailPage() {
       }
     };
     loadJob();
-  }, [id]);
+  }, [id, editor]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("es-AR", {
@@ -98,7 +119,7 @@ export default function JobDetailPage() {
     );
   }
 
-  if (error || !job) {
+  if (error || !job || !editor) {
     return (
       <div className="min-h-screen flex items-center justify-center text-destructive">
         <p>{error || "No se pudo cargar la oferta"}</p>
@@ -131,10 +152,8 @@ export default function JobDetailPage() {
 
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">Descripción</h2>
-              <div className="prose prose-sm md:prose-base text-muted-foreground max-w-none text-justify">
-                <ReactMarkdown>
-                  {job.descripcion}
-                </ReactMarkdown>
+              <div className="prose prose-sm md:prose-base text-muted-foreground max-w-none text-justify">                
+                <EditorContent editor={editor} />
               </div>
               {job.formaPostulacion === "MAIL" && job.contactoPostulacion && (
                 <p className="text-muted-foreground mt-4">

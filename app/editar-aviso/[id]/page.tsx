@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import RteEditor from "@/components/ui/RteEditor";
 
 const formSchema = z
   .object({
@@ -344,11 +345,10 @@ export default function EditarAvisoPage() {
               <FormItem>
                 <FormLabel className="text-primary font-medium">Descripción</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="Describe los requisitos y responsabilidades del puesto"
-                    className="min-h-[100px] border-primary/20 focus-visible:ring-primary"
-                    {...field}
-                  />
+                    <RteEditor
+                        content={field.value}
+                        onChange={(val) => field.onChange(val)}
+                    />
                 </FormControl>
                 <FormMessage />
               </FormItem>
