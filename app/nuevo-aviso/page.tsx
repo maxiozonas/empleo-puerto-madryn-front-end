@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { createJobOffer } from "@/lib/api/ofertas";
-import { Loader2, Anchor, Ship, ArrowLeft } from "lucide-react";
+import { Loader2, Anchor, ArrowLeft } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -221,13 +221,8 @@ export default function PublicarEmpleoPage() {
         </Button>
       </div>
       <header className="mb-8 space-y-4">
-        <div className="flex justify-center mb-4">
-          <div className="bg-primary/10 p-3 rounded-full">
-            <Ship className="h-8 w-8 text-primary" />
-          </div>
-        </div>
         <h1 className="text-3xl font-bold text-center text-primary">Publicar empleo</h1>
-        <p className="text-center text-accent">
+        <p className="text-center text-muted-foreground">
           Complete el formulario para publicar una nueva oferta de empleo en Puerto Madryn
         </p>
       </header>
@@ -405,7 +400,7 @@ export default function PublicarEmpleoPage() {
               <AlertDescription>{submitError}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full bg-ocean-gradient hover:bg-primary/90" disabled={isSubmitting}>
+          <Button type="submit" className="w-full bg-primary text-white hover:bg-primary/90" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

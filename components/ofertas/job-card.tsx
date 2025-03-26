@@ -27,11 +27,15 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
   const addFavoriteMutation = useAddFavorite();
   const removeFavoriteMutation = useRemoveFavorite();
 
-  const formattedDate = new Date(job.fechaPublicacion).toLocaleDateString("es-AR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const calculateDaysAgo = (date: string) => {
+    const publicationDate = new Date(date);
+    const currentDate = new Date();
+    const differenceInTime = currentDate.getTime() - publicationDate.getTime();
+    const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+    return differenceInDays === 0 ? "Publicado hoy" : `Publicado hace ${differenceInDays} días`;
+  };
+
+  const daysAgo = calculateDaysAgo(job.fechaPublicacion);
 
   const handleToggleFavorite = () => {
     if (isFavoriteLoading || !token || isOwnPost) return;
@@ -46,7 +50,13 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
   const canShowFavoriteButton = status === "authenticated" && !isOwnPost;
 
   return (
-    <Card className="group relative flex flex-col overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-secondary/30 bg-gradient-to-b from-white to-secondary/10 min-w-[280px]">
+    <Card
+      className={cn(
+        "group relative flex flex-col overflow-hidden transition-all duration-300",
+        "hover:shadow-xl hover:-translate-y-2 hover:bg-primary/5 border-secondary/30",
+        "bg-gradient-to-b from-white to-secondary/10 min-w-[280px]"
+      )}
+    >
       {canShowFavoriteButton && (
         <div className="absolute top-3 right-3 z-10">
           <TooltipProvider>
@@ -118,34 +128,39 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
 
       <CardHeader className="pb-2 pt-6">
         <div className="flex items-center gap-2 mb-1">
-          <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20">
+          <Badge
+            variant="outline"
+            className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-full"
+          >
             {job.categoria.nombre}
           </Badge>
         </div>
-        <CardTitle className="line-clamp-2 mt-3 group-hover:text-primary transition-colors">{job.titulo}</CardTitle>
-        <p className="text-muted-foreground font-medium">{job.empresaConsultora}</p>
+        <CardTitle className="line-clamp-2 mt-3 text-xl font-bold group-hover:text-primary transition-colors">
+          {job.titulo}
+        </CardTitle>
+        <p className="text-gray-600 font-medium text-sm">{job.empresaConsultora}</p>
       </CardHeader>
 
       <CardContent className="space-y-4 flex-grow pb-6">
         <div className="flex flex-wrap gap-4 text-sm">
-          <div className="flex items-center gap-1.5 bg-secondary/50 px-2.5 py-1 rounded-full">
-            <MapPin className="h-3.5 w-3.5 text-accent" />
+          <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full">
+            <MapPin className="h-3.5 w-3.5 text-primary" />
             <span className="text-neutral-800 font-medium">Puerto Madryn</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-secondary/50 px-2.5 py-1 rounded-full">
-            <Calendar className="h-3.5 w-3.5 text-accent" />
-            <span className="text-neutral-800 font-medium">{formattedDate}</span>
+          <div className="flex items-center gap-1.5 bg-gray-100 px-2.5 py-1 rounded-full">
+            <Calendar className="h-3.5 w-3.5 text-primary" />
+            <span className="text-neutral-800 font-medium">{daysAgo}</span>
           </div>
         </div>
-        <div className="mt-4 pt-4 border-t border-border/50">
-          <p className="text-sm text-muted-foreground line-clamp-3">{job.descripcion}</p>
+        <div className="mt-4 pt-4 border-t border-gray-200">
+          <p className="text-sm text-gray-500 line-clamp-3 text-justify">{job.descripcion}</p>
         </div>
       </CardContent>
 
-      <CardFooter className="pt-2 flex gap-2 md:flex-row md:justify-between">
+      <CardFooter className="pt-2 flex gap-2 md:flex-row md:justify-end">
         <Button
           asChild
-          className="flex-1 group/button transition-all text-white bg-ocean-gradient hover:bg-primary/70"
+          className="group/button transition-all text-white bg-primary hover:bg-primary/90 rounded-md"
           variant="default"
         >
           <Link href={`/detalles-empleo/${job.id}`} className="flex items-center justify-center">
@@ -155,7 +170,7 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
         </Button>
         {showEditOptions && (
           <div className="hidden md:flex gap-2">
-            <Button variant="outline" size="sm" onClick={onEdit} className="flex items-center gap-2 ">
+            <Button variant="outline" size="sm" onClick={onEdit} className="flex hover:bg-primary/90 hover:text-white items-center gap-2">
               <Edit className="h-4 w-4" />
               Editar
             </Button>

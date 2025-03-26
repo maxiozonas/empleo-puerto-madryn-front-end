@@ -1,9 +1,10 @@
 "use client";
 
-
 import { JobCard } from "@/components/ofertas/job-card";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export function FeaturedJobsSection() {
   const { data: jobs, isLoading, error } = useJobPosts();
@@ -45,6 +46,16 @@ export function FeaturedJobsSection() {
         {featuredJobs.map((job) => (
           <JobCard key={job.id} job={job} />
         ))}
+      </div>
+      <div className="text-center mt-10">
+        <Button
+          asChild
+          className="bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
+        >
+          <Link href="/avisos">
+            Ver todos los empleos
+          </Link>
+        </Button>
       </div>
     </section>
   );

@@ -61,9 +61,9 @@ export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
               <SelectValue placeholder="Categoría" />
             </SelectTrigger>
             <SelectContent position="popper" align="end">
-              <SelectItem value="all">Todas las categorías</SelectItem>
+              <SelectItem value="all" className="bg-primary text-white">Todas las categorías</SelectItem>
               {categorias.map((category) => (
-                <SelectItem key={category.id} value={category.id}>
+                <SelectItem key={category.id} value={category.id} className="hover:bg-primary hover:text-white !important">
                   {category.nombre}
                 </SelectItem>
               ))}
@@ -71,7 +71,7 @@ export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
           </Select>
 
           {activeFiltersCount > 0 && (
-            <Button variant="ghost" onClick={clearFilters} className="w-full sm:w-auto">
+            <Button onClick={clearFilters} className="w-full sm:w-auto hover:bg-primary hover:text-white">
               <X className="mr-2 h-4 w-4" />
               Limpiar filtros
             </Button>

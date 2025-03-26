@@ -74,7 +74,7 @@ export default function MisAvisosPage() {
       </div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-primary">Mis Avisos</h1>
-        <Button asChild className="bg-ocean-gradient hover:bg-primary/90">
+        <Button asChild className="bg-primary hover:bg-primary/90 text-white">
           <Link href="/nuevo-aviso">Nuevo Aviso</Link>
         </Button>
       </div>

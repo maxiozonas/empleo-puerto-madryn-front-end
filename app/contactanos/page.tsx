@@ -212,7 +212,7 @@ export default function ContactUs() {
               <AlertDescription>{submitError}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full bg-ocean-gradient hover:bg-primary/90" disabled={isSubmitting}>
+          <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

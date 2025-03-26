@@ -235,13 +235,8 @@ export default function EditarAvisoPage() {
         </Button>
       </div>
       <header className="mb-8 space-y-4">
-        <div className="flex justify-center mb-4">
-          <div className="bg-primary/10 p-3 rounded-full">
-            <Ship className="h-8 w-8 text-primary" />
-          </div>
-        </div>
         <h1 className="text-3xl font-bold text-center text-primary">Editar Aviso</h1>
-        <p className="text-center text-accent">
+        <p className="text-center text-muted-foreground">
           Modifique los campos que desee y guarde los cambios
         </p>
       </header>
@@ -419,7 +414,7 @@ export default function EditarAvisoPage() {
               <AlertDescription>{submitError}</AlertDescription>
             </Alert>
           )}
-          <Button type="submit" className="w-full bg-ocean-gradient hover:bg-primary/90" disabled={isSubmitting}>
+          <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

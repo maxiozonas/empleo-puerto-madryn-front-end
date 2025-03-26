@@ -19,8 +19,8 @@ export function UserNav() {
 
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center gap-4 hover:underline">
-        <Button onClick={() => signIn("google")}>
+      <div>
+        <Button className="flex items-center gap-4 hover:bg-primary/10 border-2 border-primary/30 rounded-md" onClick={() => signIn("google")}>
           Iniciar sesión
         </Button>
       </div>
@@ -31,8 +31,7 @@ export function UserNav() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="outline"
-          className="hidden md:flex items-center gap-2 rounded-full border-primary/30 bg-primary/10 hover:bg-primary/20 transition-colors h-10 px-3 text-primary"
+          className="hflex items-center gap-4 hover:bg-primary/10 border-2 border-primary/30 rounded-md"
         >
           <span className="flex items-center gap-2">
             {session?.user?.image ? (

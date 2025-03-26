@@ -55,7 +55,7 @@
     --secondary: 199 36% 65%;
     --secondary-foreground: 222 47% 11%;
 
-    --accent: 17 68% 54%;
+    --accent: 200 63% 29%;
     --accent-foreground: 210 40% 98%;
 
     --muted: 217 33% 17%;
@@ -66,6 +66,11 @@
 
     --ring: 200 63% 29%;
   }
+}
+
+.custom-sheet button.absolute.right-4.top-4 svg {
+  height: 2rem;
+  width: 2rem;
 }
 
 @layer base {
