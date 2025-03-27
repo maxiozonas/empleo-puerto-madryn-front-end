@@ -5,7 +5,7 @@ import { Factory, Anchor as Whale, Fish } from "lucide-react";
 
 export function AboutSection() {
   return (
-    <section className="bg-primary/5 py-16 px-4">
+    <section className="py-8 bg-background">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>

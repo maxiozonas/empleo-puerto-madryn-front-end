@@ -21,7 +21,7 @@ export function HeroSection() {
   }, [images.length]);
 
   return (
-    <section className="relative h-[500px] overflow-hidden rounded-3xl shadow-xl w-full">
+    <section className="relative min-h-[500px] overflow-hidden rounded-3xl shadow-xl w-full">
       {images.map((src, index) => (
         <div
           key={index}

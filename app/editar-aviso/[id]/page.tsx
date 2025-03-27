@@ -7,14 +7,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPostById } from "@/lib/hooks/useOfertas";
 import { updateJobOffer } from "@/lib/api/ofertas";
-import { ArrowLeft, Loader2, Ship, X } from "lucide-react"; // Importamos el ícono X
+import { ArrowLeft, Loader2, Ship, X } from "lucide-react"; 
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";

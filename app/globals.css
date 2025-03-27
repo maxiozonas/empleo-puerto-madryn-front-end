@@ -73,6 +73,11 @@
   width: 2rem;
 }
 
+body {
+  background-color: #edf2fb
+}
+
+
 @layer base {
   * {
     @apply border-border;
@@ -82,7 +87,6 @@
   }
 }
 
-/* Clases personalizadas para elementos específicos de Puerto Madryn */
 .text-whale-watching {
   @apply text-primary;
 }

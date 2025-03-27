@@ -56,7 +56,7 @@ export function JobList({
 
   if (isLoading && !externalJobs) {
     return (
-      <div className="text-center py-8">
+      <div className="text-center">
         <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
         <p className="mt-2 text-muted-foreground">Cargando ofertas...</p>
       </div>
@@ -65,7 +65,7 @@ export function JobList({
 
   if (error && !externalJobs) {
     return (
-      <div className="text-center text-destructive py-8">
+      <div className="text-center text-destructive">
         <p>{error.message}</p>
         <Button
           variant="outline"

@@ -34,10 +34,10 @@ export function FeaturedJobsSection() {
     );
   }
 
-  const featuredJobs = jobs.slice(0, 3); // Mostrar solo las primeras 3 ofertas
+  const featuredJobs = jobs.slice(0, 3);
 
   return (
-    <section className="container mx-auto py-12 px-4">
+    <section className="mx-auto py-12">
       <div className="text-center mb-10">
         <h2 className="text-3xl font-bold text-primary mb-2">Empleos Destacados</h2>
         <p className="text-muted-foreground">Las mejores oportunidades laborales en Puerto Madryn</p>
@@ -47,7 +47,7 @@ export function FeaturedJobsSection() {
           <JobCard key={job.id} job={job} />
         ))}
       </div>
-      <div className="text-center mt-10">
+      <div className="text-center mt-5">
         <Button
           asChild
           className="bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
