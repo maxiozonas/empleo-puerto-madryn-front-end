@@ -21,6 +21,12 @@ const nextConfig: NextConfig = {
         port: "8080",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "empleo-pm-back-end-app-production.up.railway.app",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
