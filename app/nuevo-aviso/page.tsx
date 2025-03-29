@@ -21,7 +21,8 @@ import RteEditor from "@/components/ui/RteEditor";
 
 const formSchema = z
   .object({
-    titulo: z.string()
+    titulo: z
+      .string()
       .min(1, "El título es obligatorio")
       .max(150, "El título no puede superar los 150 caracteres")
       .trim()
@@ -31,14 +32,16 @@ const formSchema = z
       .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
         message: "El título no puede contener caracteres especiales raros",
       }),
-    descripcion: z.string()
+    descripcion: z
+      .string()
       .min(1, "La descripción es obligatoria")
       .max(5000, "La descripción no puede superar los 5000 caracteres")
       .trim()
       .refine((val) => val.length > 0 && val.trim().length > 0, {
         message: "La descripción no puede ser solo espacios",
       }),
-    empresaConsultora: z.string()
+    empresaConsultora: z
+      .string()
       .min(1, "El nombre de la empresa es obligatorio")
       .max(150, "El nombre de la empresa no puede superar los 150 caracteres")
       .trim()
@@ -48,16 +51,17 @@ const formSchema = z
       .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
         message: "La empresa no puede contener caracteres especiales raros",
       }),
-    categoria: z.string()
-      .min(1, "Debes seleccionar una categoría"),
+    categoria: z.string().min(1, "Debes seleccionar una categoría"),
     formaPostulacion: z.enum(["MAIL", "LINK"], {
       required_error: "Debes seleccionar una forma de postulación",
     }),
-    emailContacto: z.string()
+    emailContacto: z
+      .string()
       .email("Debes ingresar un email válido")
       .optional()
       .nullable(),
-    linkPostulacion: z.string()
+    linkPostulacion: z
+      .string()
       .url("Debes ingresar una URL válida (ej: https://example.com)")
       .trim()
       .refine((val) => !val || (val.length > 0 && val.trim().length > 0), {
@@ -65,9 +69,7 @@ const formSchema = z
       })
       .optional()
       .nullable(),
-    fechaCierre: z.string()
-      .optional()
-      .nullable(),
+    fechaCierre: z.string().optional().nullable(),
     logo: z
       .instanceof(File)
       .optional()
@@ -83,17 +85,35 @@ const formSchema = z
       if (data.formaPostulacion === "MAIL" && (!data.emailContacto || data.emailContacto.trim() === "")) {
         return false;
       }
+      return true;
+    },
+    {
+      message: "Debes ingresar un email válido para postulación por email",
+      path: ["emailContacto"],
+    }
+  )
+  .refine(
+    (data) => {
       if (data.formaPostulacion === "LINK" && (!data.linkPostulacion || data.linkPostulacion.trim() === "")) {
         return false;
       }
+      return true;
+    },
+    {
+      message: "Debes ingresar una URL válida para postulación por enlace",
+      path: ["linkPostulacion"],
+    }
+  )
+  .refine(
+    (data) => {
       if (data.fechaCierre && new Date(data.fechaCierre) < new Date()) {
         return false;
       }
       return true;
     },
     {
-      message: "Debes ingresar un email válido para postulación por email, una URL válida para postulación por enlace, y la fecha de cierre no puede ser anterior a hoy",
-      path: ["formaPostulacion"],
+      message: "La fecha de cierre no puede ser anterior a hoy",
+      path: ["fechaCierre"],
     }
   );
 

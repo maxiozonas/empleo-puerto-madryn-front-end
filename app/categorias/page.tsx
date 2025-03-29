@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 import Link from "next/link";
-import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, Wrench, Truck } from "lucide-react";
+import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, Wrench, Truck, Scissors } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -60,7 +60,9 @@ export default function CategoriasPage() {
     "Chofer": <Truck className="h-6 w-6" />,                
     "Gastronomía": <Coffee className="h-6 w-6" />,          
     "Comercio": <Building className="h-6 w-6" />,           
-    "Industria": <Factory className="h-6 w-6" />            
+    "Industria": <Factory className="h-6 w-6" />,
+    "Belleza": <Scissors className="h-6 w-6" />, 
+    "Otros": <Anchor className="h-6 w-6" />,       
 };
 
   const jobCountByCategory = allJobs?.reduce((acc, job) => {
@@ -78,7 +80,6 @@ export default function CategoriasPage() {
         <Button
           onClick={handleBack}
           className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-          variant="ghost"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           <span>Volver</span>
@@ -108,7 +109,7 @@ export default function CategoriasPage() {
                 <CardTitle className="text-lg font-semibold group-hover:text-primary text-foreground mb-2">
                   {category.nombre}
                 </CardTitle>
-                <p className="text-sm text-gray-500">
+                <p className="text-md text-gray-500">
                   {jobCountByCategory?.[category.id] || 0} ofertas disponibles
                 </p>
               </CardContent>

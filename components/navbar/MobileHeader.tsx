@@ -38,10 +38,10 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
           />
         ) : (
           <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500 text-sm text-xl">{session.user.name?.split(" ")[0]?.[0] || "U"}</span>
+            <span className="text-gray-500 text-sm">{session.user.name?.split(" ")[0]?.[0] || "U"}</span>
           </div>
         )}
-        <span className="text-sm font-medium truncate text-xl">{session.user.name?.split(" ")[0] || "Usuario"}</span>
+        <span className="font-medium truncate text-xl">{session.user.name?.split(" ")[0] || "Usuario"}</span>
       </div>
     );
   };

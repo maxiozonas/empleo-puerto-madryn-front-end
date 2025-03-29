@@ -3,9 +3,8 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { JobList } from "@/components/ofertas/job-list";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Anchor, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useUserJobPosts, useDeleteJobOffer } from "@/lib/hooks/useOfertas";
 
 export default function MisAvisosPage() {
@@ -13,7 +12,7 @@ export default function MisAvisosPage() {
   const router = useRouter();
   const token = session?.backendToken || "";
   const { data: jobs, isLoading, error } = useUserJobPosts(token);
-  const deleteMutation = useDeleteJobOffer(); // Usa el hook existente
+  const deleteMutation = useDeleteJobOffer();
 
   if (status === "loading" || isLoading) {
     return (
@@ -72,11 +71,9 @@ export default function MisAvisosPage() {
           <span>Volver</span>
         </Button>
       </div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-primary">Mis Avisos</h1>
-        <Button asChild className="bg-primary hover:bg-primary/90 text-white">
-          <Link href="/nuevo-aviso">Nuevo Aviso</Link>
-        </Button>
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-bold text-primary mb-2">Mis avisos</h1>
+        <p className="text-muted-foreground">Aqui podras gestionar todos los avisos que publicaste desde tu cuenta.</p>
       </div>
       {jobs && jobs.length > 0 ? (
         <JobList
@@ -88,7 +85,10 @@ export default function MisAvisosPage() {
           onDelete={handleDelete}
         />
       ) : (
-        <p className="text-muted-foreground">No tienes publicaciones aún.</p>
+        <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
+          <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
+          <p className="text-foreground">Aún no hiciste ninguna publicacion.</p>
+        </div>
       )}
     </div>
   );

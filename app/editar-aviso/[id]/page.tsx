@@ -13,16 +13,16 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPostById } from "@/lib/hooks/useOfertas";
 import { updateJobOffer } from "@/lib/api/ofertas";
-import { ArrowLeft, Loader2, Ship, X } from "lucide-react"; 
+import { ArrowLeft, Loader2, Ship, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import RteEditor from "@/components/ui/RteEditor";
 
 const formSchema = z
   .object({
-    titulo: z.string()
+    titulo: z
+      .string()
       .min(1, "El título es obligatorio")
       .max(150, "El título no puede superar los 150 caracteres")
       .trim()
@@ -32,14 +32,16 @@ const formSchema = z
       .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
         message: "El título no puede contener caracteres especiales raros",
       }),
-    descripcion: z.string()
+    descripcion: z
+      .string()
       .min(1, "La descripción es obligatoria")
       .max(5000, "La descripción no puede superar los 5000 caracteres")
       .trim()
       .refine((val) => val.length > 0 && val.trim().length > 0, {
         message: "La descripción no puede ser solo espacios",
       }),
-    empresaConsultora: z.string()
+    empresaConsultora: z
+      .string()
       .min(1, "El nombre de la empresa es obligatorio")
       .max(150, "El nombre de la empresa no puede superar los 150 caracteres")
       .trim()
@@ -49,16 +51,17 @@ const formSchema = z
       .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
         message: "La empresa no puede contener caracteres especiales raros",
       }),
-    categoria: z.string()
-      .min(1, "Debes seleccionar una categoría"),
+    categoria: z.string().min(1, "Debes seleccionar una categoría"),
     formaPostulacion: z.enum(["MAIL", "LINK"], {
       required_error: "Debes seleccionar una forma de postulación",
     }),
-    emailContacto: z.string()
+    emailContacto: z
+      .string()
       .email("Debes ingresar un email válido")
       .optional()
       .nullable(),
-    linkPostulacion: z.string()
+    linkPostulacion: z
+      .string()
       .url("Debes ingresar una URL válida (ej: https://example.com)")
       .trim()
       .refine((val) => !val || (val.length > 0 && val.trim().length > 0), {
@@ -66,9 +69,7 @@ const formSchema = z
       })
       .optional()
       .nullable(),
-    fechaCierre: z.string()
-      .optional()
-      .nullable(),
+    fechaCierre: z.string().optional().nullable(),
     logo: z
       .instanceof(File)
       .optional()
@@ -84,17 +85,35 @@ const formSchema = z
       if (data.formaPostulacion === "MAIL" && (!data.emailContacto || data.emailContacto.trim() === "")) {
         return false;
       }
+      return true;
+    },
+    {
+      message: "Debes ingresar un email válido para postulación por email",
+      path: ["emailContacto"],
+    }
+  )
+  .refine(
+    (data) => {
       if (data.formaPostulacion === "LINK" && (!data.linkPostulacion || data.linkPostulacion.trim() === "")) {
         return false;
       }
+      return true;
+    },
+    {
+      message: "Debes ingresar una URL válida para postulación por enlace",
+      path: ["linkPostulacion"],
+    }
+  )
+  .refine(
+    (data) => {
       if (data.fechaCierre && new Date(data.fechaCierre) < new Date()) {
         return false;
       }
       return true;
     },
     {
-      message: "Debes ingresar un email válido para postulación por email, una URL válida para postulación por enlace, y la fecha de cierre no puede ser anterior a hoy",
-      path: ["formaPostulacion"],
+      message: "La fecha de cierre no puede ser anterior a hoy",
+      path: ["fechaCierre"],
     }
   );
 
@@ -148,31 +167,39 @@ export default function EditarAvisoPage() {
       empresaConsultora: "",
       categoria: "",
       formaPostulacion: "MAIL",
-      emailContacto: null,
-      linkPostulacion: null,
-      fechaCierre: null,
+      emailContacto: "",
+      linkPostulacion: "",
+      fechaCierre: "",
       logo: undefined,
     },
   });
 
+  const [initialDescription, setInitialDescription] = useState<string>("");
+
   useEffect(() => {
     if (job) {
-      form.reset({
-        titulo: job.titulo,
-        descripcion: job.descripcion,
-        empresaConsultora: job.empresaConsultora,
-        categoria: job.categoria.id,
-        formaPostulacion: job.formaPostulacion as "MAIL" | "LINK",
-        emailContacto: job.formaPostulacion === "MAIL" ? job.contactoPostulacion : null,
-        linkPostulacion: job.formaPostulacion === "LINK" ? job.contactoPostulacion : null,
-        fechaCierre: job.fechaCierre ? new Date(job.fechaCierre).toISOString().split("T")[0] : null,
+      const initialValues = {
+        titulo: job.titulo || "",
+        descripcion: job.descripcion || "",
+        empresaConsultora: job.empresaConsultora || "",
+        categoria: job.categoria?.id || "",
+        formaPostulacion: (job.formaPostulacion as "MAIL" | "LINK") || "MAIL",
+        emailContacto: job.formaPostulacion === "MAIL" ? job.contactoPostulacion || "" : "",
+        linkPostulacion: job.formaPostulacion === "LINK" ? job.contactoPostulacion || "" : "",
+        fechaCierre: job.fechaCierre ? new Date(job.fechaCierre).toISOString().split("T")[0] : "",
         logo: undefined,
-      });
+      };
+      form.reset(initialValues);
+      setInitialDescription(job.descripcion || "");
       setExistingLogoUrl(job.logoUrl || null);
     }
   }, [job, form]);
 
-  useAuthCheck();
+  useEffect(() => {
+    if (categorias && job && !form.getValues("categoria")) {
+      form.setValue("categoria", job.categoria?.id || "");
+    }
+  }, [categorias, job, form]);
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -218,10 +245,10 @@ export default function EditarAvisoPage() {
         descripcion: data.descripcion,
         usuarioId: session?.user.id || "",
         empresaConsultora: data.empresaConsultora,
-        fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
+        fechaCierre: data.fechaCierre || null,
         formaPostulacion: data.formaPostulacion,
-        emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto ?? null : null,
-        linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion ?? null : null,
+        emailContacto: data.formaPostulacion === "MAIL" ? (data.emailContacto || null) : null,
+        linkPostulacion: data.formaPostulacion === "LINK" ? (data.linkPostulacion || null) : null,
         categoriaId: data.categoria,
         logo: data.logo ?? null,
         logoUrl: existingLogoUrl,
@@ -241,7 +268,7 @@ export default function EditarAvisoPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl py-6 px-4">
+    <div className="container mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -260,7 +287,7 @@ export default function EditarAvisoPage() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 bg-gradient-to-b from-white to-secondary/10 p-6 rounded-lg border border-secondary/30 shadow-sm"
+          className="max-w-2xl mx-auto space-y-6 bg-gradient-to-b from-white to-secondary/10 p-6 rounded-lg border border-secondary/30 shadow-sm"
         >
           <FormField
             control={form.control}
@@ -296,7 +323,7 @@ export default function EditarAvisoPage() {
                       size="sm"
                       className="text-destructive border-destructive hover:bg-destructive/10"
                       onClick={() => {
-                        setExistingLogoUrl(null); 
+                        setExistingLogoUrl(null);
                       }}
                     >
                       <X className="h-4 w-4" />
@@ -344,10 +371,11 @@ export default function EditarAvisoPage() {
               <FormItem>
                 <FormLabel className="text-primary font-medium">Descripción</FormLabel>
                 <FormControl>
-                    <RteEditor
-                        content={field.value}
-                        onChange={(val) => field.onChange(val)}
-                    />
+                  <RteEditor
+                    key={initialDescription} // Forzamos el remontaje si la descripción inicial cambia
+                    content={field.value || initialDescription} // Usamos el valor inicial si field.value está vacío
+                    onChange={(val) => field.onChange(val)}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -401,7 +429,19 @@ export default function EditarAvisoPage() {
               <FormItem className="space-y-3">
                 <FormLabel className="text-primary font-medium">Forma de postulación</FormLabel>
                 <FormControl>
-                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-col space-y-1">
+                  <RadioGroup
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      // Limpiar los campos condicionales al cambiar la forma de postulación
+                      if (value === "MAIL") {
+                        form.setValue("linkPostulacion", "");
+                      } else {
+                        form.setValue("emailContacto", "");
+                      }
+                    }}
+                    value={field.value}
+                    className="flex flex-col space-y-1"
+                  >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
                         <RadioGroupItem value="MAIL" />
@@ -432,6 +472,7 @@ export default function EditarAvisoPage() {
                       placeholder="contacto@empresa.com"
                       {...field}
                       value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value || null)}
                       className="border-primary/20 focus-visible:ring-primary"
                     />
                   </FormControl>
@@ -452,6 +493,7 @@ export default function EditarAvisoPage() {
                       placeholder="https://..."
                       {...field}
                       value={field.value ?? ""}
+                      onChange={(e) => field.onChange(e.target.value || null)}
                       className="border-primary/20 focus-visible:ring-primary"
                     />
                   </FormControl>
@@ -471,7 +513,9 @@ export default function EditarAvisoPage() {
                     type="date"
                     {...field}
                     value={field.value ?? ""}
+                    onChange={(e) => field.onChange(e.target.value || null)}
                     className="border-primary/20 focus-visible:ring-primary"
+                    min={new Date().toISOString().split("T")[0]}
                   />
                 </FormControl>
                 <FormMessage />

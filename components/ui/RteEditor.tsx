@@ -33,7 +33,7 @@ const TipTap = ({ content, onChange }: TipTapProps) => {
             StarterKit,
             Underline.configure(),            
         ],
-        content: content || "<p>Escribe tu mensaje aquí...</p>",
+        content: content,
         editorProps: {
             attributes: {
                 class: style.editorContent,
@@ -106,7 +106,7 @@ const TipTap = ({ content, onChange }: TipTapProps) => {
                             <FaSmile />
                         </button>
                         {isEmojiPanelOpen && (
-                            <div className="absolute w-56 z-10 mt-2 p-2 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto grid grid-cols-6 gap-2">
+                            <div className="absolute w-56 h-24 z-10 mt-2 p-2 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto grid grid-cols-6 gap-2">
                                 {emojis.map((emoji) => (
                                     <button
                                         key={emoji}
@@ -120,7 +120,7 @@ const TipTap = ({ content, onChange }: TipTapProps) => {
                         )}
                     </div>                 
                 </div>
-                <EditorContent editor={editor} className="rounded-lg p-2 border focus-visible:ring-primary" />
+                <EditorContent editor={editor} className="rounded-lg p-2 border shadow-sm" />
             </div>
         </div>
     );

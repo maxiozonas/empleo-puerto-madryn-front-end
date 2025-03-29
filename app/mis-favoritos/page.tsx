@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { JobList } from "@/components/ofertas/job-list";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Anchor, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUserFavorites } from "@/lib/hooks/useFavoritos";
 import { JobPosting } from "@/lib/types/iJobPosting"; // Asegúrate de importar el tipo correcto
@@ -52,7 +52,10 @@ export default function FavoritosPage() {
           <span>Volver</span>
         </Button>
       </div>
-      <h1 className="text-3xl font-bold text-primary mb-6">Mis Favoritos</h1>
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-bold text-primary mb-2">Mis favoritos</h1>
+        <p className="text-muted-foreground">Aqui podras ver todas los avisos que agregaste a favoritos.</p>
+      </div>
       {favoriteJobs.length > 0 ? (
         <JobList
           searchTerm=""
@@ -61,7 +64,10 @@ export default function FavoritosPage() {
           showEditOptions={false}
         />
       ) : (
-        <p className="text-muted-foreground">No tienes publicaciones en favoritos aún.</p>
+        <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
+          <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
+          <p className="text-foreground">Aún no tienes avisos en favoritos.</p>
+        </div>
       )}
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { JobCard } from "@/components/ofertas/job-card";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
-import { Loader2 } from "lucide-react";
+import { Anchor, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -23,12 +23,17 @@ export function FeaturedJobsSection() {
     );
   }
 
-  if (error || !jobs) {
+  if (error || !jobs || jobs.length === 0) {
     return (
-      <section className="container mx-auto py-12 px-4">
+      <section className="mx-auto py-12">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-primary mb-2">Empleos Destacados</h2>
-          <p className="text-destructive">No se pudieron cargar los empleos destacados.</p>
+          <p className="text-muted-foreground">Las mejores oportunidades laborales en Puerto Madryn</p>
+
+          <div className="text-center w-full py-8 px-4 bg-secondary/20 rounded-lg border border-secondary mt-3">
+            <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
+            <p className="text-foreground">Aún no hay ofertas publicadas.</p>
+          </div>
         </div>
       </section>
     );

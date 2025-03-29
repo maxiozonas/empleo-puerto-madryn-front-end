@@ -10,10 +10,10 @@ import { useJobPosts } from "@/lib/hooks/useOfertas";
 interface JobListProps {
   searchTerm: string;
   selectedCategory: string;
-  jobs?: JobPosting[]; 
-  showEditOptions?: boolean; 
-  onEdit?: (jobId: string) => void; 
-  onDelete?: (jobId: string) => void; 
+  jobs?: JobPosting[];
+  showEditOptions?: boolean;
+  onEdit?: (jobId: string) => void;
+  onDelete?: (jobId: string) => void;
 }
 
 export function JobList({
@@ -24,13 +24,12 @@ export function JobList({
   onEdit,
   onDelete,
 }: JobListProps) {
-  const { data: fetchedJobs, isLoading, error, refetch } = useJobPosts(); 
+  const { data: fetchedJobs, isLoading, error, refetch } = useJobPosts();
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
 
   useEffect(() => {
     const jobsToFilter = externalJobs || fetchedJobs || [];
-    if (!jobsToFilter.length) return;
-
+    
     const applyFilters = () => {
       let result = [...jobsToFilter];
 
@@ -78,6 +77,19 @@ export function JobList({
     );
   }
 
+  const allJobs = externalJobs || fetchedJobs || [];
+  
+  // Caso 1: No hay ofertas en absoluto
+  if (allJobs.length === 0) {
+    return (
+      <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
+        <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
+        <p className="text-foreground">Aún no hay ofertas publicadas.</p>
+      </div>
+    );
+  }
+
+  // Caso 2: Hay ofertas, pero ninguna coincide con los filtros
   if (!filteredJobs.length) {
     return (
       <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
@@ -87,15 +99,16 @@ export function JobList({
     );
   }
 
+  // Caso 3: Hay ofertas que coinciden con los filtros
   return (
     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredJobs.map((job) => (
         <JobCard
           key={job.id}
           job={job}
-          showEditOptions={showEditOptions} 
-          onEdit={() => onEdit?.(job.id)} 
-          onDelete={() => onDelete?.(job.id)} 
+          showEditOptions={showEditOptions}
+          onEdit={() => onEdit?.(job.id)}
+          onDelete={() => onDelete?.(job.id)}
         />
       ))}
     </div>
