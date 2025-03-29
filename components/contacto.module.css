@@ -1,14 +1,12 @@
-/* pages/contactUs.module.css */
 .editorContent{
   min-height: 150px;
   padding: 0.5rem;
   border: solid 0px !important;
-  
 }
 
   .editorContent p {
     font-size: 1rem;
-    color: #000000;
+    color: #677788;
     margin-bottom: 0.5rem;
   }
 
@@ -32,4 +30,6 @@
     margin-bottom: 0.5rem;
     margin-left: 20px;
   }
+
+
   
