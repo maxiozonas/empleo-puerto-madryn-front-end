@@ -23,10 +23,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "empleo-pm-back-end-app-production.up.railway.app",
+        hostname: "madryn-empleos-backend.onrender.com",
         port: "",
         pathname: "/**",
-      },
+      }
     ],
   },
 };
