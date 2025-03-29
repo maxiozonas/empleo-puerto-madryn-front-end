@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { createJobOffer } from "@/lib/api/ofertas";
-import { Loader2, Anchor, ArrowLeft, X } from "lucide-react"; // Importamos el ícono X
+import { Loader2, Anchor, ArrowLeft, X } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -217,7 +217,7 @@ export default function PublicarEmpleoPage() {
   };
 
   return (
-    <div className="mx-auto max-w-2xl py-6 px-4">
+    <div className="container mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -236,7 +236,7 @@ export default function PublicarEmpleoPage() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 bg-gradient-to-b from-white to-secondary/10 p-6 rounded-lg border border-secondary/30 shadow-sm"
+          className="max-w-2xl mx-auto space-y-6 bg-gradient-to-b from-white to-secondary/10 p-6 rounded-lg border border-secondary/30 shadow-sm"
         >
           <FormField
             control={form.control}

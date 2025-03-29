@@ -73,8 +73,7 @@ export default function CategoriasPage() {
   };
 
   return (
-    <section className="container mx-auto py-8 px-4">
-      {/* Botón Volver */}
+    <section className="container mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -86,13 +85,11 @@ export default function CategoriasPage() {
         </Button>
       </div>
 
-      {/* Título y subtítulo */}
       <div className="text-center mb-10">
         <h1 className="text-3xl font-bold text-primary mb-2">Categorías Destacadas</h1>
         <p className="text-muted-foreground">Explora oportunidades por sector en Puerto Madryn</p>
       </div>
 
-      {/* Cuadrícula de categorías */}
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {categories.map((category) => (
           <Card
@@ -105,17 +102,12 @@ export default function CategoriasPage() {
           >
             <Link href={`/categorias/${category.id}`}>
               <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
-                {/* Ícono en círculo */}
                 <div className="mb-4 rounded-full p-3 group-hover:text-primary">
                   {categoryIcons[category.nombre] || <Briefcase className="h-6 w-6 text-blue-600" />}
-                </div>
-
-                {/* Nombre de la categoría */}
+                </div>  
                 <CardTitle className="text-lg font-semibold group-hover:text-primary text-foreground mb-2">
                   {category.nombre}
                 </CardTitle>
-
-                {/* Número de ofertas */}
                 <p className="text-sm text-gray-500">
                   {jobCountByCategory?.[category.id] || 0} ofertas disponibles
                 </p>

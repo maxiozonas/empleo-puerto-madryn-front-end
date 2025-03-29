@@ -128,8 +128,8 @@ export default function JobDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background py-6 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <div className="min-h-screen py-6">
+      <div className="mx-auto max-w-6xl">
         <div className="flex items-center mb-6">
           <Button
             onClick={handleBack}
@@ -142,22 +142,22 @@ export default function JobDetailPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-2">
-            <h1 className="text-3xl font-bold mb-2 text-justify">{job.titulo}</h1>
+            <h1 className="md:text-3xl text-xl font-bold mb-2 text-justify">{job.titulo}</h1>
 
             <div className="flex items-center gap-2 mb-6">
-              <Badge variant="outline" className="bg-muted/50">
+              <Badge variant="outline" className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-md">
                 {job.categoria.nombre}
               </Badge>
             </div>
 
             <div className="mb-8">
-              <h2 className="text-xl font-bold mb-4">Descripción</h2>
-              <div className="prose prose-sm md:prose-base text-muted-foreground max-w-none text-justify">                
+              <h2 className="text-xl font-bold mb-4">Descripción del puesto</h2>
+              <div className="bg-background md:p-4 p-0 text-muted-foreground text-justify">                
                 <EditorContent editor={editor} />
               </div>
               {job.formaPostulacion === "MAIL" && job.contactoPostulacion && (
                 <p className="text-muted-foreground mt-4">
-                  Enviar CV a: <span className="font-medium">{job.contactoPostulacion}</span>
+                  Enviar CV a: <span className="font-bold">{job.contactoPostulacion}</span>
                 </p>
               )}
             </div>
@@ -196,7 +196,7 @@ export default function JobDetailPage() {
 
                   <Button
                     onClick={handleApply}
-                    className="w-full mb-6 group/button transition-all bg-ocean-gradient text-white hover:bg-primary/90"
+                    className="w-full mb-6 bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
                   >
                     <span>Aplicar ahora</span>
                     <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover/button:translate-x-1" />

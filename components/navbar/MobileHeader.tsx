@@ -79,7 +79,6 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
         </Button>
       )}
 
-      {/* Original Sheet Content */}
       <SheetContent side="top" className="w-full sm:w-[400px] bg-white rounded-lg custom-sheet">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>

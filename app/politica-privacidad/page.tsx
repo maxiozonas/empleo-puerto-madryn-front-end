@@ -23,8 +23,8 @@ export default function PoliticaPrivacidadPage() {
         </Button>
       </div>
 
-      <h1 className="text-3xl font-bold text-primary mb-6">Términos y Condiciones</h1>
-      <section className="space-y-6 text-gray-700">
+      <h1 className="text-2xl font-bold text-primary mb-6 text-center">Términos y Condiciones</h1>
+      <section className="space-y-6 text-gray-700 text-justify">
         <h2 className="text-2xl font-semibold">Política de Privacidad</h2>
         <p>
           El sitio web <strong>Empleos Madryn</strong> es propiedad de Empleos Madryn, que actúa como controlador de tus datos personales. Estamos comprometidos con la protección de tu privacidad y cumplimos con la <strong>Ley 25.326 de Protección de Datos Personales de Argentina</strong>, así como con el <strong>Reglamento General de Protección de Datos (GDPR)</strong> para usuarios en la Unión Europea.

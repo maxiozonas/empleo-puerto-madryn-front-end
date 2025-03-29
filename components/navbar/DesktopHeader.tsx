@@ -26,10 +26,10 @@ export function DesktopHeader() {
     <>
       <Link
         href="/"
-        className="flex items-center text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
+        className="flex items-center text-2xl font-bold  text-primary hover:text-primary/90 transition-colors"
       >
-        <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={128} height={128} className="h-16 w-16" />
-        <span className="bg-clip-text">EmpleosMadryn</span>
+        <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={100} height={100} className="h-28 w-28" />
+        <span className="bg-clip-text text-lg md:text-xl">Madryn Empleos</span>
       </Link>
 
       <div className="hidden md:flex flex-1 items-center justify-center gap-6">

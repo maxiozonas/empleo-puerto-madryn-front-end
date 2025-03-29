@@ -38,7 +38,7 @@ export default function AboutUs() {
         </Button>
       </div>
       <div className="flex flex-col gap-8">
-        <h1 className="text-3xl font-bold text-center text-primary mb-2">
+        <h1 className="text-2xl font-bold text-center text-primary">
           Sobre Nosotros
         </h1>
         <p className="text-muted-foreground text-justify">
