@@ -23,6 +23,8 @@ export function FeaturedJobsSection() {
     );
   }
 
+  
+
   if (error || !jobs || jobs.length === 0) {
     return (
       <section className="mx-auto py-12">

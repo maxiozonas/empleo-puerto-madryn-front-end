@@ -20,6 +20,7 @@ export function DesktopHeader() {
   const router = useRouter();
 
   const handlePublicarEmpleo = () => {
+    console.log(session);
     if (!isAuthenticated) {
       router.push("/login");
     } else {
@@ -52,6 +53,11 @@ export function DesktopHeader() {
       </div>
 
       <div className="flex items-center gap-4">
+      {isAuthenticated && session.user.email === "empleospuertomadryn@gmail.com" && (
+            <Button asChild className="text-muted-foreground hover:text-primary">
+              <Link href="/admin">Administrar</Link>
+            </Button>
+          )}
         <Button
           className="bg-ocean-gradient hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
           onClick={handlePublicarEmpleo}

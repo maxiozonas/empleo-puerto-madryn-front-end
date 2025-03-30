@@ -15,4 +15,5 @@ export interface JobPosting {
     nombre: string;
   };
   logoUrl?: string | null;
+  habilitado: boolean;
 }

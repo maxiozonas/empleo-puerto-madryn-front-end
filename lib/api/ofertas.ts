@@ -193,3 +193,30 @@ export async function deleteJobOffer(id: string, token: string): Promise<void> {
     throw new Error(`Error ${response.status}: ${errorText}`);
   }
 }
+
+export async function enableJobOfferAdmin(id: string, token: string) {
+  const url = `${apiUrl}/api/admin/ofertas/habilitar/${id}`;
+  console.log("Enviando PUT a:", url); 
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status}: ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log("Respuesta:", result);
+    return result;
+  } catch (error) {
+    console.error("Error en enableJobOfferAdmin:", error);
+    throw error;
+  }
+}
