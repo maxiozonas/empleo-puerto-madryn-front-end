@@ -211,10 +211,6 @@ export async function enableJobOfferAdmin(id: string, token: string) {
       const errorText = await response.text();
       throw new Error(`Error ${response.status}: ${errorText}`);
     }
-
-    const result = await response.json();
-    console.log("Respuesta:", result);
-    return result;
   } catch (error) {
     console.error("Error en enableJobOfferAdmin:", error);
     throw error;
