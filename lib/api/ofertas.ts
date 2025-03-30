@@ -154,7 +154,7 @@ export async function createJobOffer(
     categoria: { id: data.categoriaId },
   };
 
-  console.log("Datos enviados al backend:", ofertaData); // Depuración
+  console.log("Datos enviados al backend:", ofertaData); 
 
   formData.append("oferta", JSON.stringify(ofertaData));
 

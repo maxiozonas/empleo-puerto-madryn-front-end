@@ -5,14 +5,13 @@ import { Factory, Anchor as Whale, Fish } from "lucide-react";
 
 export function AboutSection() {
   return (
-    <section className="py-6 bg-background">
-      <div className="px-2 mx-auto">
+    <section className="p-6 bg-background rounded-lg shadow-xl">
+      <div className="mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-2xl text-center md:text-start font-bold text-primary mb-4">Trabajar en Puerto Madryn</h2>
             <p className="text-muted-foreground mb-6 text-justify">
-              Puerto Madryn es una ciudad costera ubicada en la provincia de Chubut, Patagonia Argentina. Reconocida por
-              su belleza natural, es un importante centro industrial, pesquero y turístico.
+            Encuentra trabajo en Puerto Madryn con Madryn Empleos. Explora oportunidades laborales en una ciudad costera de Chubut, Patagonia Argentina, conocida por su industria, turismo y pesca.
             </p>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
