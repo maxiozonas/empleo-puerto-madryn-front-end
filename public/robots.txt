@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /nuevo-aviso
+Disallow: /mis-avisos
+Disallow: /mis-favoritos
+Host: https://www.madrynempleos.com
+Sitemap: https://www.madrynempleos.com/sitemap.xml

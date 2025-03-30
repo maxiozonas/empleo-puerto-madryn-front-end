@@ -7,14 +7,30 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Madryn Empleos",
+    default: "Madryn Empleos - Ofertas laborales en Puerto Madryn",
     template: "%s | Madryn Empleos",
   },
-  description: "Encuentra tu próximo trabajo en Madryn Empleos",
-  keywords: ["empleos", "trabajo", "madryn", "avisos", "oportunidades"],
+  description: "Explora las mejores ofertas laborales en Puerto Madryn. Encuentra empleos actualizados y oportunidades en Madryn Empleos.",
+  keywords: ["Madryn Empleos, empleos Puerto Madryn, ofertas laborales Madryn, trabajo Madryn"],
   authors: [{ name: "Madryn Empleos" }],
   creator: "Maximo Ozonas, Juan Ignacio Rodriguez Mariani",
-  publisher: "Madryn Empleos"
+  publisher: "Madryn Empleos",
+  openGraph: {
+    title: "Madryn Empleos - Ofertas laborales en Puerto Madryn",
+    description: "Explora las mejores ofertas laborales en Puerto Madryn. Encuentra empleos actualizados y oportunidades en Madryn Empleos.",
+    url: "https://madrynempleos.com",
+    siteName: "Madryn Empleos",
+    images: [
+      {
+        url: "https://madrynempleos.com/lib/logoPage.png",
+        width: 800,
+        height: 600,
+        alt: "Madryn Empleos",
+      },
+    ],
+    locale: "es-AR",
+    type: "website",
+  }
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

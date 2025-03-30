@@ -10,7 +10,7 @@ export default function HomePage() {
   useAuthCheck();
 
   return (
-    <div className="space-y-">
+    <div>
       <HeroSection />
       <FeaturedJobsSection />
       <AboutSection />
