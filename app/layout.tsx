@@ -1,30 +1,27 @@
-"use client";
-
-import type React from "react";
+import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/navbar/Header";
-import { SessionProvider } from "next-auth/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Footer from "@/components/home-page/Footer";
+import ClientProviders from "./ClientProviders"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
-const queryClient = new QueryClient();
+export const metadata: Metadata = {
+  title: {
+    default: "Madryn Empleos",
+    template: "%s | Madryn Empleos",
+  },
+  description: "Encuentra tu próximo trabajo en Madryn Empleos",
+  keywords: ["empleos", "trabajo", "madryn", "avisos", "oportunidades"],
+  authors: [{ name: "Madryn Empleos" }],
+  creator: "Maximo Ozonas, Juan Ignacio Rodriguez Mariani",
+  publisher: "Madryn Empleos"
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
       <body className={inter.className}>
-        <SessionProvider>
-          <QueryClientProvider client={queryClient}>
-            <Header />
-            <main className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-6 sm:py-2 lg:py-4">
-              {children}
-              <Footer />
-            </main>
-          </QueryClientProvider>
-        </SessionProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

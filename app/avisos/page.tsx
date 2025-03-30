@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
+
 export default function OfertasLaboralesPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");

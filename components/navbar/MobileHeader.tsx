@@ -1,13 +1,12 @@
 "use client";
 
-import { Button } from "../ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Menu, Ship, ChevronDown } from "lucide-react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 
 export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolean; setIsMenuOpen: (open: boolean) => void }) {
   const { data: session, status } = useSession();
@@ -23,135 +22,141 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
     }
   };
 
-  const UserNavMobile = () => {
-    if (!isAuthenticated || !session?.user) return null;
-
-    return (
-      <div className="flex items-center justify-center gap-2 p-2 bg-secondary/10 rounded-lg mb-4 mt-4">
-        {session.user.image ? (
-          <Image
-            src={session.user.image || "/placeholder.svg"}
-            alt={session.user.name || "Perfil de usuario"}
-            width={32}
-            height={32}
-            className="rounded-full object-cover"
-          />
-        ) : (
-          <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-            <span className="text-gray-500 text-sm">{session.user.name?.split(" ")[0]?.[0] || "U"}</span>
-          </div>
-        )}
-        <span className="font-medium truncate text-xl">{session.user.name?.split(" ")[0] || "Usuario"}</span>
-      </div>
-    );
-  };
-
   return (
     <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-      {isAuthenticated && session?.user ? (
-        <Button
-          size="lg"
-          className="md:hidden flex items-center gap-2 px-3"
-          onClick={() => setIsMenuOpen(true)}
+      <div className="md:hidden flex items-center justify-between w-full">
+        <Link
+          href="/"
+          className="flex items-center text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
         >
-          {session.user.image ? (
-            <Image
-              src={session.user.image}
-              alt={session.user.name || "Perfil de usuario"}
-              width={40}
-              height={40}
-              className="rounded-full object-cover"
-            />
-          ) : (
-            <div className="rounded-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-500 text-sm">{session.user.name?.split(" ")[0]?.[0] || "U"}</span>
+          <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={40} height={40} />
+          <span className="ml-2 text-lg">Madryn Empleos</span>
+        </Link>
+
+        {isAuthenticated && session?.user ? (
+          <Button
+            size="sm"
+            variant="outline"
+            className="flex items-center gap-2 hover:bg-primary/10 border-2 border-primary/30 rounded-md"
+            onClick={() => setIsMenuOpen(true)}
+          >
+            {session.user.image ? (
+              <Image
+                src={session.user.image}
+                alt={session.user.name || "Perfil de usuario"}
+                width={24}
+                height={24}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <div className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500 text-sm">{session.user.name?.split(" ")[0]?.[0] || "U"}</span>
+              </div>
+            )}
+            <ChevronDown className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            size="icon"
+            variant="ghost"
+            className=""
+            onClick={() => setIsMenuOpen(true)}
+          >
+            <Menu className="h-6 w-6 text-primary" />
+          </Button>
+        )}
+      </div>
+
+      <SheetContent side="left" className="w-[300px] bg-gradient-to-b from-primary to-secondary text-white p-0">
+        <div className="flex flex-col h-full">
+          <SheetHeader className="flex items-center justify-between p-4 border-b border-white/10">
+            <SheetTitle className="font-bold text-xl text-white">Madryn Empleos</SheetTitle>
+          </SheetHeader>
+
+          {isAuthenticated && session?.user && (
+            <div className="flex items-center gap-2 p-4 bg-white/10">
+              {session.user.image ? (
+                <Image
+                  src={session.user.image}
+                  alt={session.user.name || "Perfil de usuario"}
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover"
+                />
+              ) : (
+                <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center">
+                  <Ship className="h-6 w-6 text-white" />
+                </div>
+              )}
+              <div>
+                <p className="font-medium">{session.user.name?.split(" ")[0] || "Usuario"}</p>
+                <p className="text-sm text-white/70">{session.user.email}</p>
+              </div>
             </div>
           )}
-          <ChevronDown className="text-primary h-8 w-8 custom-chevron"/>
-        </Button>
-      ) : (
-        <Button
-          size="lg"
-          className="md:hidden bg-ocean-gradient text-white p-3"
-          onClick={() => setIsMenuOpen(true)}
-        >
-          <Menu className="h-8 w-8" />
-        </Button>
-      )}
 
-      <SheetContent side="top" className="w-full sm:w-[400px] bg-white rounded-lg custom-sheet">
-        <SheetHeader>
-          <SheetTitle>Menu</SheetTitle>
-        </SheetHeader>
-        <UserNavMobile />
-        <div className="flex flex-col gap-4 mt-4">
-          <Button
-            asChild
-            className="w-full text-primary"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/avisos");
-            }}
-          >
-            <Link href="/avisos" className="text-xl font-semibold">Avisos</Link>
-          </Button>
-          <Button
-            asChild
-            className="w-full text-primary"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/categorias");
-            }}
-          >
-            <Link href="/categorias" className="text-xl font-semibold">Categorías</Link>
-          </Button>
-          <Button
-            asChild
-            className="w-full text-primary"
-            onClick={() => {
-              setIsMenuOpen(false);
-              router.push("/contactanos");  
-            }}
-          >
-            <Link href="/contactanos" className="text-xl font-semibold">Contáctanos</Link>
-          </Button>
-          <Separator className="border-t-2 border-primary" />
-          <Button
-            className="bg-ocean-gradient text-white w-full text-xl font-semibold"
-            onClick={handlePublicarEmpleo}
-          >
-            <Ship className="mr-2 h-4 w-4" />
-            Publicar
-          </Button>
+          <nav className="flex-1 overflow-auto py-4">
+            <div className="py-2">
+              {[
+                { name: "Inicio", path: "/" },
+                { name: "Avisos", path: "/avisos" },
+                { name: "Categorías", path: "/categorias" },
+                { name: "Contáctanos", path: "/contactanos" },
+              ].map((item) => (
+                <Link 
+                  key={item.name} 
+                  href={item.path}
+                  className="flex items-center px-4 py-3 hover:bg-white/10"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="text-lg">{item.name}</span>
+                </Link>
+              ))}
+            </div>
 
-          {!isAuthenticated ? (
-            <Button
-              className="w-full text-primary text-xl font-semibold"
-              onClick={() => {
-                setIsMenuOpen(false);
-                signIn("google", { callbackUrl: "/" });
-              }}
+            {isAuthenticated && (
+              <div className="border-t border-white/10 my-2 pt-2">
+                <p className="px-4 py-2 text-white/70 text-sm">Mi cuenta</p>
+                <Link 
+                  href="/mis-avisos" 
+                  className="flex items-center px-4 py-3 hover:bg-white/10"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="text-lg">Mis avisos</span>
+                </Link>
+                <Link 
+                  href="/mis-favoritos" 
+                  className="flex items-center px-4 py-3 hover:bg-white/10"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="text-lg">Mis favoritos</span>
+                </Link>
+              </div>
+            )}
+          </nav>
+
+          <div className="p-4 border-t border-white/10">
+            <Button 
+              className="w-full bg-white text-primary hover:bg-white/90 mb-2"
+              onClick={handlePublicarEmpleo}
             >
-              Iniciar sesión
+              <Ship className="mr-2 h-4 w-4" />
+              Publicar Empleo
             </Button>
-          ) : (
-            <>
-              <Button
-                asChild
-                className="w-full text-primary text-xl font-semibold"
-                onClick={() => setIsMenuOpen(false)}
+
+            {!isAuthenticated ? (
+              <Button 
+                className="w-full bg-transparent border border-white text-white hover:bg-white/10"
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  signIn("google", { callbackUrl: "/" });
+                }}
               >
-                <Link href="/mis-avisos">Mis Avisos</Link>
+                Iniciar sesión
               </Button>
-              <Button
-                asChild
-                className="w-full  text-primary text-xl font-semibold"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Link href="/mis-favoritos">Mis Favoritos</Link>
-              </Button>
-              <Button
-                className="w-full text-destructive hover:text-destructive border-destructive/30 text-xl font-semibold"
+            ) : (
+              <Button 
+                className="w-full bg-transparent border border-white text-white hover:bg-white/10"
                 onClick={() => {
                   setIsMenuOpen(false);
                   signOut();
@@ -159,8 +164,8 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
               >
                 Cerrar sesión
               </Button>
-            </>
-          )}
+            )}
+          </div>
         </div>
       </SheetContent>
     </Sheet>
