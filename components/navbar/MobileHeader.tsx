@@ -113,6 +113,18 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
                 </Link>
               ))}
             </div>
+            {isAuthenticated && process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string) && (
+              <div className="border-t border-white/10 my-2 pt-2">
+                <p className="px-4 py-2 text-white/70 text-sm">Administrar</p>
+                <Link
+                  href="/admin"
+                  className="flex items-center px-4 py-3 hover:bg-white/10"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="text-lg">Administrar</span>
+                </Link>
+              </div>
+            )}
 
             {isAuthenticated && (
               <div className="border-t border-white/10 my-2 pt-2">

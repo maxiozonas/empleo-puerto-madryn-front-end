@@ -218,3 +218,25 @@ export async function enableJobOfferAdmin(id: string, token: string) {
     throw error;
   }
 }
+
+export async function deleteJobOfferAdmin(id: string, token: string) {
+  const url = `${apiUrl}/api/admin/ofertas/${id}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status}: ${errorText}`);
+    }
+  } catch (error) {
+    console.error("Error en deleteJobOfferAdmin:", error);
+    throw error;
+  }
+}
