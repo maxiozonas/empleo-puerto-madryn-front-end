@@ -33,10 +33,7 @@ export function JobList({
     const applyFilters = () => {
       let result = [...jobsToFilter];
 
-      console.log("All jobs:", result);
-
       result = result.filter((job) => job.habilitado === true);
-      console.log("Filtered jobs:", result);
 
       if (searchTerm.trim()) {
         const term = searchTerm.toLowerCase().trim();

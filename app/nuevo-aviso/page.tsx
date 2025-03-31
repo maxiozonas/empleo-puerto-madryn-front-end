@@ -16,7 +16,7 @@ import { Loader2, Anchor, ArrowLeft, X } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import RteEditor from "@/components/ui/RteEditor";
 
 const formSchema = z
@@ -145,8 +145,11 @@ export default function PublicarEmpleoPage() {
     mutationFn: ({ data, token }: { data: CreateJobOfferData; token: string }) => createJobOffer(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
-      setSubmitSuccess("¡Oferta publicada con éxito!");
-      setTimeout(() => router.push("/"), 2000);
+      setSubmitSuccess(
+        "¡Oferta enviada con éxito! Será publicada en la web tras ser verificada por nuestro equipo."
+      );
+      form.reset();
+      setTimeout(() => router.push("/"), 5000);
     },
     onError: (err) => {
       setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
@@ -322,10 +325,7 @@ export default function PublicarEmpleoPage() {
               <FormItem>
                 <FormLabel className="text-primary font-medium">Descripción</FormLabel>
                 <FormControl>
-                  <RteEditor
-                      content={field.value}
-                      onChange={(val) => field.onChange(val)}
-                  />
+                  <RteEditor content={field.value} onChange={(val) => field.onChange(val)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -457,12 +457,14 @@ export default function PublicarEmpleoPage() {
             )}
           />
           {submitSuccess && (
-            <Alert variant="default" className="border-green-500 text-green-700">
+            <Alert variant="default" className="bg-green-600 text-white text-bold">
+              <AlertTitle>¡Éxito!</AlertTitle>
               <AlertDescription>{submitSuccess}</AlertDescription>
             </Alert>
           )}
           {submitError && (
             <Alert variant="destructive">
+              <AlertTitle>Error</AlertTitle>
               <AlertDescription>{submitError}</AlertDescription>
             </Alert>
           )}

@@ -80,6 +80,7 @@ export async function updateJobOffer(
     categoriaId: string;
     logo?: File | null;
     logoUrl?: string | null;
+    habilitado: boolean;
   },
   token: string
 ): Promise<JobPosting> {
@@ -97,6 +98,7 @@ export async function updateJobOffer(
     emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
     linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
     categoria: { id: data.categoriaId },
+    habilitado: data.habilitado,
   };
 
   formData.append("oferta", JSON.stringify(ofertaData));

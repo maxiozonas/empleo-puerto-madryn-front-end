@@ -14,10 +14,13 @@ import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useJobPostById } from "@/lib/hooks/useOfertas";
 import { updateJobOffer } from "@/lib/api/ofertas";
 import { ArrowLeft, Loader2, Ship, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import RteEditor from "@/components/ui/RteEditor";
+import { JobPosting } from "@/lib/types/iJobPosting";
+import { Category } from "@/lib/types/iCategory";
+import { Session } from "next-auth";
 
 const formSchema = z
   .object({
@@ -125,81 +128,6 @@ export default function EditarAvisoPage() {
   const { id } = useParams();
   const { data: job, isLoading: jobLoading, error: jobError } = useJobPostById(id as string);
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [existingLogoUrl, setExistingLogoUrl] = useState<string | null>(null);
-  const queryClient = useQueryClient();
-
-  type UpdateJobOfferData = {
-    id: string;
-    titulo: string;
-    descripcion: string;
-    usuarioId: string;
-    empresaConsultora: string;
-    fechaCierre: string | null;
-    formaPostulacion: string;
-    emailContacto: string | null;
-    linkPostulacion: string | null;
-    categoriaId: string;
-    logo?: File | null;
-    logoUrl?: string | null;
-  };
-
-  const updateJobOfferMutation = useMutation({
-    mutationFn: ({ data, token }: { data: UpdateJobOfferData; token: string }) => updateJobOffer(data, token),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["jobPost", id] });
-      queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
-      setSubmitSuccess("¡Oferta actualizada con éxito!");
-      setTimeout(() => router.push("/mis-avisos"), 2000);
-    },
-    onError: (err) => {
-      setSubmitError(err instanceof Error ? err.message : "Error desconocido al actualizar la oferta");
-    },
-  });
-
-  const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      titulo: "",
-      descripcion: "",
-      empresaConsultora: "",
-      categoria: "",
-      formaPostulacion: "MAIL",
-      emailContacto: "",
-      linkPostulacion: "",
-      fechaCierre: "",
-      logo: undefined,
-    },
-  });
-
-  const [initialDescription, setInitialDescription] = useState<string>("");
-
-  useEffect(() => {
-    if (job) {
-      const initialValues = {
-        titulo: job.titulo || "",
-        descripcion: job.descripcion || "",
-        empresaConsultora: job.empresaConsultora || "",
-        categoria: job.categoria?.id || "",
-        formaPostulacion: (job.formaPostulacion as "MAIL" | "LINK") || "MAIL",
-        emailContacto: job.formaPostulacion === "MAIL" ? job.contactoPostulacion || "" : "",
-        linkPostulacion: job.formaPostulacion === "LINK" ? job.contactoPostulacion || "" : "",
-        fechaCierre: job.fechaCierre ? new Date(job.fechaCierre).toISOString().split("T")[0] : "",
-        logo: undefined,
-      };
-      form.reset(initialValues);
-      setInitialDescription(job.descripcion || "");
-      setExistingLogoUrl(job.logoUrl || null);
-    }
-  }, [job, form]);
-
-  useEffect(() => {
-    if (categorias && job && !form.getValues("categoria")) {
-      form.setValue("categoria", job.categoria?.id || "");
-    }
-  }, [categorias, job, form]);
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -234,13 +162,90 @@ export default function EditarAvisoPage() {
     return <div className="text-center py-8">No hay categorías disponibles.</div>;
   }
 
+  return (
+    <div className="container mx-auto py-6 px-4">
+      <EditForm
+        job={job}
+        categorias={categorias}
+        session={session}
+        id={id as string}
+        router={router}
+      />
+    </div>
+  );
+}
+
+interface EditFormProps {
+  job: JobPosting; 
+  categorias: Category[]; 
+  session: Session | null;
+  id: string;
+  router: ReturnType<typeof useRouter>;
+}
+
+function EditForm({ job, categorias, session, id, router }: EditFormProps) {
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [existingLogoUrl, setExistingLogoUrl] = useState<string | null>(job.logoUrl || null);
+  const queryClient = useQueryClient();
+
+
+
+  const form = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      titulo: job.titulo || "",
+      descripcion: job.descripcion || "",
+      empresaConsultora: job.empresaConsultora || "",
+      categoria: job.categoria?.id || "",
+      formaPostulacion: (job.formaPostulacion as "MAIL" | "LINK") || "MAIL",
+      emailContacto: job.formaPostulacion === "MAIL" ? job.contactoPostulacion || null : null,
+      linkPostulacion: job.formaPostulacion === "LINK" ? job.contactoPostulacion || null : null,
+      fechaCierre: job.fechaCierre ? new Date(job.fechaCierre).toISOString().split("T")[0] : null,
+      logo: undefined,
+    },
+  });
+
+  type UpdateJobOfferData = {
+    id: string;
+    titulo: string;
+    descripcion: string;
+    usuarioId: string;
+    empresaConsultora: string;
+    fechaCierre: string | null;
+    formaPostulacion: string;
+    emailContacto: string | null;
+    linkPostulacion: string | null;
+    categoriaId: string;
+    logo?: File | null;
+    logoUrl?: string | null;
+    habilitado: boolean;
+  };
+
+  const updateJobOfferMutation = useMutation({
+    mutationFn: ({ data, token }: { data: UpdateJobOfferData; token: string }) => updateJobOffer(data, token),
+    onSuccess: () => {
+      console.log("Mutación exitosa");
+      queryClient.invalidateQueries({ queryKey: ["jobPost", id] });
+      queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
+      setSubmitSuccess("¡Oferta actualizada con éxito!");
+      setTimeout(() => router.push("/mis-avisos"), 2000);
+    },
+    onError: (err) => {
+      console.error("Error en la mutación:", err);
+      setSubmitError(err instanceof Error ? err.message : "Error desconocido al actualizar la oferta");
+    },
+  });
+
   const onSubmit = async (data: FormData) => {
+    console.log("Formulario enviado con datos:", data);
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
     try {
       const updateData: UpdateJobOfferData = {
-        id: id as string,
+        id: id,
         titulo: data.titulo,
         descripcion: data.descripcion,
         usuarioId: session?.user.id || "",
@@ -252,7 +257,10 @@ export default function EditarAvisoPage() {
         categoriaId: data.categoria,
         logo: data.logo ?? null,
         logoUrl: existingLogoUrl,
+        habilitado: job.habilitado,
       };
+
+      console.log("Datos enviados a la mutación:", updateData);
 
       await updateJobOfferMutation.mutateAsync({
         data: updateData,
@@ -267,8 +275,10 @@ export default function EditarAvisoPage() {
     router.push("/");
   };
 
+  console.log("Valores iniciales del formulario:", form.getValues());
+
   return (
-    <div className="container mx-auto py-6 px-4">
+    <>
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -371,11 +381,7 @@ export default function EditarAvisoPage() {
               <FormItem>
                 <FormLabel className="text-primary font-medium">Descripción</FormLabel>
                 <FormControl>
-                  <RteEditor
-                    key={initialDescription} // Forzamos el remontaje si la descripción inicial cambia
-                    content={field.value || initialDescription} // Usamos el valor inicial si field.value está vacío
-                    onChange={(val) => field.onChange(val)}
-                  />
+                <RteEditor content={field.value} onChange={(val) => field.onChange(val)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -404,7 +410,7 @@ export default function EditarAvisoPage() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-primary font-medium">Categoría</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
+                <Select onValueChange={field.onChange} value={field.value} key={field.value}>
                   <FormControl>
                     <SelectTrigger className="border-primary/20 focus:ring-primary">
                       <SelectValue placeholder="Selecciona una categoría" />
@@ -432,11 +438,10 @@ export default function EditarAvisoPage() {
                   <RadioGroup
                     onValueChange={(value) => {
                       field.onChange(value);
-                      // Limpiar los campos condicionales al cambiar la forma de postulación
                       if (value === "MAIL") {
-                        form.setValue("linkPostulacion", "");
+                        form.setValue("linkPostulacion", null);
                       } else {
-                        form.setValue("emailContacto", "");
+                        form.setValue("emailContacto", null);
                       }
                     }}
                     value={field.value}
@@ -523,7 +528,7 @@ export default function EditarAvisoPage() {
             )}
           />
           {submitSuccess && (
-            <Alert variant="default" className="border-green-500 text-green-700">
+            <Alert variant="default" className="bg-green-600 text-white text-bold">
               <AlertDescription>{submitSuccess}</AlertDescription>
             </Alert>
           )}
@@ -547,6 +552,6 @@ export default function EditarAvisoPage() {
           </Button>
         </form>
       </Form>
-    </div>
+    </>
   );
 }
