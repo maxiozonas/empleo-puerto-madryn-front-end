@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { JobPosting } from "@/lib/types/iJobPosting";
-import { MapPin, Calendar, Edit, Trash2  } from "lucide-react";
+import { MapPin, Calendar, Edit, Trash2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
@@ -81,6 +81,19 @@ export function JobCard({ job, showEditOptions = false, onEdit, onDelete }: JobC
             </div>
           </div>
         </CardContent>
+
+        <CardFooter className="flex justify-center">
+          <div className="w-full flex justify-center items-center gap-2">
+            <Button
+              variant="outline"
+              size="lg"
+              className="flex hover:bg-primary/90 hover:text-white items-center gap-2 w-full"
+            >
+              <ArrowRight className="h-4 w-4" />
+              Ver detalles
+            </Button>
+          </div>
+        </CardFooter>
 
         {showEditOptions && (
           <div className="flex justify-between items-center gap-2 px-4 pb-2">

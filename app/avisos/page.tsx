@@ -5,13 +5,15 @@ import { JobList } from "@/components/ofertas/job-list";
 import { SearchFilters } from "@/components/ofertas/search-filters";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useJobPosts } from "@/lib/hooks/useOfertas";
 
 
 export default function OfertasLaboralesPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const { data: jobs, isLoading, error } = useJobPosts()
 
   const handleFilterChange = (newFilters: { searchTerm?: string; selectedCategory?: string }) => {
     if (newFilters.searchTerm !== undefined) setSearchTerm(newFilters.searchTerm);
@@ -21,6 +23,22 @@ export default function OfertasLaboralesPage() {
   const handleBack = () => {
     router.push("/");
   };
+
+  if (isLoading) {
+    return (
+      <div className="container min-h-screen items-center justify-center py-6 px-4 text-center">
+        <Loader2 className="h-8 w-8 animate-spin mx-auto justify-center items-center text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto py-6 px-4 text-center text-destructive">
+        <p>{error.message}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-6 px-4">
@@ -38,7 +56,7 @@ export default function OfertasLaboralesPage() {
         <p className="text-muted-foreground">Explora todas las oportunidades laborales en Puerto Madryn.</p>
       </div>
       <SearchFilters onFilterChange={handleFilterChange} />
-      <JobList searchTerm={searchTerm} selectedCategory={selectedCategory} />
+      <JobList searchTerm={searchTerm} selectedCategory={selectedCategory} jobs={jobs} />
     </div>
   );
 }

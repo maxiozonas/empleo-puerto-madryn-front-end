@@ -23,16 +23,13 @@ export function FeaturedJobsSection() {
     );
   }
 
-  
-
-  if (error || !jobs || jobs.length === 0) {
+  if (error || !jobs || jobs.length === 0 || !jobs.some(job => job.habilitado === true)) {
     return (
       <section className="mx-auto py-12">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-primary mb-2">Empleos Destacados</h2>
           <p className="text-muted-foreground">Las mejores oportunidades laborales en Puerto Madryn</p>
-
-          <div className="text-center w-full py-8 px-4 bg-secondary/20 rounded-lg border border-secondary mt-3">
+          <div className="text-center w-full py-8 px-4 bg-secondary/20 rounded-lg border border-secondary mt-8">
             <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
             <p className="text-foreground">Aún no hay ofertas publicadas.</p>
           </div>
@@ -41,7 +38,10 @@ export function FeaturedJobsSection() {
     );
   }
 
-  const featuredJobs = jobs.slice(0, 3);
+  const featuredJobs = jobs
+    .filter(job => job.habilitado === true)
+    .sort((a, b) => new Date(b.fechaPublicacion).getTime() - new Date(a.fechaPublicacion).getTime())
+    .slice(0, 3);
 
   return (
     <section className="mx-auto py-12">

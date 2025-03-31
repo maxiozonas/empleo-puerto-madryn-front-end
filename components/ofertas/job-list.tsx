@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { JobCard } from "@/components/ofertas/job-card";
 import { JobPosting } from "@/lib/types/iJobPosting";
 import { Loader2, Anchor } from "lucide-react";
@@ -27,11 +27,11 @@ export function JobList({
   const { data: fetchedJobs, isLoading, error, refetch } = useJobPosts();
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
 
+  const allJobs = useMemo(() => externalJobs || fetchedJobs || [], [externalJobs, fetchedJobs]);
+
   useEffect(() => {
-    const jobsToFilter = externalJobs || fetchedJobs || [];
-    
     const applyFilters = () => {
-      let result = [...jobsToFilter];
+      let result = [...allJobs];
 
       result = result.filter((job) => job.habilitado === true);
 
@@ -53,7 +53,7 @@ export function JobList({
     };
 
     applyFilters();
-  }, [searchTerm, selectedCategory, externalJobs, fetchedJobs]);
+  }, [searchTerm, selectedCategory, allJobs]);
 
   if (isLoading && !externalJobs) {
     return (
@@ -79,10 +79,9 @@ export function JobList({
     );
   }
 
-  const allJobs = externalJobs || fetchedJobs || [];
-  
-  // Caso 1: No hay ofertas en absoluto
-  if (allJobs.length === 0) {
+  // Show "Aún no hay ofertas publicadas" when allJobs is empty or all jobs are disabled
+  if (allJobs.length === 0 || !allJobs.some(job => job.habilitado === true)) {
+    console.log("Showing no enabled jobs message");
     return (
       <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
         <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
@@ -91,8 +90,9 @@ export function JobList({
     );
   }
 
-  // Caso 2: Hay ofertas, pero ninguna coincide con los filtros
+  // Show "No hay ofertas disponibles con los filtros seleccionados" when there are enabled jobs but none match filters
   if (!filteredJobs.length) {
+    console.log("Showing no matching filters message");
     return (
       <div className="text-center py-8 px-4 bg-secondary/20 rounded-lg border border-secondary">
         <Anchor className="h-8 w-8 mx-auto text-primary mb-2" />
@@ -101,7 +101,6 @@ export function JobList({
     );
   }
 
-  // Caso 3: Hay ofertas que coinciden con los filtros
   return (
     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
       {filteredJobs.map((job) => (
