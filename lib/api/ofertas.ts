@@ -73,7 +73,7 @@ export async function updateJobOffer(
     descripcion: string;
     usuarioId: string;
     empresaConsultora: string;
-    fechaCierre: string | null;
+    fechaCierre: Date | null;
     formaPostulacion: string;
     emailContacto: string | null;
     linkPostulacion: string | null;
@@ -93,7 +93,7 @@ export async function updateJobOffer(
     usuario: { id: data.usuarioId },
     empresaConsultora: data.empresaConsultora,
     fechaPublicacion: new Date().toISOString(),
-    fechaCierre: data.fechaCierre,
+    fechaCierre: data.fechaCierre ? new Date(data.fechaCierre).toISOString() : null,
     formaPostulacion: data.formaPostulacion as "MAIL" | "LINK",
     emailContacto: data.formaPostulacion === "MAIL" ? data.emailContacto : null,
     linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
@@ -156,7 +156,7 @@ export async function createJobOffer(
     categoria: { id: data.categoriaId },
   };
 
-  console.log("Datos enviados al backend:", ofertaData); 
+  console.log("Datos enviados al backend:", ofertaData);
 
   formData.append("oferta", JSON.stringify(ofertaData));
 
@@ -198,7 +198,7 @@ export async function deleteJobOffer(id: string, token: string): Promise<void> {
 
 export async function enableJobOfferAdmin(id: string, token: string) {
   const url = `${apiUrl}/api/admin/ofertas/habilitar/${id}`;
-  console.log("Enviando PUT a:", url); 
+  console.log("Enviando PUT a:", url);
 
   try {
     const response = await fetch(url, {
@@ -215,6 +215,28 @@ export async function enableJobOfferAdmin(id: string, token: string) {
     }
   } catch (error) {
     console.error("Error en enableJobOfferAdmin:", error);
+    throw error;
+  }
+}
+
+export async function deleteJobOfferAdmin(id: string, token: string) {
+  const url = `${apiUrl}/api/admin/ofertas/${id}`;
+
+  try {
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Error ${response.status}: ${errorText}`);
+    }
+  } catch (error) {
+    console.error("Error en deleteJobOfferAdmin:", error);
     throw error;
   }
 }

@@ -213,7 +213,7 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
     descripcion: string;
     usuarioId: string;
     empresaConsultora: string;
-    fechaCierre: string | null;
+    fechaCierre: Date | null;
     formaPostulacion: string;
     emailContacto: string | null;
     linkPostulacion: string | null;
@@ -250,7 +250,7 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
         descripcion: data.descripcion,
         usuarioId: session?.user.id || "",
         empresaConsultora: data.empresaConsultora,
-        fechaCierre: data.fechaCierre || null,
+        fechaCierre: data.fechaCierre ? new Date(data.fechaCierre) : null,
         formaPostulacion: data.formaPostulacion,
         emailContacto: data.formaPostulacion === "MAIL" ? (data.emailContacto || null) : null,
         linkPostulacion: data.formaPostulacion === "LINK" ? (data.linkPostulacion || null) : null,

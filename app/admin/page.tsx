@@ -8,7 +8,7 @@ import { useEffect, useState, useMemo } from "react";
 import { JobPosting } from "@/lib/types/iJobPosting";
 import { useJobPosts } from "@/lib/hooks/useOfertas";
 import { useSession } from "next-auth/react";
-import { enableJobOfferAdmin } from "@/lib/api/ofertas";
+import { enableJobOfferAdmin, deleteJobOfferAdmin } from "@/lib/api/ofertas";
 import Image from "next/image";
 
 export default function Page() {
@@ -33,10 +33,10 @@ export default function Page() {
     return null;
   }
 
-  if (status === "authenticated" && session?.user.email !== "empleospuertomadryn@gmail.com") {
+  if (status === "authenticated" && !process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string)) {
     router.push("/");
-    return null;
-  }
+     return null;
+}
 
   if (status === "loading" || isLoading) {
     return (
@@ -57,6 +57,15 @@ export default function Page() {
       setFilteredJobs((prev) => prev.filter((job) => job.id !== data.id));
     } catch (error) {
       console.error("Error al habilitar la oferta:", error);
+    }
+  };
+
+  const handleRechazar = async (data: JobPosting) => {
+    try {
+      await deleteJobOfferAdmin(data.id, session?.backendToken as string);
+      setFilteredJobs((prev) => prev.filter((job) => job.id !== data.id));
+    } catch (error) {
+      console.error("Error al rechazar la oferta:", error);
     }
   };
 
@@ -85,6 +94,7 @@ export default function Page() {
                 key={job.id}
                 job={job}
                 onHabilitar={() => handleHabilitar(job)}
+                onRechazar={() => handleRechazar(job)}
               />
             ))}
           </div>
@@ -99,7 +109,7 @@ export default function Page() {
 }
 
 
-function JobCard({ job, onHabilitar }: { job: JobPosting; onHabilitar: () => void }) {
+function JobCard({ job, onHabilitar, onRechazar}: { job: JobPosting; onHabilitar: () => void; onRechazar: () => void }) {
   const [imageSrc, setImageSrc] = useState<string | null>(
     job.logoUrl ? `${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}` : null
   );
@@ -172,6 +182,12 @@ function JobCard({ job, onHabilitar }: { job: JobPosting; onHabilitar: () => voi
         className="mt-4 w-full bg-green-500 text-white hover:bg-green-600 transition-colors duration-200"
       >
         Habilitar
+      </Button>
+      <Button
+        onClick={onRechazar}
+        className="mt-2 w-full bg-red-500 text-white hover:bg-red-600 transition-colors duration-200"
+      >
+        Rechazar
       </Button>
     </div>
   );

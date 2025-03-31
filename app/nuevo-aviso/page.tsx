@@ -146,10 +146,10 @@ export default function PublicarEmpleoPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
       setSubmitSuccess(
-        "¡Oferta enviada con éxito! Será publicada en la web tras ser verificada por nuestro equipo."
+        "¡Oferta enviada con éxito! Será publicada en la web tras ser verificada por nuestro equipo. Luego de eso, recibirás un email de confirmación."
       );
       form.reset();
-      setTimeout(() => router.push("/"), 5000);
+      setTimeout(() => router.push("/"), 6000);
     },
     onError: (err) => {
       setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
@@ -458,8 +458,7 @@ export default function PublicarEmpleoPage() {
           />
           {submitSuccess && (
             <Alert variant="default" className="bg-green-600 text-white text-bold">
-              <AlertTitle>¡Éxito!</AlertTitle>
-              <AlertDescription>{submitSuccess}</AlertDescription>
+              <AlertDescription className="">{submitSuccess}</AlertDescription>
             </Alert>
           )}
           {submitError && (
