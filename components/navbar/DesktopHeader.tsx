@@ -53,7 +53,7 @@ export function DesktopHeader() {
       </div>
 
       <div className="flex items-center gap-4">
-      {isAuthenticated && process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string) && (
+      {isAuthenticated && session.user.email === "empleospuertomadryn@gmail.com" && (
             <Button asChild className="text-muted-foreground hover:text-primary">
               <Link href="/admin">Administrar</Link>
             </Button>
