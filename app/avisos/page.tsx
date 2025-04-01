@@ -41,7 +41,7 @@ export default function OfertasLaboralesPage() {
   }
 
   return (
-    <div className="container mx-auto py-6 px-4">
+    <div className="container min-h-screen mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}

@@ -179,7 +179,7 @@ export default function JobDetailPage() {
               </div>
               <div className="p-3 bg-white/20 rounded-full">
                 {job.logoUrl ? (
-                  <Image src={`${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}`} alt={job.empresaConsultora} className="h-16 w-16 rounded-full object-cover" />
+                  <Image src={`${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}`} alt={job.empresaConsultora} width={120} height={120} className="h-16 w-16 rounded-full object-cover" />
                 ) : (
                   <Building className="h-10 w-10" />
                 )}

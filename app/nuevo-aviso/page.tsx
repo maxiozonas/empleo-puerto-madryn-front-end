@@ -269,7 +269,7 @@ export default function PublicarEmpleoPage() {
                 <FormLabel className="text-primary font-medium">Título del empleo</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="ej: Full Stack Developer Junior"
+                    placeholder="ej: Cocinero/a"
                     {...field}
                     className="border-primary/20 focus-visible:ring-primary"
                   />
@@ -339,7 +339,7 @@ export default function PublicarEmpleoPage() {
                 <FormLabel className="text-primary font-medium">Empresa</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="ej: Globant"
+                    placeholder="ej: Restaurante Madryn"
                     {...field}
                     className="border-primary/20 focus-visible:ring-primary"
                   />
@@ -457,8 +457,8 @@ export default function PublicarEmpleoPage() {
             )}
           />
           {submitSuccess && (
-            <Alert variant="default" className="bg-green-600 text-white text-bold">
-              <AlertDescription className="">{submitSuccess}</AlertDescription>
+            <Alert variant="default" className="bg-green-600 text-white text-center text-bold">
+              <AlertDescription className="text-center">{submitSuccess}</AlertDescription>
             </Alert>
           )}
           {submitError && (
