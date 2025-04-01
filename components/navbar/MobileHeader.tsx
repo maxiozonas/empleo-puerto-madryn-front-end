@@ -18,7 +18,7 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
     if (!isAuthenticated) {
       router.push("/login");
     } else {
-      router.push("/nuevo-aviso");
+      router.push("/publicar");
     }
   };
 
@@ -100,6 +100,7 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
               {[
                 { name: "Inicio", path: "/" },
                 { name: "Avisos", path: "/avisos" },
+                { name: "Servicios", path: "/servicios" },
                 { name: "Categorías", path: "/categorias" },
                 { name: "Contáctanos", path: "/contactanos" },
               ].map((item) => (

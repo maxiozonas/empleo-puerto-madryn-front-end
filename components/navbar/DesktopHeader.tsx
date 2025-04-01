@@ -24,7 +24,7 @@ export function DesktopHeader() {
     if (!isAuthenticated) {
       router.push("/login");
     } else {
-      router.push("/nuevo-aviso");
+      router.push("/publicar");
     }
   };
 
@@ -42,6 +42,9 @@ export function DesktopHeader() {
         <div className="flex flex-1 items-center justify-center gap-5 ml-5">
           <Button asChild className="text-muted-foreground hover:text-primary">
             <Link href="/avisos">Avisos</Link>
+          </Button>
+          <Button asChild className="text-muted-foreground hover:text-primary">
+            <Link href="/servicios">Servicios</Link>
           </Button>
           <Button asChild className="text-muted-foreground hover:text-primary">
             <Link href="/categorias">Categorías</Link>
