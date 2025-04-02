@@ -225,7 +225,7 @@ export default function OfertaDetallePage() {
                 <h1 className="text-2xl md:text-3xl font-bold">{oferta.titulo}</h1>
                 <div className="flex justify-between md:flex-col">
                   <p className="text-base md:text-lg text-white/90">{oferta.empresaConsultora}</p>
-                  <Badge className="bg-primary text-white font-medium mt-2 ">
+                  <Badge className="w-28 bg-secondary text-white text-md font-medium md:mt-2">
                     {oferta.categoria.nombre}
                   </Badge>
                 </div>
@@ -246,7 +246,7 @@ export default function OfertaDetallePage() {
             </div>
           </div>
 
-          <Card className="mb-6 shadow-md">
+          <Card className="mb-6 shadow-md md:hidden">
             <CardHeader className="bg-heritage-gradient text-white rounded-t-lg">
               <CardTitle className="text-xl">Acciones Rápidas</CardTitle>
               <CardDescription className="text-white/90">
