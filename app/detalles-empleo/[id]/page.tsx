@@ -26,11 +26,13 @@ import {
   Briefcase,
   Link as LinkIcon,
   Building,
-  MapPin
+  MapPin,
+  Upload
 } from "lucide-react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import { useDropzone } from "react-dropzone";
 import style from '../../../components/contacto.module.css';
 
 export default function JobDetailPage() {
@@ -40,6 +42,9 @@ export default function JobDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { data: session, status } = useSession();
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
@@ -106,12 +111,53 @@ export default function JobDetailPage() {
   const handleBack = () => router.push("/avisos");
 
   const handleApply = () => {
-    if (job?.contactoPostulacion) {
-      if (job.formaPostulacion === "MAIL") {
-        window.location.href = `mailto:${job.contactoPostulacion}`;
-      } else if (job.formaPostulacion === "LINK") {
-        window.open(job.contactoPostulacion, "_blank");
+    if (job?.formaPostulacion === "MAIL") {
+      setShowApplyModal(true);
+    } else if (job?.formaPostulacion === "LINK" && job.contactoPostulacion) {
+      window.open(job.contactoPostulacion, "_blank");
+    }
+  };
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: { "application/pdf": [".pdf"], "application/msword": [".doc"] },
+    maxSize: 5 * 1024 * 1024, // 5MB
+    multiple: false,
+    onDrop: (acceptedFiles) => {
+      if (acceptedFiles.length > 0) {
+        setSelectedFile(acceptedFiles[0]);
       }
+    },
+  });
+
+  const handleSubmitApplication = async () => {
+    if (!selectedFile || !userEmail || !job?.id) return;
+
+    setIsSubmitting(true);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    formData.append("applicantEmail", userEmail);
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/applications/apply/${job.id}`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      alert("¡Postulación enviada con éxito! Revisá tu correo para una confirmación.");
+      setShowApplyModal(false);
+      setSelectedFile(null);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Intenta de nuevo";
+      alert("Error al enviar la postulación: " + errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -168,32 +214,39 @@ export default function JobDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <div className="bg-ocean-gradient rounded-lg p-8 mb-6 shadow-md text-white">
-            <div className="flex items-start justify-between">
-              <div>
-                <h1 className="text-3xl font-bold mb-2">{job.titulo}</h1>
-                <p className="text-lg text-white/90 mb-4">{job.empresaConsultora}</p>
+          {/* Encabezado optimizado para móviles */}
+          <div className="bg-ocean-gradient rounded-lg p-6 mb-6 shadow-md text-white">
+            <div className="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between">
+              <div className="space-y-2 text-center md:text-start">
+                <h1 className="text-2xl md:text-3xl font-bold">{job.titulo}</h1>
+                <p className="text-base md:text-lg text-white/90">{job.empresaConsultora}</p>
                 <Badge className="bg-secondary text-secondary-foreground font-medium">
                   {job.categoria.nombre}
                 </Badge>
               </div>
-              <div className="p-3 bg-white/20 rounded-full">
+              <div className="p-3 bg-white/20 rounded-full self-center md:self-start">
                 {job.logoUrl ? (
-                  <Image src={`${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}`} alt={job.empresaConsultora} width={120} height={120} className="h-16 w-16 rounded-full object-cover" />
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}`}
+                    alt={job.empresaConsultora}
+                    width={80}
+                    height={80}
+                    className="h-12 w-12 md:h-16 md:w-16 rounded-full object-cover"
+                  />
                 ) : (
-                  <Building className="h-10 w-10" />
+                  <Building className="h-8 w-8 md:h-10 md:w-10" />
                 )}
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-8 mb-6">
-            <h2 className="text-2xl font-bold text-primary mb-4">Descripción del empleo</h2>
+          <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-primary mb-4">Descripción del empleo</h2>
             <div className="text-gray-700 whitespace-pre-line mb-8">
               <EditorContent editor={editor} />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-8">
               <div className="flex items-center gap-3 text-gray-700">
                 <Calendar className="h-5 w-5 text-primary" />
                 <div>
@@ -242,17 +295,17 @@ export default function JobDetailPage() {
             </div>
 
             <div className="border-t border-gray-200 pt-6">
-              <h3 className="text-xl font-bold text-primary mb-4">¿Cómo aplicar?</h3>
+              <h3 className="text-lg md:text-xl font-bold text-primary mb-4">¿Cómo aplicar?</h3>
               {job.formaPostulacion === "MAIL" ? (
-                <div className="flex">
-                  <p className="mb-4">Envía tu CV al siguiente correo electrónico:</p>
-                  <p className="text-muted-foreground ml-2">{job.contactoPostulacion}</p>
+                <div className="flex flex-col space-y-2">
+                  <p className="text-gray-700">Envía tu CV a:</p>
+                  <p className="text-primary font-medium break-all">{job.contactoPostulacion}</p>
                 </div>
               ) : (
-                <div>
-                  <p className="mb-4">Postúlate a través del siguiente enlace:</p>
+                <div className="flex flex-col space-y-2">
+                  <p className="text-gray-700">Postúlate a través del siguiente enlace:</p>
                   <Button
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground w-full md:w-auto"
                     asChild
                   >
                     <a href={job.contactoPostulacion || "#"} target="_blank" rel="noopener noreferrer">
@@ -380,6 +433,58 @@ export default function JobDetailPage() {
           </div>
         </div>
       </div>
+
+      {showApplyModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md p-6">
+            <CardHeader>
+              <CardTitle>Subir currículum</CardTitle>
+              <CardDescription>
+                Arrastra y suelta tu CV en formato .pdf o .doc (máximo 5MB). Recibirás una confirmación por correo.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div
+                {...getRootProps()}
+                className={`border-2 border-dashed p-6 rounded-lg text-center ${
+                  isDragActive ? "border-primary bg-primary/10" : "border-gray-300"
+                }`}
+              >
+                <input {...getInputProps()} />
+                {selectedFile ? (
+                  <p>{selectedFile.name}</p>
+                ) : isDragActive ? (
+                  <p>Suelta el archivo aquí...</p>
+                ) : (
+                  <p>Arrastra tu CV aquí o haz clic para seleccionarlo</p>
+                )}
+                <Upload className="h-8 w-8 mx-auto mt-2 text-gray-500" />
+              </div>
+              <div className="flex justify-end gap-4 mt-6">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowApplyModal(false);
+                    setSelectedFile(null);
+                  }}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  onClick={handleSubmitApplication}
+                  disabled={!selectedFile || isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : null}
+                  Enviar
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
