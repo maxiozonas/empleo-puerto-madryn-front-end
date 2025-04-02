@@ -2,22 +2,23 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { JobList } from "@/components/ofertas/job-list";
+import { OfertaList } from "@/components/ofertas/OfertaList";
 import { Anchor, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useUserJobPosts, useDeleteJobOffer } from "@/lib/hooks/useOfertas";
+import { useUserOfertas, useDeleteOferta } from "@/lib/hooks/useOfertas";
 
 export default function MisAvisosPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const token = session?.backendToken || "";
-  const { data: jobs, isLoading, error } = useUserJobPosts(token);
-  const deleteMutation = useDeleteJobOffer();
+  const { data: ofertas, isLoading, error } = useUserOfertas(token);
+  const deleteMutation = useDeleteOferta();
 
   if (status === "loading" || isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="mt-2 text-muted-foreground">Cargando</p>
       </div>
     );
   }
@@ -35,25 +36,23 @@ export default function MisAvisosPage() {
     );
   }
 
-  const handleEdit = (jobId: string) => {
-    router.push(`/editar-aviso/${jobId}`);
+  const handleEdit = (ofertaId: string) => {
+    router.push(`/editar-aviso/${ofertaId}`);
   };
 
-  const handleDelete = (jobId: string) => {
-    if (confirm("¿Estás seguro de que quieres eliminar esta publicación?")) {
-      deleteMutation.mutate(
-        { id: jobId, token },
-        {
-          onError: (err) => {
-            console.error("Error al eliminar:", err);
-            alert(err instanceof Error ? err.message : "Error desconocido al eliminar la publicación");
-          },
-          onSuccess: () => {
-            console.log("Publicación eliminada con éxito");
-          },
-        }
-      );
-    }
+  const handleDelete = (ofertaId: string) => {
+    deleteMutation.mutate(
+      { id: ofertaId, token },
+      {
+        onError: (err) => {
+          console.error("Error al eliminar:", err);
+          alert(err instanceof Error ? err.message : "Error desconocido al eliminar la publicación");
+        },
+        onSuccess: () => {
+          console.log("Publicación eliminada con éxito");
+        },
+      }
+    );
   };
 
   const handleBack = () => {
@@ -75,11 +74,11 @@ export default function MisAvisosPage() {
         <h1 className="text-3xl font-bold text-primary mb-2">Mis avisos</h1>
         <p className="text-muted-foreground">Aqui podras gestionar todos los avisos que publicaste desde tu cuenta.</p>
       </div>
-      {jobs && jobs.length > 0 ? (
-        <JobList
+      {ofertas && ofertas.length > 0 ? (
+        <OfertaList
           searchTerm=""
-          selectedCategory="all"
-          jobs={jobs}
+          selectedCategoria="all"
+          ofertas={ofertas}
           showEditOptions={true}
           onEdit={handleEdit}
           onDelete={handleDelete}

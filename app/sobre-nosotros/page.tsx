@@ -6,7 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-export default function AboutUs() {
+export default function SobreNosotrosPage() {
   const router = useRouter();
 
   const images = {

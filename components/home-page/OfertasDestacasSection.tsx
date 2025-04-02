@@ -1,13 +1,13 @@
 "use client";
 
-import { JobCard } from "@/components/ofertas/job-card";
-import { useJobPosts } from "@/lib/hooks/useOfertas";
+import { OfertaCard } from "@/components/ofertas/OfertaCard";
+import { useOfertas } from "@/lib/hooks/useOfertas";
 import { Anchor, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export function FeaturedJobsSection() {
-  const { data: jobs, isLoading, error } = useJobPosts();
+export function OfertasDestacadasSection() {
+  const { data: ofertas, isLoading, error } = useOfertas();
 
   if (isLoading) {
     return (
@@ -23,7 +23,7 @@ export function FeaturedJobsSection() {
     );
   }
 
-  if (error || !jobs || jobs.length === 0 || !jobs.some(job => job.habilitado === true)) {
+  if (error || !ofertas || ofertas.length === 0 || !ofertas.some(job => job.habilitado === true)) {
     return (
       <section className="mx-auto py-12">
         <div className="text-center mb-10">
@@ -38,8 +38,8 @@ export function FeaturedJobsSection() {
     );
   }
 
-  const featuredJobs = jobs
-    .filter(job => job.habilitado === true)
+  const ofertasDestacadas = ofertas
+    .filter(oferta => oferta.habilitado === true)
     .sort((a, b) => new Date(b.fechaPublicacion).getTime() - new Date(a.fechaPublicacion).getTime())
     .slice(0, 3);
 
@@ -50,8 +50,8 @@ export function FeaturedJobsSection() {
         <p className="text-muted-foreground">Las mejores oportunidades laborales en Puerto Madryn</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {featuredJobs.map((job) => (
-          <JobCard key={job.id} job={job} />
+        {ofertasDestacadas.map((oferta) => (
+          <OfertaCard key={oferta.id} oferta={oferta} />
         ))}
       </div>
       <div className="text-center mt-5">

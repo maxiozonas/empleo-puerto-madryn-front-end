@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { JobList } from "@/components/ofertas/job-list";
-import { SearchFilters } from "@/components/ofertas/search-filters";
+import { OfertaList } from "@/components/ofertas/OfertaList";
+import { SearchFilters } from "@/components/ofertas/SearchFilters";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { useJobPosts } from "@/lib/hooks/useOfertas";
+import { useOfertas } from "@/lib/hooks/useOfertas";
 
 
-export default function OfertasLaboralesPage() {
+export default function AvisosPage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const { data: jobs, isLoading, error } = useJobPosts()
+  const { data: ofertas, isLoading, error } = useOfertas()
 
   const handleFilterChange = (newFilters: { searchTerm?: string; selectedCategory?: string }) => {
     if (newFilters.searchTerm !== undefined) setSearchTerm(newFilters.searchTerm);
@@ -26,8 +26,9 @@ export default function OfertasLaboralesPage() {
 
   if (isLoading) {
     return (
-      <div className="container min-h-screen items-center justify-center py-6 px-4 text-center">
+      <div className="container min-h-screen flex flex-col items-center justify-center py-6 px-4">
         <Loader2 className="h-8 w-8 animate-spin mx-auto justify-center items-center text-primary" />
+        <p className="mt-2 text-muted-foreground">Cargando</p>
       </div>
     );
   }
@@ -56,7 +57,7 @@ export default function OfertasLaboralesPage() {
         <p className="text-muted-foreground">Explora todas las oportunidades laborales en Puerto Madryn.</p>
       </div>
       <SearchFilters onFilterChange={handleFilterChange} />
-      <JobList searchTerm={searchTerm} selectedCategory={selectedCategory} jobs={jobs} />
+      <OfertaList searchTerm={searchTerm} selectedCategoria={selectedCategory} ofertas={ofertas} />
     </div>
   );
 }

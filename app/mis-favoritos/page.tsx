@@ -2,17 +2,17 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { JobList } from "@/components/ofertas/job-list";
+import { OfertaList } from "@/components/ofertas/OfertaList";
 import { Anchor, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useUserFavorites } from "@/lib/hooks/useFavoritos";
-import { JobPosting } from "@/lib/types/iJobPosting"; // Asegúrate de importar el tipo correcto
+import { useUserFavoritos } from "@/lib/hooks/useFavoritos";
+import { Oferta } from "@/lib/types/iOferta";
 
 export default function FavoritosPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const token = session?.backendToken || "";
-  const { data: favoritos, isLoading, error } = useUserFavorites(token);
+  const { data: favoritos, isLoading, error } = useUserFavoritos(token);
 
   if (status === "loading" || isLoading) {
     return (
@@ -35,7 +35,7 @@ export default function FavoritosPage() {
     );
   }
 
-  const favoriteJobs = favoritos?.map((fav: { ofertaEmpleo: JobPosting }) => fav.ofertaEmpleo) || [];
+  const favoriteJobs = favoritos?.map((fav: { ofertaEmpleo: Oferta }) => fav.ofertaEmpleo) || [];
 
   const handleBack = () => {
     router.push("/");
@@ -57,10 +57,10 @@ export default function FavoritosPage() {
         <p className="text-muted-foreground">Aqui podras ver todas los avisos que agregaste a favoritos.</p>
       </div>
       {favoriteJobs.length > 0 ? (
-        <JobList
+        <OfertaList
           searchTerm=""
-          selectedCategory="all"
-          jobs={favoriteJobs}
+          selectedCategoria="all"
+          ofertas={favoriteJobs}
           showEditOptions={false}
         />
       ) : (

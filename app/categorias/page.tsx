@@ -3,34 +3,35 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCategorias } from "@/lib/hooks/useCategorias";
-import { useJobPosts } from "@/lib/hooks/useOfertas";
+import { useOfertas } from "@/lib/hooks/useOfertas";
 import Link from "next/link";
 import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, Wrench, Truck, Scissors } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export default function CategoriasPage() {
-  const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useCategorias();
-  const { data: allJobs, isLoading: jobsLoading, error: jobsError } = useJobPosts();
+  const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
+  const { data: allOfertas, isLoading: ofertasLoading, error: ofertasError } = useOfertas();
   const router = useRouter();
 
-  if (categoriesLoading || jobsLoading) {
+  if (categoriasLoading || ofertasLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="mt-2 text-muted-foreground">Cargando</p>
       </div>
     );
   }
 
-  if (categoriesError || jobsError) {
+  if (categoriasError || ofertasError) {
     return (
       <div className="min-h-screen flex items-center justify-center text-destructive">
-        <p>{categoriesError?.message || jobsError?.message || "Error al cargar las categorías u ofertas"}</p>
+        <p>{categoriasError?.message || ofertasError?.message || "Error al cargar las categorías u ofertas"}</p>
       </div>
     );
   }
 
-  if (!categories || categories.length === 0) {
+  if (!categorias || categorias.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center text-muted-foreground">
         <p>No hay categorías disponibles.</p>
@@ -38,7 +39,7 @@ export default function CategoriasPage() {
     );
   }
 
-  const categoryIcons: { [key: string]: React.ReactNode } = {
+  const categoriasIcons: { [key: string]: React.ReactNode } = {
     "Turismo": <Anchor className="h-6 w-6" />,
     "Ventas": <CircleDollarSign className="h-6 w-6" />,
     "Pesca": <Fish className="h-6 w-6" />,
@@ -65,9 +66,9 @@ export default function CategoriasPage() {
     "Otros": <Anchor className="h-6 w-6" />,
   };
 
-  const jobCountByCategory = allJobs?.reduce((acc, job) => {
-    if (job.habilitado === true) {
-      acc[job.categoria.id] = (acc[job.categoria.id] || 0) + 1;
+  const ofertaCountByCategoria = allOfertas?.reduce((acc, oferta) => {
+    if (oferta.habilitado === true) {
+      acc[oferta.categoria.id] = (acc[oferta.categoria.id] || 0) + 1;
     }
     return acc;
   }, {} as { [key: string]: number }) || {};
@@ -94,25 +95,25 @@ export default function CategoriasPage() {
       </div>
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {categories.map((category) => (
+        {categorias.map((categoria) => (
           <Card
-            key={category.id}
+            key={categoria.id}
             className={cn(
               "group relative flex flex-col overflow-hidden transition-all duration-300",
               "hover:shadow-xl hover:-translate-y-2 hover:bg-primary/5 border-secondary/30",
               "bg-gradient-to-b from-white to-secondary/10 min-w-[280px]"
             )}
           >
-            <Link href={`/categorias/${category.id}`}>
+            <Link href={`/categorias/${categoria.id}`}>
               <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
                 <div className="mb-4 rounded-full p-3 group-hover:text-primary">
-                  {categoryIcons[category.nombre] || <Briefcase className="h-6 w-6 text-blue-600" />}
+                  {categoriasIcons[categoria.nombre] || <Briefcase className="h-6 w-6 text-blue-600" />}
                 </div>
                 <CardTitle className="text-lg font-semibold group-hover:text-primary text-foreground mb-2">
-                  {category.nombre}
+                  {categoria.nombre}
                 </CardTitle>
                 <p className="text-md text-gray-500">
-                  {jobCountByCategory[category.id] || 0} ofertas disponibles
+                  {ofertaCountByCategoria[categoria.id] || 0} ofertas disponibles
                 </p>
               </CardContent>
             </Link>

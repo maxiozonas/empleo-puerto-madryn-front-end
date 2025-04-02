@@ -1,8 +1,7 @@
-import { JobPosting } from "@/lib/types/iJobPosting";
+import { Oferta } from "@/lib/types/iOferta";
 
 interface Favorite {
-  ofertaEmpleo: JobPosting;
-  // Añade otras propiedades si las hay (por ejemplo, id, fecha, etc.)
+  ofertaEmpleo: Oferta;
 }
 
 export async function addFavorite(ofertaId: string, token: string): Promise<void> {

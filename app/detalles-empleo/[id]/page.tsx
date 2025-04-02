@@ -6,11 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { JobPosting } from "@/lib/types/iJobPosting";
-import { fetchJobPostById } from "@/lib/api/ofertas";
+import { Oferta } from "@/lib/types/iOferta";
+import { fetchOfertaById } from "@/lib/api/ofertas";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useAddFavorite, useRemoveFavorite, useIsFavorite } from "@/lib/hooks/useFavoritos";
+import { useAddFavorito, useRemoveFavorito, useIsFavoritos } from "@/lib/hooks/useFavoritos";
 import {
   ArrowLeft,
   Calendar,
@@ -27,31 +27,34 @@ import {
   Link as LinkIcon,
   Building,
   MapPin,
-  Upload
+  Upload,
+  CheckCircle2,
 } from "lucide-react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import { useDropzone } from "react-dropzone";
 import style from '../../../components/contacto.module.css';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-export default function JobDetailPage() {
+export default function OfertaDetallePage() {
   const router = useRouter();
   const { id } = useParams();
-  const [job, setJob] = useState<JobPosting | null>(null);
+  const [oferta, setOferta] = useState<Oferta | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false); // Nuevo estado para la alerta de éxito
   const { data: session, status } = useSession();
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
-  const isOwnPost = job?.usuarioPublicador?.email === userEmail;
-  const { data: isFavoriteFromServer, isLoading: isFavoriteLoading } = useIsFavorite(id as string, token);
-  const addFavoriteMutation = useAddFavorite();
-  const removeFavoriteMutation = useRemoveFavorite();
+  const isOwnPost = oferta?.usuarioPublicador?.email === userEmail;
+  const { data: isFavoriteFromServer, isLoading: isFavoriteLoading } = useIsFavoritos(id as string, token);
+  const addFavoriteMutation = useAddFavorito();
+  const removeFavoriteMutation = useRemoveFavorito();
   const [optimisticIsFavorite, setOptimisticIsFavorite] = useState<boolean | undefined>(undefined);
   const isFavorite = optimisticIsFavorite !== undefined ? optimisticIsFavorite : isFavoriteFromServer;
 
@@ -64,10 +67,10 @@ export default function JobDetailPage() {
   });
 
   useEffect(() => {
-    const loadJob = async () => {
+    const CargarOferta = async () => {
       try {
-        const data = await fetchJobPostById(id as string);
-        setJob(data);
+        const data = await fetchOfertaById(id as string);
+        setOferta(data);
         if (editor && data) {
           editor.commands.setContent(data.descripcion);
         }
@@ -77,7 +80,7 @@ export default function JobDetailPage() {
         setIsLoading(false);
       }
     };
-    loadJob();
+    CargarOferta();
   }, [id, editor]);
 
   const formatDate = (dateString: string) => {
@@ -111,16 +114,16 @@ export default function JobDetailPage() {
   const handleBack = () => router.push("/avisos");
 
   const handleApply = () => {
-    if (job?.formaPostulacion === "MAIL") {
+    if (oferta?.formaPostulacion === "MAIL") {
       setShowApplyModal(true);
-    } else if (job?.formaPostulacion === "LINK" && job.contactoPostulacion) {
-      window.open(job.contactoPostulacion, "_blank");
+    } else if (oferta?.formaPostulacion === "LINK" && oferta.contactoPostulacion) {
+      window.open(oferta.contactoPostulacion, "_blank");
     }
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: { "application/pdf": [".pdf"], "application/msword": [".doc"] },
-    maxSize: 5 * 1024 * 1024, // 5MB
+    maxSize: 5 * 1024 * 1024,
     multiple: false,
     onDrop: (acceptedFiles) => {
       if (acceptedFiles.length > 0) {
@@ -130,7 +133,7 @@ export default function JobDetailPage() {
   });
 
   const handleSubmitApplication = async () => {
-    if (!selectedFile || !userEmail || !job?.id) return;
+    if (!selectedFile || !userEmail || !oferta?.id) return;
 
     setIsSubmitting(true);
     const formData = new FormData();
@@ -138,7 +141,7 @@ export default function JobDetailPage() {
     formData.append("applicantEmail", userEmail);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/applications/apply/${job.id}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/applications/apply/${oferta.id}`, {
         method: "POST",
         body: formData,
         headers: {
@@ -150,9 +153,10 @@ export default function JobDetailPage() {
         throw new Error(await response.text());
       }
 
-      alert("¡Postulación enviada con éxito! Revisá tu correo para una confirmación.");
+      setShowSuccessAlert(true);
       setShowApplyModal(false);
       setSelectedFile(null);
+      setTimeout(() => setShowSuccessAlert(false), 5000);
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "Intenta de nuevo";
       alert("Error al enviar la postulación: " + errorMessage);
@@ -172,7 +176,7 @@ export default function JobDetailPage() {
   const shareOnWhatsApp = () => {
     if (typeof window !== "undefined") {
       const url = encodeURIComponent(window.location.href);
-      const text = encodeURIComponent(`${job?.titulo} - ${job?.empresaConsultora}`);
+      const text = encodeURIComponent(`${oferta?.titulo} - ${oferta?.empresaConsultora}`);
       window.open(`https://wa.me/?text=${text}%20${url}`, "_blank");
     }
   };
@@ -186,13 +190,14 @@ export default function JobDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="mt-2 text-muted-foreground">Cargando</p>
       </div>
     );
   }
 
-  if (error || !job || !editor) {
+  if (error || !oferta || !editor) {
     return (
       <div className="min-h-screen flex items-center justify-center text-destructive">
         <p>{error || "No se pudo cargar la oferta"}</p>
@@ -214,21 +219,22 @@ export default function JobDetailPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          {/* Encabezado optimizado para móviles */}
           <div className="bg-ocean-gradient rounded-lg p-6 mb-6 shadow-md text-white">
             <div className="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between">
               <div className="space-y-2 text-center md:text-start">
-                <h1 className="text-2xl md:text-3xl font-bold">{job.titulo}</h1>
-                <p className="text-base md:text-lg text-white/90">{job.empresaConsultora}</p>
-                <Badge className="bg-secondary text-secondary-foreground font-medium">
-                  {job.categoria.nombre}
-                </Badge>
+                <h1 className="text-2xl md:text-3xl font-bold">{oferta.titulo}</h1>
+                <div className="flex justify-between md:flex-col">
+                  <p className="text-base md:text-lg text-white/90">{oferta.empresaConsultora}</p>
+                  <Badge className="bg-primary text-white font-medium mt-2 ">
+                    {oferta.categoria.nombre}
+                  </Badge>
+                </div>
               </div>
-              <div className="p-3 bg-white/20 rounded-full self-center md:self-start">
-                {job.logoUrl ? (
+              <div className="p-3 bg-white/20 rounded-full self-center md:self-start hidden md:block">
+                {oferta.logoUrl ? (
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}`}
-                    alt={job.empresaConsultora}
+                    src={`${process.env.NEXT_PUBLIC_API_URL}${oferta.logoUrl}`}
+                    alt={oferta.empresaConsultora}
                     width={80}
                     height={80}
                     className="h-12 w-12 md:h-16 md:w-16 rounded-full object-cover"
@@ -239,6 +245,99 @@ export default function JobDetailPage() {
               </div>
             </div>
           </div>
+
+          <Card className="mb-6 shadow-md">
+            <CardHeader className="bg-heritage-gradient text-white rounded-t-lg">
+              <CardTitle className="text-xl">Acciones Rápidas</CardTitle>
+              <CardDescription className="text-white/90">
+                Opciones disponibles para este empleo
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-6 space-y-4">
+              <Button
+                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground flex items-center gap-2"
+                onClick={handleApply}
+              >
+                {oferta.formaPostulacion === "MAIL" ? (
+                  <Mail className="h-4 w-4" />
+                ) : (
+                  <ArrowRight className="h-4 w-4" />
+                )}
+                Postularme ahora
+              </Button>
+
+              {status === "authenticated" && !isOwnPost && (
+                <Button
+                  variant="outline"
+                  className="w-full border-primary text-primary hover:bg-primary/10 flex items-center gap-2"
+                  onClick={handleToggleFavorite}
+                  disabled={isFavoriteLoading || !token || addFavoriteMutation.isPending || removeFavoriteMutation.isPending}
+                >
+                  <BookmarkPlus className="h-4 w-4" />
+                  {isFavorite ? "Guardado" : "Guardar empleo"}
+                </Button>
+              )}
+
+              <div>
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Compartir</h4>
+                <div className="flex items-center gap-2">
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="rounded-full h-9 w-9"
+                          onClick={copyToClipboard}
+                        >
+                          {copied ? <CheckCircle className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copiar enlace</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="rounded-full h-9 w-9"
+                          onClick={shareOnWhatsApp}
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Compartir por WhatsApp</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="rounded-full h-9 w-9"
+                          onClick={shareOnFacebook}
+                        >
+                          <Facebook className="h-4 w-4" />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Compartir en Facebook</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
           <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-6">
             <h2 className="text-xl md:text-2xl font-bold text-primary mb-4">Descripción del empleo</h2>
@@ -251,16 +350,16 @@ export default function JobDetailPage() {
                 <Calendar className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm font-medium text-gray-500">Fecha de publicación</p>
-                  <p>Publicado {formatDate(job.fechaPublicacion)}</p>
+                  <p>Publicado {formatDate(oferta.fechaPublicacion)}</p>
                 </div>
               </div>
 
-              {job.fechaCierre && (
+              {oferta.fechaCierre && (
                 <div className="flex items-center gap-3 text-gray-700">
                   <Clock className="h-5 w-5 text-primary" />
                   <div>
                     <p className="text-sm font-medium text-gray-500">Fecha de cierre</p>
-                    <p>Cierra {formatDate(job.fechaCierre)}</p>
+                    <p>Cierra {formatDate(oferta.fechaCierre)}</p>
                   </div>
                 </div>
               )}
@@ -269,7 +368,7 @@ export default function JobDetailPage() {
                 <Briefcase className="h-5 w-5 text-primary" />
                 <div>
                   <p className="text-sm font-medium text-gray-500">Empresa</p>
-                  <p>{job.empresaConsultora}</p>
+                  <p>{oferta.empresaConsultora}</p>
                 </div>
               </div>
 
@@ -282,24 +381,24 @@ export default function JobDetailPage() {
               </div>
 
               <div className="flex items-center gap-3 text-gray-700">
-                {job.formaPostulacion === "MAIL" ? (
+                {oferta.formaPostulacion === "MAIL" ? (
                   <Mail className="h-5 w-5 text-primary" />
                 ) : (
                   <LinkIcon className="h-5 w-5 text-primary" />
                 )}
                 <div>
                   <p className="text-sm font-medium text-gray-500">Forma de postulación</p>
-                  <p>{job.formaPostulacion === "MAIL" ? "Email" : "Link externo"}</p>
+                  <p>{oferta.formaPostulacion === "MAIL" ? "Email" : "Link externo"}</p>
                 </div>
               </div>
             </div>
 
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg md:text-xl font-bold text-primary mb-4">¿Cómo aplicar?</h3>
-              {job.formaPostulacion === "MAIL" ? (
+              {oferta.formaPostulacion === "MAIL" ? (
                 <div className="flex flex-col space-y-2">
                   <p className="text-gray-700">Envía tu CV a:</p>
-                  <p className="text-primary font-medium break-all">{job.contactoPostulacion}</p>
+                  <p className="text-primary font-medium break-all">{oferta.contactoPostulacion}</p>
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2">
@@ -308,7 +407,7 @@ export default function JobDetailPage() {
                     className="bg-primary hover:bg-primary/90 text-primary-foreground w-full md:w-auto"
                     asChild
                   >
-                    <a href={job.contactoPostulacion || "#"} target="_blank" rel="noopener noreferrer">
+                    <a href={oferta.contactoPostulacion || "#"} target="_blank" rel="noopener noreferrer">
                       <LinkIcon className="mr-2 h-4 w-4" />
                       Aplicar en sitio externo
                     </a>
@@ -336,7 +435,7 @@ export default function JobDetailPage() {
           </div>
         </div>
 
-        <div className="lg:block">
+        <div className="hidden lg:block">
           <div className="sticky top-20">
             <Card className="mb-6 shadow-md">
               <CardHeader className="bg-heritage-gradient text-white rounded-t-lg">
@@ -350,7 +449,7 @@ export default function JobDetailPage() {
                   className="w-full bg-accent hover:bg-accent/90 text-accent-foreground flex items-center gap-2"
                   onClick={handleApply}
                 >
-                  {job.formaPostulacion === "MAIL" ? (
+                  {oferta.formaPostulacion === "MAIL" ? (
                     <Mail className="h-4 w-4" />
                   ) : (
                     <ArrowRight className="h-4 w-4" />
@@ -446,9 +545,8 @@ export default function JobDetailPage() {
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed p-6 rounded-lg text-center ${
-                  isDragActive ? "border-primary bg-primary/10" : "border-gray-300"
-                }`}
+                className={`border-2 border-dashed p-6 rounded-lg text-center ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300"
+                  }`}
               >
                 <input {...getInputProps()} />
                 {selectedFile ? (
@@ -483,6 +581,29 @@ export default function JobDetailPage() {
               </div>
             </CardContent>
           </Card>
+        </div>
+      )}
+
+      {showSuccessAlert && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+          <Alert
+            variant="default"
+            className="bg-green-50 border-green-400 text-green-800 shadow-lg max-w-md w-full mx-4 p-6 text-center rounded-lg"
+          >
+            <CheckCircle2 className="h-5 w-5" />
+            <AlertTitle className="text-lg font-semibold">¡Postulación enviada!</AlertTitle>
+            <AlertDescription className="mt-1">
+              Tu CV se ha enviado con éxito. Revisa tu correo para una confirmación.
+            </AlertDescription>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4 w-full text-"
+              onClick={() => setShowSuccessAlert(false)}
+            >
+              Cerrar
+            </Button>
+          </Alert>
         </div>
       )}
     </div>

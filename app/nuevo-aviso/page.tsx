@@ -11,8 +11,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
-import { createJobOffer } from "@/lib/api/ofertas";
-import { Loader2, Anchor, ArrowLeft, X } from "lucide-react";
+import { createOferta } from "@/lib/api/ofertas";
+import { Loader2, Anchor, ArrowLeft, X, CheckCircle2 } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -123,7 +123,6 @@ export default function PublicarEmpleoPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
-  const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const queryClient = useQueryClient();
@@ -142,18 +141,15 @@ export default function PublicarEmpleoPage() {
   };
 
   const createJobOfferMutation = useMutation({
-    mutationFn: ({ data, token }: { data: CreateJobOfferData; token: string }) => createJobOffer(data, token),
+    mutationFn: ({ data, token }: { data: CreateJobOfferData; token: string }) => createOferta(data, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
       setSubmitSuccess(
         "¡Oferta enviada con éxito! Será publicada en la web tras ser verificada por nuestro equipo. Luego de eso, recibirás un email de confirmación."
       );
       form.reset();
-      setTimeout(() => router.push("/"), 6000);
-    },
-    onError: (err) => {
-      setSubmitError(err instanceof Error ? err.message : "Error desconocido al crear la oferta");
-    },
+      setTimeout(() => router.push("/"), 5000);
+    }
   });
 
   const form = useForm<FormData>({
@@ -207,7 +203,6 @@ export default function PublicarEmpleoPage() {
   }
 
   const onSubmit = async (data: FormData) => {
-    setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
     try {
@@ -236,6 +231,11 @@ export default function PublicarEmpleoPage() {
   };
 
   const handleBack = () => {
+    router.push("/");
+  };
+
+  const handleCloseSuccess = () => {
+    setSubmitSuccess(null);
     router.push("/");
   };
 
@@ -456,17 +456,6 @@ export default function PublicarEmpleoPage() {
               </FormItem>
             )}
           />
-          {submitSuccess && (
-            <Alert variant="default" className="bg-green-600 text-white text-center text-bold">
-              <AlertDescription className="text-center">{submitSuccess}</AlertDescription>
-            </Alert>
-          )}
-          {submitError && (
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{submitError}</AlertDescription>
-            </Alert>
-          )}
           <Button type="submit" className="w-full bg-primary text-white hover:bg-primary/90" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
@@ -482,6 +471,30 @@ export default function PublicarEmpleoPage() {
           </Button>
         </form>
       </Form>
+
+      {submitSuccess && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+          <Alert
+            variant="default"
+            className="bg-green-50 border-green-400 text-green-800 shadow-lg max-w-md w-full mx-4 p-6 text-center rounded-lg"
+          >
+            <CheckCircle2 className="h-5 w-5" />
+            <AlertTitle className="text-lg font-semibold">¡Éxito!</AlertTitle>
+            <AlertDescription className="mt-1">
+              {submitSuccess}
+            </AlertDescription>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4 w-full"
+              onClick={handleCloseSuccess}
+            >
+              Cerrar
+            </Button>
+          </Alert>
+        </div>
+      )}
     </div>
+
   );
 }

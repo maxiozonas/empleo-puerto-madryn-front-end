@@ -1,8 +1,8 @@
 "use client";
 
 import { HeroSection } from "@/components/home-page/HeroSection";
-import { FeaturedJobsSection } from "@/components/home-page/FeaturedJobSection";
-import { AboutSection } from "@/components/home-page/AboutSection";
+import { OfertasDestacadasSection } from "@/components/home-page/OfertasDestacasSection";
+import { SobreMadrynSection } from "@/components/home-page/SobreMadrynSection";
 
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 
@@ -12,8 +12,8 @@ export default function HomePage() {
   return (
     <div>
       <HeroSection />
-      <FeaturedJobsSection />
-      <AboutSection />
+      <OfertasDestacadasSection />
+      <SobreMadrynSection />
     </div>
   );
 }

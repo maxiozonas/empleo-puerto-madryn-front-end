@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { Category } from "../types/iCategory";
+import { Categoria } from "../types/iCategoria";
 import { fetchCategorias } from "../api/categorias";
 
 export function useCategorias() {
-  return useQuery<Category[], Error>({
+  return useQuery<Categoria[], Error>({
     queryKey: ["categories"],
     queryFn: fetchCategorias
   });

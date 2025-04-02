@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Factory, Anchor as Whale, Fish } from "lucide-react";
 
-export function AboutSection() {
+export function SobreMadrynSection() {
   return (
     <section className="p-6 bg-background rounded-lg shadow-xl">
       <div className="mx-auto">

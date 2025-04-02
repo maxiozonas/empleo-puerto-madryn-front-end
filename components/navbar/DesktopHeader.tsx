@@ -20,7 +20,6 @@ export function DesktopHeader() {
   const router = useRouter();
 
   const handlePublicarEmpleo = () => {
-    console.log(session);
     if (!isAuthenticated) {
       router.push("/login");
     } else {

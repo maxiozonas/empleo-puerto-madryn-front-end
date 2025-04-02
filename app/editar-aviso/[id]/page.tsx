@@ -11,15 +11,15 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
-import { useJobPostById } from "@/lib/hooks/useOfertas";
-import { updateJobOffer } from "@/lib/api/ofertas";
-import { ArrowLeft, Loader2, Ship, X } from "lucide-react";
+import { useOfertaById } from "@/lib/hooks/useOfertas";
+import { updateOferta } from "@/lib/api/ofertas";
+import { ArrowLeft, Loader2, Ship, X, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import RteEditor from "@/components/ui/RteEditor";
-import { JobPosting } from "@/lib/types/iJobPosting";
-import { Category } from "@/lib/types/iCategory";
+import { Oferta } from "@/lib/types/iOferta";
+import { Categoria } from "@/lib/types/iCategoria";
 import { Session } from "next-auth";
 
 const formSchema = z
@@ -126,7 +126,7 @@ export default function EditarAvisoPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { id } = useParams();
-  const { data: job, isLoading: jobLoading, error: jobError } = useJobPostById(id as string);
+  const { data: oferta, isLoading: ofertaLoading, error: ofertaError } = useOfertaById(id as string);
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
 
   if (status === "unauthenticated") {
@@ -134,19 +134,19 @@ export default function EditarAvisoPage() {
     return null;
   }
 
-  if (status === "loading" || jobLoading || categoriasLoading) {
+  if (status === "loading" || ofertaLoading || categoriasLoading) {
     return (
-      <div className="text-center py-8">
+      <div className="min-h-screen flex flex-col justify-center items-center py-6 px-4">
         <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-        <p className="mt-2 text-muted-foreground">Cargando...</p>
+        <p className="mt-2 text-muted-foreground">Cargando</p>
       </div>
     );
   }
 
-  if (jobError || categoriasError || !job) {
+  if (ofertaError || categoriasError || !oferta) {
     return (
       <div className="text-center text-destructive py-8">
-        <p>{jobError?.message || categoriasError?.message || "No se pudo cargar la oferta"}</p>
+        <p>{ofertaError?.message || categoriasError?.message || "No se pudo cargar la oferta"}</p>
         <Button
           variant="outline"
           className="mt-4 border-primary text-primary hover:bg-primary/10"
@@ -165,7 +165,7 @@ export default function EditarAvisoPage() {
   return (
     <div className="container mx-auto py-6 px-4">
       <EditForm
-        job={job}
+        oferta={oferta}
         categorias={categorias}
         session={session}
         id={id as string}
@@ -176,38 +176,36 @@ export default function EditarAvisoPage() {
 }
 
 interface EditFormProps {
-  job: JobPosting; 
-  categorias: Category[]; 
+  oferta: Oferta;
+  categorias: Categoria[];
   session: Session | null;
   id: string;
   router: ReturnType<typeof useRouter>;
 }
 
-function EditForm({ job, categorias, session, id, router }: EditFormProps) {
+function EditForm({ oferta: oferta, categorias, session, id, router }: EditFormProps) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [existingLogoUrl, setExistingLogoUrl] = useState<string | null>(job.logoUrl || null);
+  const [existingLogoUrl, setExistingLogoUrl] = useState<string | null>(oferta.logoUrl || null);
   const queryClient = useQueryClient();
-
-
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      titulo: job.titulo || "",
-      descripcion: job.descripcion || "",
-      empresaConsultora: job.empresaConsultora || "",
-      categoria: job.categoria?.id || "",
-      formaPostulacion: (job.formaPostulacion as "MAIL" | "LINK") || "MAIL",
-      emailContacto: job.formaPostulacion === "MAIL" ? job.contactoPostulacion || null : null,
-      linkPostulacion: job.formaPostulacion === "LINK" ? job.contactoPostulacion || null : null,
-      fechaCierre: job.fechaCierre ? new Date(job.fechaCierre).toISOString().split("T")[0] : null,
+      titulo: oferta.titulo || "",
+      descripcion: oferta.descripcion || "",
+      empresaConsultora: oferta.empresaConsultora || "",
+      categoria: oferta.categoria?.id || "",
+      formaPostulacion: (oferta.formaPostulacion as "MAIL" | "LINK") || "MAIL",
+      emailContacto: oferta.formaPostulacion === "MAIL" ? oferta.contactoPostulacion || null : null,
+      linkPostulacion: oferta.formaPostulacion === "LINK" ? oferta.contactoPostulacion || null : null,
+      fechaCierre: oferta.fechaCierre ? new Date(oferta.fechaCierre).toISOString().split("T")[0] : null,
       logo: undefined,
     },
   });
 
-  type UpdateJobOfferData = {
+  type UpdateOfertaData = {
     id: string;
     titulo: string;
     descripcion: string;
@@ -223,14 +221,13 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
     habilitado: boolean;
   };
 
-  const updateJobOfferMutation = useMutation({
-    mutationFn: ({ data, token }: { data: UpdateJobOfferData; token: string }) => updateJobOffer(data, token),
+  const updateOfertaMutation = useMutation({
+    mutationFn: ({ data, token }: { data: UpdateOfertaData; token: string }) => updateOferta(data, token),
     onSuccess: () => {
-      console.log("Mutación exitosa");
       queryClient.invalidateQueries({ queryKey: ["jobPost", id] });
       queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });
       setSubmitSuccess("¡Oferta actualizada con éxito!");
-      setTimeout(() => router.push("/mis-avisos"), 2000);
+      setTimeout(() => router.push("/mis-avisos"), 5000);
     },
     onError: (err) => {
       console.error("Error en la mutación:", err);
@@ -239,12 +236,11 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
   });
 
   const onSubmit = async (data: FormData) => {
-    console.log("Formulario enviado con datos:", data);
     setSubmitError(null);
     setSubmitSuccess(null);
     setIsSubmitting(true);
     try {
-      const updateData: UpdateJobOfferData = {
+      const updateData: UpdateOfertaData = {
         id: id,
         titulo: data.titulo,
         descripcion: data.descripcion,
@@ -257,12 +253,10 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
         categoriaId: data.categoria,
         logo: data.logo ?? null,
         logoUrl: existingLogoUrl,
-        habilitado: job.habilitado,
+        habilitado: oferta.habilitado,
       };
 
-      console.log("Datos enviados a la mutación:", updateData);
-
-      await updateJobOfferMutation.mutateAsync({
+      await updateOfertaMutation.mutateAsync({
         data: updateData,
         token: session?.backendToken || "",
       });
@@ -272,10 +266,13 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
   };
 
   const handleBack = () => {
-    router.push("/");
+    router.push("/mis-avisos");
   };
 
-  console.log("Valores iniciales del formulario:", form.getValues());
+  const handleCloseSuccess = () => {
+    setSubmitSuccess(null);
+    router.push("/mis-avisos");
+  };
 
   return (
     <>
@@ -381,7 +378,7 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
               <FormItem>
                 <FormLabel className="text-primary font-medium">Descripción</FormLabel>
                 <FormControl>
-                <RteEditor content={field.value} onChange={(val) => field.onChange(val)} />
+                  <RteEditor content={field.value} onChange={(val) => field.onChange(val)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -527,11 +524,6 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
               </FormItem>
             )}
           />
-          {submitSuccess && (
-            <Alert variant="default" className="bg-green-600 text-white text-bold">
-              <AlertDescription>{submitSuccess}</AlertDescription>
-            </Alert>
-          )}
           {submitError && (
             <Alert variant="destructive">
               <AlertDescription>{submitError}</AlertDescription>
@@ -552,6 +544,29 @@ function EditForm({ job, categorias, session, id, router }: EditFormProps) {
           </Button>
         </form>
       </Form>
+
+      {submitSuccess && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+          <Alert
+            variant="default"
+            className="bg-green-50 border-green-400 text-green-800 shadow-lg max-w-md w-full mx-4 p-6 text-center rounded-lg"
+          >
+            <CheckCircle2 className="h-5 w-5" />
+            <AlertTitle className="text-lg font-semibold">¡Éxito!</AlertTitle>
+            <AlertDescription className="mt-1">
+              {submitSuccess}
+            </AlertDescription>
+            <Button
+              variant="outline"
+              size="sm"
+              className="mt-4 w-full"
+              onClick={handleCloseSuccess}
+            >
+              Cerrar
+            </Button>
+          </Alert>
+        </div>
+      )}
     </>
   );
 }

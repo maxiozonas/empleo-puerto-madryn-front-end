@@ -5,28 +5,28 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useEffect, useState, useMemo } from "react";
-import { JobPosting } from "@/lib/types/iJobPosting";
-import { useJobPosts } from "@/lib/hooks/useOfertas";
+import { Oferta } from "@/lib/types/iOferta";
+import { useOfertas } from "@/lib/hooks/useOfertas";
 import { useSession } from "next-auth/react";
-import { enableJobOfferAdmin, deleteJobOfferAdmin } from "@/lib/api/ofertas";
+import { enableOfertaAdmin, deleteOfertaAdmin } from "@/lib/api/ofertas";
 import Image from "next/image";
 
-export default function Page() {
+export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { data: fetchedJobs, isLoading } = useJobPosts();
-  const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>([]);
+  const { data: fetchedOfertas, isLoading } = useOfertas();
+  const [filteredOfertas, setFilteredOfertas] = useState<Oferta[]>([]);
 
   useAuthCheck();
 
-  const filteredJobsMemo = useMemo(() => {
-    const jobsToFilter = fetchedJobs || [];
-    return jobsToFilter.filter((job) => job.habilitado === false);
-  }, [fetchedJobs]);
+  const filteredOfertasMemo = useMemo(() => {
+    const ofertasToFilter = fetchedOfertas || [];
+    return ofertasToFilter.filter((oferta) => oferta.habilitado === false);
+  }, [fetchedOfertas]);
 
   useEffect(() => {
-    setFilteredJobs(filteredJobsMemo);
-  }, [filteredJobsMemo]);
+    setFilteredOfertas(filteredOfertasMemo);
+  }, [filteredOfertasMemo]);
 
   if (status === "unauthenticated") {
     router.push("/login");
@@ -40,7 +40,7 @@ export default function Page() {
 
   if (status === "loading" || isLoading) {
     return (
-      <div className="text-center py-8">
+      <div className="min-h-screen flex flex-col justify-center items-center py-8">
         <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
         <p className="mt-2 text-muted-foreground">Cargando...</p>
       </div>
@@ -51,26 +51,26 @@ export default function Page() {
     router.push("/");
   };
 
-  const handleHabilitar = async (data: JobPosting) => {
+  const handleHabilitar = async (data: Oferta) => {
     try {
-      await enableJobOfferAdmin(data.id, session?.backendToken as string);
-      setFilteredJobs((prev) => prev.filter((job) => job.id !== data.id));
+      await enableOfertaAdmin(data.id, session?.backendToken as string);
+      setFilteredOfertas((prev) => prev.filter((job) => job.id !== data.id));
     } catch (error) {
       console.error("Error al habilitar la oferta:", error);
     }
   };
 
-  const handleRechazar = async (data: JobPosting) => {
+  const handleRechazar = async (data: Oferta) => {
     try {
-      await deleteJobOfferAdmin(data.id, session?.backendToken as string);
-      setFilteredJobs((prev) => prev.filter((job) => job.id !== data.id));
+      await deleteOfertaAdmin(data.id, session?.backendToken as string);
+      setFilteredOfertas((prev) => prev.filter((job) => job.id !== data.id));
     } catch (error) {
       console.error("Error al rechazar la oferta:", error);
     }
   };
 
   return (
-    <section className="container mx-auto py-6 px-4">
+    <section className="container mx-auto py-6 px-4 min-h-screen">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}
@@ -87,14 +87,14 @@ export default function Page() {
         </p>
       </header>
       <div className="mb-8">
-        {filteredJobs.length > 0 ? (
+        {filteredOfertas.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredJobs.map((job) => (
-              <JobCard
-                key={job.id}
-                job={job}
-                onHabilitar={() => handleHabilitar(job)}
-                onRechazar={() => handleRechazar(job)}
+            {filteredOfertas.map((oferta) => (
+              <OfertaCard
+                key={oferta.id}
+                oferta={oferta}
+                onHabilitar={() => handleHabilitar(oferta)}
+                onRechazar={() => handleRechazar(oferta)}
               />
             ))}
           </div>
@@ -109,13 +109,13 @@ export default function Page() {
 }
 
 
-function JobCard({ job, onHabilitar, onRechazar}: { job: JobPosting; onHabilitar: () => void; onRechazar: () => void }) {
+function OfertaCard({ oferta, onHabilitar, onRechazar}: { oferta: Oferta; onHabilitar: () => void; onRechazar: () => void }) {
   const [imageSrc, setImageSrc] = useState<string | null>(
-    job.logoUrl ? `${process.env.NEXT_PUBLIC_API_URL}${job.logoUrl}` : null
+    oferta.logoUrl ? `${process.env.NEXT_PUBLIC_API_URL}${oferta.logoUrl}` : null
   );
   
   const handleImageError = () => {
-    console.log(`Error al cargar la imagen para el trabajo ${job.id}: ${imageSrc}`);
+    console.log(`Error al cargar la imagen para el trabajo ${oferta.id}: ${imageSrc}`);
     setImageSrc("/placeholder-logo.png");
   };
 
@@ -125,53 +125,53 @@ function JobCard({ job, onHabilitar, onRechazar}: { job: JobPosting; onHabilitar
         <div className="relative w-20 h-20 mx-auto mb-4">
           <Image
             src={imageSrc}
-            alt={`${job.empresaConsultora} logo`}
+            alt={`${oferta.empresaConsultora} logo`}
             fill
             className="object-contain rounded-md"
             onError={handleImageError}
           />
         </div>
       )}
-      <h2 className="text-xl font-semibold mb-2 text-gray-800">{job.titulo}</h2>
-      <p className="text-gray-600 mb-4 line-clamp-3">{job.descripcion}</p>
+      <h2 className="text-xl font-semibold mb-2 text-gray-800">{oferta.titulo}</h2>
+      <p className="text-gray-600 mb-4 line-clamp-3">{oferta.descripcion}</p>
       <div className="space-y-2 text-sm text-gray-700">
         <p>
-          <span className="font-medium">Empresa:</span> {job.empresaConsultora}
+          <span className="font-medium">Empresa:</span> {oferta.empresaConsultora}
         </p>
         <p>
-          <span className="font-medium">Publicador:</span> {job.usuarioPublicador.email}
+          <span className="font-medium">Publicador:</span> {oferta.usuarioPublicador.email}
         </p>
         <p>
-          <span className="font-medium">Categoría:</span> {job.categoria.nombre}
+          <span className="font-medium">Categoría:</span> {oferta.categoria.nombre}
         </p>
         <p>
           <span className="font-medium">Fecha de publicación:</span>{" "}
-          {new Date(job.fechaPublicacion).toLocaleDateString()}
+          {new Date(oferta.fechaPublicacion).toLocaleDateString()}
         </p>
-        {job.fechaCierre && (
+        {oferta.fechaCierre && (
           <p>
             <span className="font-medium">Fecha de cierre:</span>{" "}
-            {new Date(job.fechaCierre).toLocaleDateString()}
+            {new Date(oferta.fechaCierre).toLocaleDateString()}
           </p>
         )}
         <p>
-          <span className="font-medium">Forma de postulación:</span> {job.formaPostulacion}
+          <span className="font-medium">Forma de postulación:</span> {oferta.formaPostulacion}
         </p>
-        {job.contactoPostulacion && (
+        {oferta.contactoPostulacion && (
           <p>
             <span className="font-medium">Contacto:</span>{" "}
-            {job.formaPostulacion === "MAIL" ? (
-              <a href={`mailto:${job.contactoPostulacion}`} className="text-blue-500 hover:underline">
-                {job.contactoPostulacion}
+            {oferta.formaPostulacion === "MAIL" ? (
+              <a href={`mailto:${oferta.contactoPostulacion}`} className="text-blue-500 hover:underline">
+                {oferta.contactoPostulacion}
               </a>
             ) : (
               <a
-                href={job.contactoPostulacion}
+                href={oferta.contactoPostulacion}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-500 hover:underline"
               >
-                {job.contactoPostulacion}
+                {oferta.contactoPostulacion}
               </a>
             )}
           </p>

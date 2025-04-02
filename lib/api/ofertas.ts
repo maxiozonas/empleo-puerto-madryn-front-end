@@ -1,8 +1,8 @@
-import { JobPosting } from "../types/iJobPosting";
+import { Oferta } from "../types/iOferta";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-export async function fetchJobPostById(id: string): Promise<JobPosting> {
+export async function fetchOfertaById(id: string): Promise<Oferta> {
   const response = await fetch(`${apiUrl}/api/ofertas/${id}`, {
     method: "GET",
     headers: {
@@ -20,10 +20,10 @@ export async function fetchJobPostById(id: string): Promise<JobPosting> {
     throw new Error("La respuesta del servidor no es un objeto válido");
   }
 
-  return data as JobPosting;
+  return data as Oferta;
 }
 
-export async function fetchJobPosts(): Promise<JobPosting[]> {
+export async function fetchOfertas(): Promise<Oferta[]> {
   const response = await fetch(`${apiUrl}/api/ofertas`, {
     method: "GET",
     headers: {
@@ -41,10 +41,10 @@ export async function fetchJobPosts(): Promise<JobPosting[]> {
     throw new Error("La respuesta del servidor no es un array válido");
   }
 
-  return data as JobPosting[];
+  return data as Oferta[];
 }
 
-export async function fetchUserJobPosts(token: string): Promise<JobPosting[]> {
+export async function fetchUserOfertas(token: string): Promise<Oferta[]> {
   const response = await fetch(`${apiUrl}/api/ofertas/mis-avisos`, {
     method: "GET",
     headers: {
@@ -63,10 +63,10 @@ export async function fetchUserJobPosts(token: string): Promise<JobPosting[]> {
     throw new Error("La respuesta del servidor no es un array válido");
   }
 
-  return data as JobPosting[];
+  return data as Oferta[];
 }
 
-export async function updateJobOffer(
+export async function updateOferta(
   data: {
     id: string;
     titulo: string;
@@ -83,7 +83,7 @@ export async function updateJobOffer(
     habilitado: boolean;
   },
   token: string
-): Promise<JobPosting> {
+): Promise<Oferta> {
   const formData = new FormData();
 
   const ofertaData = {
@@ -123,10 +123,10 @@ export async function updateJobOffer(
   }
 
   const dataResponse = await response.json();
-  return dataResponse as JobPosting;
+  return dataResponse as Oferta;
 }
 
-export async function createJobOffer(
+export async function createOferta(
   data: {
     titulo: string;
     descripcion: string;
@@ -140,7 +140,7 @@ export async function createJobOffer(
     logo?: File | null;
   },
   token: string
-): Promise<JobPosting> {
+): Promise<Oferta> {
   const formData = new FormData();
 
   const ofertaData = {
@@ -155,8 +155,6 @@ export async function createJobOffer(
     linkPostulacion: data.formaPostulacion === "LINK" ? data.linkPostulacion : null,
     categoria: { id: data.categoriaId },
   };
-
-  console.log("Datos enviados al backend:", ofertaData);
 
   formData.append("oferta", JSON.stringify(ofertaData));
 
@@ -178,10 +176,10 @@ export async function createJobOffer(
   }
 
   const dataResponse = await response.json();
-  return dataResponse as JobPosting;
+  return dataResponse as Oferta;
 }
 
-export async function deleteJobOffer(id: string, token: string): Promise<void> {
+export async function deleteOferta(id: string, token: string): Promise<void> {
   const response = await fetch(`${apiUrl}/api/ofertas/${id}`, {
     method: "DELETE",
     headers: {
@@ -191,12 +189,15 @@ export async function deleteJobOffer(id: string, token: string): Promise<void> {
   });
 
   if (!response.ok) {
+    if (response.status === 404) {
+      return;
+    }
     const errorText = await response.text();
     throw new Error(`Error ${response.status}: ${errorText}`);
   }
 }
 
-export async function enableJobOfferAdmin(id: string, token: string) {
+export async function enableOfertaAdmin(id: string, token: string) {
   const url = `${apiUrl}/api/admin/ofertas/habilitar/${id}`;
   console.log("Enviando PUT a:", url);
 
@@ -219,7 +220,7 @@ export async function enableJobOfferAdmin(id: string, token: string) {
   }
 }
 
-export async function deleteJobOfferAdmin(id: string, token: string) {
+export async function deleteOfertaAdmin(id: string, token: string) {
   const url = `${apiUrl}/api/admin/ofertas/${id}`;
 
   try {

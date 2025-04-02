@@ -1,45 +1,45 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { JobPosting } from "../types/iJobPosting";
-import { deleteJobOffer, fetchJobPostById, fetchJobPosts, fetchUserJobPosts } from "../api/ofertas";
+import { Oferta } from "../types/iOferta";
+import { deleteOferta, fetchOfertaById, fetchOfertas, fetchUserOfertas } from "../api/ofertas";
 
-export function useJobPostById(id: string) {
-    return useQuery<JobPosting, Error>({
+export function useOfertaById(id: string) {
+    return useQuery<Oferta, Error>({
         queryKey: ["jobPost", id],
-        queryFn: () => fetchJobPostById(id),
+        queryFn: () => fetchOfertaById(id),
         enabled: !!id,
     });
 }
 
-export function useJobPosts() {
-    return useQuery<JobPosting[], Error>({
+export function useOfertas() {
+    return useQuery<Oferta[], Error>({
         queryKey: ["jobPosts"],
-        queryFn: fetchJobPosts,
+        queryFn: fetchOfertas,
     });
 }
 
-export function useUserJobPosts(token: string) {
-    return useQuery<JobPosting[], Error>({
+export function useUserOfertas(token: string) {
+    return useQuery<Oferta[], Error>({
         queryKey: ["userJobPosts", token],
-        queryFn: () => fetchUserJobPosts(token),
+        queryFn: () => fetchUserOfertas(token),
         enabled: !!token,
     });
 }
 
-export function useJobPostsByCategory(categoryId: string) {
-    return useQuery<JobPosting[], Error>({
+export function useOfertasByCategory(categoryId: string) {
+    return useQuery<Oferta[], Error>({
         queryKey: ["jobPostsByCategory", categoryId],
         queryFn: async () => {
-            const allJobs = await fetchJobPosts();
+            const allJobs = await fetchOfertas();
             return allJobs.filter((job) => job.categoria.id === categoryId);
         },
     });
 }
 
-export function useDeleteJobOffer() {
+export function useDeleteOferta() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: ({ id, token }: { id: string; token: string }) => deleteJobOffer(id, token),
+        mutationFn: ({ id, token }: { id: string; token: string }) => deleteOferta(id, token),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["jobPosts"] });
             queryClient.invalidateQueries({ queryKey: ["userJobPosts"] });

@@ -1,4 +1,4 @@
-export interface JobPosting {
+export interface Oferta {
   id: string;
   titulo: string;
   descripcion: string;

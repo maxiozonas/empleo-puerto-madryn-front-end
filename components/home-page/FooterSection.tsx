@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-export default function Footer() {
+export default function FooterSection() {
   const router = useRouter();
 
   const icons = {
