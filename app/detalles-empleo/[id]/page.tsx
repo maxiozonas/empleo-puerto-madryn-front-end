@@ -222,12 +222,14 @@ export default function OfertaDetallePage() {
           <div className="bg-ocean-gradient rounded-lg p-6 mb-6 shadow-md text-white">
             <div className="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between">
               <div className="space-y-2 text-center md:text-start">
-                <h1 className="text-2xl md:text-3xl font-bold">{oferta.titulo}</h1>
+                <h1 className="text-xl md:text-3xl font-bold">{oferta.titulo}</h1>
                 <div className="flex justify-between md:flex-col">
-                  <p className="text-base md:text-lg text-white/90">{oferta.empresaConsultora}</p>
-                  <Badge className="w-28 bg-secondary text-white text-md font-medium md:mt-2">
-                    {oferta.categoria.nombre}
-                  </Badge>
+                  <p className="text-base md:text-lg text-white/90 font-medium">{oferta.empresaConsultora}</p>
+                  <div className="inline-flex md:mt-2">
+                    <Badge className="bg-white hover:bg-primary hover:text-white text-primary text-md font-medium">
+                      {oferta.categoria.nombre}
+                    </Badge>
+                  </div>
                 </div>
               </div>
               <div className="p-3 bg-white/20 rounded-full self-center md:self-start hidden md:block">
