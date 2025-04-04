@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="es">
       <head>
-        <meta name="google-site-verification" content="TU_CÓDIGO_AQUÍ" />
+        <meta name="google-adsense-account" content="ca-pub-5932421257314184" />
       </head>
       <body className={inter.className}>
         <ClientProviders>{children}</ClientProviders>
