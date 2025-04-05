@@ -24,7 +24,7 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
     const currentDate = new Date();
     const differenceInTime = currentDate.getTime() - publicationDate.getTime();
     const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
-    if (differenceInDays < 0) return "Hoy";
+    if (differenceInDays <= 0) return "Hoy";
     if (differenceInDays === 1) return "Hace 1 día";
     if (differenceInDays > 1) return `Hace ${differenceInDays} días`;
     
