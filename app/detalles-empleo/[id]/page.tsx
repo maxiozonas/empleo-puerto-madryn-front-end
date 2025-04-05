@@ -47,7 +47,7 @@ export default function OfertaDetallePage() {
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false); // Nuevo estado para la alerta de éxito
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const { data: session, status } = useSession();
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
@@ -222,11 +222,11 @@ export default function OfertaDetallePage() {
           <div className="bg-ocean-gradient rounded-lg p-6 mb-6 shadow-md text-white">
             <div className="flex flex-col space-y-3 md:flex-row md:items-start md:justify-between">
               <div className="space-y-2 text-center md:text-start">
-                <h1 className="text-xl md:text-3xl font-bold">{oferta.titulo}</h1>
+                <h1 className="text-sm md:text-xl md:text-start font-bold uppercase">{oferta.titulo}</h1>
                 <div className="flex justify-between md:flex-col">
-                  <p className="text-base md:text-lg text-white/90 font-medium">{oferta.empresaConsultora}</p>
+                  <p className="text-xs uppercase md:text-base text-white/90 font-medium">{oferta.empresaConsultora}</p>
                   <div className="inline-flex md:mt-2">
-                    <Badge className="bg-white hover:bg-primary hover:text-white text-primary text-md font-medium">
+                    <Badge className="bg-white hover:bg-primary hover:text-white text-primary text-xs md:text-base font-medium">
                       {oferta.categoria.nombre}
                     </Badge>
                   </div>
@@ -398,9 +398,8 @@ export default function OfertaDetallePage() {
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg md:text-xl font-bold text-primary mb-4">¿Cómo aplicar?</h3>
               {oferta.formaPostulacion === "MAIL" ? (
-                <div className="flex flex-col space-y-2">
-                  <p className="text-gray-700">Envía tu CV a:</p>
-                  <p className="text-primary font-medium break-all">{oferta.contactoPostulacion}</p>
+                <div className="flex">
+                  <p className="text-gray-700 text-sm md:text-base">Envía tu CV a: <span className="text-primary">{oferta.contactoPostulacion}</span></p>
                 </div>
               ) : (
                 <div className="flex flex-col space-y-2">
@@ -536,18 +535,19 @@ export default function OfertaDetallePage() {
       </div>
 
       {showApplyModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
           <Card className="w-full max-w-md p-6">
             <CardHeader>
-              <CardTitle>Subir currículum</CardTitle>
-              <CardDescription>
-                Arrastra y suelta tu CV en formato .pdf o .doc (máximo 5MB). Recibirás una confirmación por correo.
+              <CardTitle className="text-center pb-2">Subir currículum</CardTitle>
+              <CardDescription className="text-center text-sm text-muted-foreground">
+                <p>Arrastra y suelta tu CV en formato .pdf o .doc.</p>
+                <p>Recibirás una confirmación por correo.</p>
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`border-2 border-dashed p-6 rounded-lg text-center ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300"
+                className={`border-2 cursor-pointer border-dashed p-6 rounded-lg text-center ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300"
                   }`}
               >
                 <input {...getInputProps()} />
@@ -560,18 +560,20 @@ export default function OfertaDetallePage() {
                 )}
                 <Upload className="h-8 w-8 mx-auto mt-2 text-gray-500" />
               </div>
-              <div className="flex justify-end gap-4 mt-6">
+              <div className="flex justify-center gap-4 mt-6">
                 <Button
-                  variant="outline"
+                  variant="destructive"
                   onClick={() => {
                     setShowApplyModal(false);
                     setSelectedFile(null);
                   }}
                   disabled={isSubmitting}
+                  className="bg-red-500 text-white hover:bg-red-600"
                 >
                   Cancelar
                 </Button>
                 <Button
+                  className="bg-primary text-white hover:bg-primary/90"
                   onClick={handleSubmitApplication}
                   disabled={!selectedFile || isSubmitting}
                 >

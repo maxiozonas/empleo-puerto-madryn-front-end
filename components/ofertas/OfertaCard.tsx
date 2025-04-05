@@ -64,10 +64,10 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
               {oferta.categoria.nombre}
             </Badge>
           </div>
-          <CardTitle className="line-clamp-1 md:text-xl text-md mt-3 font-bold group-hover:text-primary transition-colors">
+          <CardTitle className="line-clamp-1 mt-3 uppercase font-bold group-hover:text-primary transition-colors">
             {oferta.titulo}
           </CardTitle>
-          <p className="text-muted-foreground font-medium text-sm">{oferta.empresaConsultora}</p>
+          <p className="text-muted-foreground font-medium uppercase text-sm">{oferta.empresaConsultora}</p>
           <Separator className="border border-accent" />
         </CardHeader>
 

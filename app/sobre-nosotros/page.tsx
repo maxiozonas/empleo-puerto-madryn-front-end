@@ -27,7 +27,7 @@ export default function SobreNosotrosPage() {
   };
 
   return (
-    <section className="container mx-auto py-6 px-4">
+    <section className="container min-h-screen mx-auto py-6 px-4">
       <div className="flex items-center mb-6">
         <Button
           onClick={handleBack}

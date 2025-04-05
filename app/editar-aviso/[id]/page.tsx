@@ -32,7 +32,7 @@ const formSchema = z
       .refine((val) => val.length > 0 && val.trim().length > 0, {
         message: "El título no puede ser solo espacios",
       })
-      .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,-]/.test(val), {
+      .refine((val) => !/[^a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ./]/.test(val), {
         message: "El título no puede contener caracteres especiales raros",
       }),
     descripcion: z

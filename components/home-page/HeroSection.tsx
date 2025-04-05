@@ -51,7 +51,7 @@ export function HeroSection() {
                 className="h-16 w-16"
               />
             </div>
-            <h2 className="text-white font-medium">Empleos Madryn</h2>
+            <h2 className="text-white font-medium">Madryn Empleos</h2>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
             Descubre tu futuro en Puerto Madryn

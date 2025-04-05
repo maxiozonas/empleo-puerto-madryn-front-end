@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     icon: "/logo.png",
   },
   keywords: ["Madryn Empleos, empleos Puerto Madryn, trabajos puerto madryn,ofertas laborales Madryn, trabajo Madryn, empleo Madryn, empleo Patagonia, trabajo Patagonia, empleos Patagonia, trabajos Patagonia, ofertas laborales Patagonia, trabajos Patagonia, empleo Argentina, trabajo Argentina, empleos Argentina, trabajos Argentina, ofertas laborales Argentina"],
-  authors: [{ name: "Madryn Empleos" }],
+  authors: [{ name: "Madryn Empleos, Maximo Ozonas, Juan Ignacio Rodriguez Mariani" }],
   creator: "Maximo Ozonas, Juan Ignacio Rodriguez Mariani",
   publisher: "Madryn Empleos",
   openGraph: {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     siteName: "Madryn Empleos",
     images: [
       {
-        url: "https://www.madrynempleos.com/lib/logoPage.png",
+        url: "https://www.madrynempleos.com/lib/logo.jpeg",
         width: 800,
         height: 600,
         alt: "Madryn Empleos",
