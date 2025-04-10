@@ -114,6 +114,11 @@ export default function OfertaDetalle() {
   const handleBack = () => router.push("/avisos");
 
   const handleApply = () => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+      return;
+    }
+
     if (oferta?.formaPostulacion === "MAIL") {
       setShowApplyModal(true);
     } else if (oferta?.formaPostulacion === "LINK" && oferta.contactoPostulacion) {
