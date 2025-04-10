@@ -251,9 +251,12 @@ export default function PublicarEmpleoPage() {
         </Button>
       </div>
       <header className="mb-8 space-y-4">
-        <h1 className="text-3xl font-bold text-center text-primary">Publicar empleo</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Publicar empleo</h1>
         <p className="text-center text-muted-foreground">
-          Complete el formulario para publicar una nueva oferta de empleo en Puerto Madryn
+          Publica una nueva oferta laboral en Puerto Madryn con Madryn Empleos.
+        </p>
+        <p className="text-center text-muted-foreground">
+          Completa el formulario a continuación para conectar tu empresa con talento local.
         </p>
       </header>
       <Form {...form}>
@@ -471,6 +474,10 @@ export default function PublicarEmpleoPage() {
           </Button>
         </form>
       </Form>
+
+      <p className="text-muted-foreground mt-2 text-center">
+        Tu oferta será revisada por nuestro equipo antes de publicarse. Recibirás un email de confirmación.
+      </p>
 
       {submitSuccess && (
         <div className="fixed inset-0 flex items-center justify-center z-50 px-4">

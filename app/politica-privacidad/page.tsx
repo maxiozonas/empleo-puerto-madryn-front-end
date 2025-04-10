@@ -23,9 +23,9 @@ export default function PoliticaPrivacidadPage() {
         </Button>
       </div>
 
-      <h1 className="text-2xl font-bold text-primary mb-6 text-center">Términos y Condiciones</h1>
+      <h1 className="text-2xl font-bold text-primary mb-6 text-center uppercase">Política de Privacidad</h1>
       <section className="space-y-6 text-gray-700 text-justify">
-        <h2 className="text-2xl font-semibold">Política de Privacidad</h2>
+        <p>En Madryn Empleos, valoramos tu privacidad. Esta política explica cómo manejamos tus datos personales para ofrecerte una experiencia segura y personalizada en nuestra plataforma laboral.</p>
         <p>
           El sitio web <strong>Empleos Madryn</strong> es propiedad de Empleos Madryn, que actúa como controlador de tus datos personales. Estamos comprometidos con la protección de tu privacidad y cumplimos con la <strong>Ley 25.326 de Protección de Datos Personales de Argentina</strong>, así como con el <strong>Reglamento General de Protección de Datos (GDPR)</strong> para usuarios en la Unión Europea.
         </p>
@@ -46,7 +46,7 @@ export default function PoliticaPrivacidadPage() {
 
         <h3 className="text-xl font-semibold">Uso de cookies</h3>
         <p>
-          Utilizamos cookies para mejorar tu experiencia en nuestro sitio. Al navegar, puedes aceptar o rechazar las cookies no esenciales a través de nuestro banner de consentimiento. Las cookies esenciales son necesarias para el funcionamiento del sitio y no requieren consentimiento. Para más información, consulta nuestra <a href='/politica-cookies' className="text-primary underline">Política de Cookies</a>.
+        Usamos cookies esenciales para el funcionamiento del sitio y cookies analíticas (como Google Analytics) para mejorar tu experiencia.
         </p>
 
         <h3 className="text-xl font-semibold">¿Por qué procesamos tus datos?</h3>

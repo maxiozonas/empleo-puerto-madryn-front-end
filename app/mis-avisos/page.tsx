@@ -71,8 +71,9 @@ export default function MisAvisosPage() {
         </Button>
       </div>
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-primary mb-2">Mis avisos</h1>
+        <h1 className="text-2xl lg:text-2xl font-bold text-primary mb-2 uppercase">Mis avisos</h1>
         <p className="text-muted-foreground">Aqui podras gestionar todos los avisos que publicaste desde tu cuenta.</p>
+        <p className="text-muted-foreground">Aquí podrás ver, editar o eliminar los avisos que has publicado desde tu cuenta.</p>
       </div>
       {ofertas && ofertas.length > 0 ? (
         <OfertaList

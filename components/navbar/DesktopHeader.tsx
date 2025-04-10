@@ -37,26 +37,26 @@ export function DesktopHeader() {
           <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={100} height={100} />
           <span className="bg-clip-text text-lg md:text-xl">Madryn Empleos</span>
         </Link>
+      </div>
 
-        <div className="flex flex-1 items-center justify-center gap-5 ml-5">
-          <Button asChild className="text-muted-foreground hover:text-primary">
-            <Link href="/avisos">Avisos</Link>
-          </Button>
-          <Button asChild className="text-muted-foreground hover:text-primary">
-            <Link href="/categorias">Categorías</Link>
-          </Button>
-          <Button asChild className="text-muted-foreground hover:text-primary">
-            <Link href="/contactanos">Contáctanos</Link>
-          </Button>
-        </div>
+      <div className="flex flex-1 items-center justify-center gap-5 ml-5">
+        <Button asChild className="text-muted-foreground hover:text-primary">
+          <Link href="/avisos">Avisos</Link>
+        </Button>
+        <Button asChild className="text-muted-foreground hover:text-primary">
+          <Link href="/categorias">Categorías</Link>
+        </Button>
+        <Button asChild className="text-muted-foreground hover:text-primary">
+          <Link href="/contactanos">Contáctanos</Link>
+        </Button>
       </div>
 
       <div className="flex items-center gap-4">
-      {isAuthenticated && process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string) && (
-            <Button asChild className="text-muted-foreground hover:text-primary">
-              <Link href="/admin">Administrar</Link>
-            </Button>
-          )}
+        {isAuthenticated && process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string) && (
+          <Button asChild className="text-muted-foreground hover:text-primary">
+            <Link href="/admin">Administrar</Link>
+          </Button>
+        )}
         <Button
           className="bg-ocean-gradient hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
           onClick={handlePublicarEmpleo}

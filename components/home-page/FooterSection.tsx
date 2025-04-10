@@ -13,24 +13,29 @@ export default function FooterSection() {
   };
 
   const handleHomeClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault(); 
-    router.push("/"); 
+    e.preventDefault();
+    router.push("/");
   };
 
   const handlePrivacyClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    router.push("/politica-privacidad"); 
+    router.push("/politica-privacidad");
   };
 
   const handleAboutUsClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     router.push("/sobre-nosotros");
   }
-  
+
+  const handleTerminosClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    router.push("/terminos-servicio");
+  };
+
   return (
     <div className="border-t mt-6 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-600">
       <div className="mb-4 md:mb-0 flex">
-        <h2 className="bg-clip-text text-primary mr-2 uppercase text-lg">
+        <h2 className="bg-clip-text text-primary mr-2 text-base">
           Madryn Empleos
         </h2>
         <a
@@ -38,44 +43,45 @@ export default function FooterSection() {
           target="_blank"
           rel="noopener noreferrer"
         >
-            <Image
-                src={icons.instagram}
-                alt="Instagram Madryn Empleos"
-                width={24}
-                height={24}
-                className="h-6 w-6 mr-3"
-            />
+          <Image
+            src={icons.instagram}
+            alt="Instagram Madryn Empleos"
+            width={24}
+            height={24}
+            className="h-6 w-6 mr-3"
+          />
         </a>
         <a
           href="https://www.facebook.com/profile.php?id=61574532959697&locale=es_LA"
           target="_blank"
           rel="noopener noreferrer"
         >
-            <Image
-                src={icons.facebook}
-                alt="Facebook Madryn Empleos"
-                width={24}
-                height={24}
-                className="h-6 w-6 mr-3"
-            />
-        </a>        
+          <Image
+            src={icons.facebook}
+            alt="Facebook Madryn Empleos"
+            width={24}
+            height={24}
+            className="h-6 w-6 mr-3"
+          />
+        </a>
       </div>
       <div className="mb-4 md:mb-0 flex">
-          <a
-              href="https://cafecito.app/madrynempleos"
-              target="_blank"
-              rel="noopener noreferrer"
-          >
-            <Image
-                  src={icons.cafecito}
-                  alt="Cafecito Madryn Empleos"
-                  width={516} 
-                  height={516}
-                  className="h-8 w-full"
-            />
-          </a>
-      </div>      
-      <div className="flex flex-wrap justify-center md:justify-end gap-4">
+        <a
+          href="https://cafecito.app/madrynempleos"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Image
+            src={icons.cafecito}
+            alt="Cafecito Madryn Empleos"
+            width={516}
+            height={516}
+            className="h-8 w-full"
+          />
+        </a>
+      </div>
+      <p className="text-center md:text-left">© 2025 Madryn Empleos</p>
+      <div className="flex mt-2 text-center justify-center md:justify-end gap-4">
         <a
           href="#"
           onClick={handleHomeClick}
@@ -92,6 +98,11 @@ export default function FooterSection() {
           Política Privacidad
         </a>
         <span>·</span>
+        <a href="#"
+          className="hover:text-blue-600"
+          onClick={handleTerminosClick}
+        >Términos de Servicio</a>
+        <span>·</span>
         <a
           href="#"
           onClick={handleAboutUsClick}
@@ -99,6 +110,7 @@ export default function FooterSection() {
         >
           Sobre Nosotros
         </a>
+
       </div>
     </div>
   );

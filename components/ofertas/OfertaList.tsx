@@ -78,11 +78,9 @@ export function OfertaList({
             setDeleteSuccess("¡Oferta eliminada con éxito!");
             if (onDelete) onDelete(showConfirmDelete);
             setShowConfirmDelete(null);
-            setDeleteError(null); // Limpiar cualquier error previo
+            setDeleteError(null);
           },
           onError: (err) => {
-            console.error("Error al eliminar la oferta:", err);
-            // Ignoramos el error 404, ya que indica que la oferta fue eliminada correctamente
             if (err.message.includes("404")) {
               setFilteredOfertas((prev) => prev.filter((oferta) => oferta.id !== showConfirmDelete));
               setDeleteSuccess("¡Oferta eliminada con éxito!");

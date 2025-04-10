@@ -286,9 +286,12 @@ function EditForm({ oferta: oferta, categorias, session, id, router }: EditFormP
         </Button>
       </div>
       <header className="mb-8 space-y-4">
-        <h1 className="text-3xl font-bold text-center text-primary">Editar Aviso</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Editar Aviso</h1>
         <p className="text-center text-muted-foreground">
-          Modifique los campos que desee y guarde los cambios
+          Modifica tu oferta laboral en Puerto Madryn con Madryn Empleos.
+        </p>
+        <p className="text-center text-muted-foreground">
+        Actualiza el título, descripción, categoría, forma de postulación u otros detalles.
         </p>
       </header>
       <Form {...form}>

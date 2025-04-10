@@ -124,7 +124,7 @@ export default function ContactUs() {
         </Button>
       </div>
       <header className="mb-8 space-y-4">
-        <h1 className="text-3xl font-bold text-center text-primary">Contactanos</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Contactanos</h1>
         <p className="text-center text-muted-foreground line-clamp-3">
           Estamos aquí para ayudarte. Si tienes alguna duda, inconveniente o una idea para mejorar nuestra plataforma, ¡no dudes en escribirnos!
         </p>

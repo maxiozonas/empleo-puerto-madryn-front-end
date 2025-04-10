@@ -53,7 +53,7 @@ export default function FavoritosPage() {
         </Button>
       </div>
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-primary mb-2">Mis favoritos</h1>
+        <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-2 uppercase">Mis favoritos</h1>
         <p className="text-muted-foreground">Aqui podras ver todas los avisos que agregaste a favoritos.</p>
       </div>
       {favoriteJobs.length > 0 ? (

@@ -53,11 +53,17 @@ export default function AvisosPage() {
         </Button>
       </div>
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-primary mb-2">Ofertas Laborales</h1>
-        <p className="text-muted-foreground">Explora todas las oportunidades laborales en Puerto Madryn.</p>
+        <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-2 uppercase">Ofertas Laborales en Puerto Madryn</h1>
+        <p className="text-muted-foreground">Encuentra las mejores oportunidades laborales en Puerto Madryn.</p>
       </div>
       <SearchFilters onFilterChange={handleFilterChange} />
       <OfertaList searchTerm={searchTerm} selectedCategoria={selectedCategory} ofertas={ofertas} />
+      <div className="text-center mt-6 bg-secondary/20 p-4 rounded-lg">
+        <p className="text-foreground">
+          ¡Estamos creciendo! No dudes en ofrecer tu puesto de trabajo a la comunidad. ¿Tienes un empleo para ofrecer?{" "}
+          <a href="/nuevo-aviso" className="text-primary underline">Publica tu aviso ahora</a>.
+        </p>
+      </div>
     </div>
   );
 }

@@ -48,8 +48,8 @@ export default function CategoryPage() {
         </Button>
       </div>
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-primary text-center mb-2">{categoryName}</h1>
-        <p className="text-muted-foreground text-center mb-2">Estas son las ofertas de empleo para la categoria {categoryName}</p>
+        <h1 className="text-3xl font-bold text-primary text-center mb-2 uppercase">{categoryName}</h1>
+        <p className="text-muted-foreground text-center mb-2">Descubre las mejores ofertas de empleo en {categoryName} en Puerto Madryn</p>
       </div>
       <OfertaList searchTerm="" selectedCategoria="all" ofertas={jobs} showEditOptions={false} />
     </div>

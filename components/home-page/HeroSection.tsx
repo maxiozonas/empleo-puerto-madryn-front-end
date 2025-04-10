@@ -53,11 +53,11 @@ export function HeroSection() {
             </div>
             <h2 className="text-white font-medium">Madryn Empleos</h2>
           </div>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
             Descubre tu futuro en Puerto Madryn
           </h1>
           <p className="text-white/90 text-lg sm:text-xl mb-8">
-            Donde el mar patagónico y las oportunidades laborales se encuentran
+            Donde el mar patagónico y las oportunidades laborales se encuentran.
           </p>
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <Button

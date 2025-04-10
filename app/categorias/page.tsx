@@ -90,8 +90,8 @@ export default function CategoriasPage() {
       </div>
 
       <div className="text-center mb-10">
-        <h1 className="text-3xl font-bold text-primary mb-2">Categorías Destacadas</h1>
-        <p className="text-muted-foreground">Explora oportunidades por sector en Puerto Madryn</p>
+        <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-2 uppercase">Categorías Destacadas</h1>
+        <p className="text-muted-foreground">Explora oportunidades laborales en Puerto Madryn organizadas por sector con Madryn Empleos.</p>
       </div>
 
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

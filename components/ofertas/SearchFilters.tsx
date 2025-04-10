@@ -51,10 +51,11 @@ export function SearchFilters({ onFilterChange }: SearchFiltersProps) {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10"
+              aria-label="Buscar ofertas laborales por título o empresa"
             />
           </div>
 
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <Select value={selectedCategory} onValueChange={setSelectedCategory} aria-label="Filtrar por categoría de empleo">
             <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Categoría" />
             </SelectTrigger>
