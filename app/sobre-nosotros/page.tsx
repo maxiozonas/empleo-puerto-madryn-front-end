@@ -38,11 +38,11 @@ export default function SobreNosotrosPage() {
         </Button>
       </div>
       <div className="flex flex-col gap-8">
-        <h1 className="text-2xl font-bold text-center text-primary">Sobre Nosotros</h1>
-        <p className="text-muted-foreground text-justify">
+        <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Sobre Nosotros</h1>
+        <p className="text-muted-foreground ">
           Somos Máximo Ozonas y Juan Ignacio Rodríguez Mariani, dos amigos de Puerto Madryn, Chubut, que decidimos unir nuestras habilidades para crear &quot;Madryn Empleos&quot;. Este proyecto nace de una necesidad que observamos en la comunidad: la falta de una plataforma efectiva para conectar a quienes buscan empleo con empresas locales. Combinamos nuestra pasión por la tecnología y el desarrollo web para ofrecer una solución práctica que fomente las oportunidades laborales en la Patagonia Argentina.
         </p>
-        <p className="text-muted-foreground text-justify">
+        <p className="text-muted-foreground">
           Nuestro objetivo es simple pero ambicioso: facilitar la búsqueda y creación de empleo en Puerto Madryn, apoyando tanto a los residentes como a las empresas de la región. Este sitio no solo es una herramienta útil, sino también un reflejo de nuestro compromiso con el crecimiento económico y social de la ciudad. Esperamos que &quot;Madryn Empleos&quot; sea un puente para el talento local y una ayuda para quienes buscan dar el próximo paso en su carrera. ¡Gracias por acompañarnos en esta misión y bienvenidos a nuestra comunidad!
         </p>
       </div>

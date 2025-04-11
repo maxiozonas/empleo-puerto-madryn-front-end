@@ -67,7 +67,7 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
         )}
       </div>
 
-      <SheetContent side="left" className="w-[300px] bg-gradient-to-b from-primary to-secondary text-white p-0">
+      <SheetContent side="left" className="w-full bg-gradient-to-b from-primary to-secondary text-white p-0">
         <div className="flex flex-col h-full">
           <SheetHeader className="flex items-center justify-between p-4 border-b border-white/10">
             <SheetTitle className="font-bold text-xl text-white">Madryn Empleos</SheetTitle>

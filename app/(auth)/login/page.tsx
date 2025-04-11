@@ -19,7 +19,7 @@ export default function LoginPage() {
         </p>
         <Button
           onClick={handleLogin}
-          className="bg-ocean-gradient hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
+          className="bg-ocean-gradient text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
         >
           <FaGoogle className="mr-2 h-4 w-4"/>
           Iniciar sesión con Google

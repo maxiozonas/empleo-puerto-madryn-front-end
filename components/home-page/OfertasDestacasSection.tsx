@@ -57,7 +57,7 @@ export function OfertasDestacadasSection() {
       <div className="text-center mt-5">
         <Button
           asChild
-          className="bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
+          className="bg-ocean-gradient text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
         >
           <Link href="/avisos">
             Ver todos los empleos

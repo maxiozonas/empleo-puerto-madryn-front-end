@@ -58,7 +58,7 @@ export function DesktopHeader() {
           </Button>
         )}
         <Button
-          className="bg-ocean-gradient hover:bg-primary/90 text-white font-semibold py-2 px-6 rounded-md transition-all duration-300"
+          className="bg-ocean-gradient text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
           onClick={handlePublicarEmpleo}
         >
           <Ship className="mr-2 h-4 w-4" />
@@ -102,7 +102,7 @@ export function DesktopHeader() {
         ) : (
           <Button
             variant="outline"
-            className="border-primary text-primary hover:text-primary hover:bg-primary/10 border-2 border-primary/30 rounded-md"
+            className="border-primary text-primary hover:text-primary hover:bg-primary/10 border-2 border-primary/30 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
             onClick={() => signIn("google")}
           >
             Iniciar sesión

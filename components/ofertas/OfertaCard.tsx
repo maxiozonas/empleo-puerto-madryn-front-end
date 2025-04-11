@@ -89,7 +89,7 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
             <Button
               variant="outline"
               size="lg"
-              className="flex hover:bg-primary/90 hover:text-white items-center gap-2 w-full"
+              className="flex bg-ocean-gradient w-full text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
             >
               <ArrowRight className="h-4 w-4" />
               Ver detalles

@@ -10,9 +10,11 @@ export function SobreMadrynSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-2xl text-center md:text-start font-bold text-primary mb-4 uppercase">Trabajo en Puerto Madryn</h2>
-            <p className="text-muted-foreground mb-6 text-justify">
-            Puerto Madryn, en la Patagonia Argentina, no solo es famosa por su belleza natural, sino también por su economía diversa que ofrece empleos en múltiples sectores. Encuentra trabajo en Puerto Madryn con Madryn Empleos y explora oportunidades laborales en una ciudad costera de Chubut conocida por su industria, turismo y pesca. Desde fábricas hasta avistamiento de ballenas, esta ciudad tiene algo para todos.
+            <p className="text-muted-foreground mb-4">
+            Puerto Madryn, en la Patagonia Argentina, no solo es famosa por su belleza natural, sino también por su economía diversa que ofrece empleos en múltiples sectores.  
             </p>
+            <p className="text-muted-foreground mb-4">Encuentra trabajo en Puerto Madryn con Madryn Empleos y explora oportunidades laborales en una ciudad costera de Chubut conocida por su industria, turismo y pesca.</p>
+            <p className="text-muted-foreground mb-4">Desde fábricas hasta avistamiento de ballenas, esta ciudad tiene algo para todos.</p>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <div className="bg-primary/10 p-2 rounded-full mt-1">

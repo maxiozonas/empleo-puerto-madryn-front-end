@@ -202,7 +202,7 @@ export default function ContactUs() {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white" disabled={isSubmitting}>
+          <Button type="submit" className="bg-ocean-gradient w-full text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg transform" disabled={isSubmitting}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

@@ -262,7 +262,7 @@ export default function OfertaDetalle() {
             </CardHeader>
             <CardContent className="p-6 space-y-4">
               <Button
-                className="w-full bg-accent hover:bg-accent/90 text-accent-foreground flex items-center gap-2"
+                className="bg-ocean-gradient w-full text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
                 onClick={handleApply}
               >
                 {oferta.formaPostulacion === "MAIL" ? (
@@ -452,7 +452,7 @@ export default function OfertaDetalle() {
               </CardHeader>
               <CardContent className="p-6 space-y-4">
                 <Button
-                  className="w-full bg-accent hover:bg-accent/90 text-accent-foreground flex items-center gap-2"
+                  className="bg-ocean-gradient w-full text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
                   onClick={handleApply}
                 >
                   {oferta.formaPostulacion === "MAIL" ? (
@@ -545,7 +545,8 @@ export default function OfertaDetalle() {
             <CardHeader>
               <CardTitle className="text-center pb-2">Subir currículum</CardTitle>
               <CardDescription className="text-center text-sm text-muted-foreground">
-                <p>Arrastra y suelta tu CV en formato .pdf o .doc.</p>
+                <p className="mb-2">Arrastra y suelta tu CV.</p>
+                <p className="mb-2">Formato .pdf o .docx</p>
                 <p>Recibirás una confirmación por correo.</p>
               </CardDescription>
             </CardHeader>
@@ -578,7 +579,7 @@ export default function OfertaDetalle() {
                   Cancelar
                 </Button>
                 <Button
-                  className="bg-primary text-white hover:bg-primary/90"
+                  className="bg-accent text-white hover:bg-primary/90"
                   onClick={handleSubmitApplication}
                   disabled={!selectedFile || isSubmitting}
                 >

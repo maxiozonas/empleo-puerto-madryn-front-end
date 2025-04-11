@@ -21,7 +21,7 @@ export function HeroSection() {
   }, [images.length]);
 
   return (
-    <section className="relative min-h-[500px] overflow-hidden rounded-3xl shadow-xl w-full">
+    <section className="relative min-h-[500px] overflow-hidden rounded-2xl shadow-xl w-full">
       {images.map((src, index) => (
         <div
           key={index}
@@ -64,7 +64,7 @@ export function HeroSection() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-neutral-800 hover:bg-white/30"
+              className="border-white text-neutral-800 hover:bg-white/50 hover:text-neutral-800"
             >
               <Link href="/avisos">Ver avisos laborales</Link>
             </Button>
@@ -72,7 +72,7 @@ export function HeroSection() {
               asChild
               size="lg"
               variant="outline"
-              className="border-white text-neutral-800 hover:bg-white/30"
+              className="border-white text-neutral-800 hover:bg-white/50 hover:text-neutral-800"
             >
               <Link href="/nuevo-aviso">Publicar aviso</Link>
             </Button>
