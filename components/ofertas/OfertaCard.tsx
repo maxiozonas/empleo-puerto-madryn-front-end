@@ -27,7 +27,7 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
     if (differenceInDays <= 0) return "Hoy";
     if (differenceInDays === 1) return "Hace 1 día";
     if (differenceInDays > 1) return `Hace ${differenceInDays} días`;
-    
+    console.log(oferta.slug);
   };
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -41,7 +41,7 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
   };
 
   return (
-    <Link href={`/detalles-empleo/${oferta.id}`} passHref>
+    <Link href={`/detalles-empleo/${oferta.slug}`} passHref>
       <Card
         className={cn(
           "group relative flex flex-col overflow-hidden transition-all duration-300",
