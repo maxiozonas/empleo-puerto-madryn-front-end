@@ -1,11 +1,11 @@
 import { Metadata } from "next";
-import { fetchOfertaById } from "@/lib/api/ofertas";
+import { fetchOfertaBySlug } from "@/lib/api/ofertas";
 import { Oferta } from "@/lib/types/iOferta";
 import OfertaDetalle from "./DetallesEmpleo";
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const resolvedParams = await params;
-    const oferta: Oferta = await fetchOfertaById(resolvedParams.id);
+    const oferta: Oferta = await fetchOfertaBySlug(resolvedParams.slug);
     const title = `${oferta.titulo} - ${oferta.empresaConsultora} | Madryn Empleos`;
     const description = `Oferta laboral para ${oferta.titulo} en ${oferta.empresaConsultora}, Puerto Madryn, Chubut, Argentina. Postúlate ahora en Madryn Empleos.`;
 
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         openGraph: {
             title,
             description,
-            url: `https://www.madrynempleos.com/detalles-empleo/${resolvedParams.id}`,
+            url: `https://www.madrynempleos.com/detalles-empleo/${resolvedParams.slug}`,
             siteName: "Madryn Empleos",
             images: [
                 {

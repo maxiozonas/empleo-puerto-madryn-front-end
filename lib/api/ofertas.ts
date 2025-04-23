@@ -23,6 +23,26 @@ export async function fetchOfertaById(id: string): Promise<Oferta> {
   return data as Oferta;
 }
 
+export async function fetchOfertaBySlug(slug: string): Promise<Oferta> {
+  const response = await fetch(`${apiUrl}/api/ofertas/detalles/${slug}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error ${response.status}: ${errorText}`);
+  }
+
+  const data = await response.json();
+  if (typeof data !== "object" || data === null) {
+    throw new Error("La respuesta del servidor no es un objeto válido");
+  }
+
+  return data as Oferta;
+}
+
 export async function fetchOfertas(): Promise<Oferta[]> {
   const response = await fetch(`${apiUrl}/api/ofertas`, {
     method: "GET",
@@ -40,7 +60,7 @@ export async function fetchOfertas(): Promise<Oferta[]> {
   if (!Array.isArray(data)) {
     throw new Error("La respuesta del servidor no es un array válido");
   }
-
+  console.log("Ofertas:", data);
   return data as Oferta[];
 }
 

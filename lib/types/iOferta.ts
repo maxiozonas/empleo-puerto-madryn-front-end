@@ -16,4 +16,5 @@ export interface Oferta {
   };
   logoUrl?: string | null;
   habilitado: boolean;
+  slug: string;
 }

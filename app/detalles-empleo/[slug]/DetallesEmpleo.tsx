@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Oferta } from "@/lib/types/iOferta";
-import { fetchOfertaById } from "@/lib/api/ofertas";
+import { fetchOfertaBySlug } from "@/lib/api/ofertas";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useAddFavorito, useRemoveFavorito, useIsFavoritos } from "@/lib/hooks/useFavoritos";
@@ -50,7 +50,7 @@ const getLogoUrl = (logoUrl: string | null | undefined): string | null => {
 
 export default function OfertaDetalle() {
   const router = useRouter();
-  const { id } = useParams();
+  const { slug } = useParams();
   const [oferta, setOferta] = useState<Oferta | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,7 @@ export default function OfertaDetalle() {
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
   const isOwnPost = oferta?.usuarioPublicador?.email === userEmail;
-  const { data: isFavoriteFromServer, isLoading: isFavoriteLoading } = useIsFavoritos(id as string, token);
+  const { data: isFavoriteFromServer, isLoading: isFavoriteLoading } = useIsFavoritos(slug as string, token);
   const addFavoriteMutation = useAddFavorito();
   const removeFavoriteMutation = useRemoveFavorito();
   const [optimisticIsFavorite, setOptimisticIsFavorite] = useState<boolean | undefined>(undefined);
@@ -81,7 +81,7 @@ export default function OfertaDetalle() {
   useEffect(() => {
     const CargarOferta = async () => {
       try {
-        const data = await fetchOfertaById(id as string);
+        const data = await fetchOfertaBySlug(slug as string);
         setOferta(data);
         if (editor && data) {
           editor.commands.setContent(data.descripcion);
@@ -93,7 +93,7 @@ export default function OfertaDetalle() {
       }
     };
     CargarOferta();
-  }, [id, editor]);
+  }, [slug, editor]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("es-AR", {
@@ -112,12 +112,12 @@ export default function OfertaDetalle() {
 
     if (newFavoriteState) {
       addFavoriteMutation.mutate(
-        { ofertaId: id as string, token },
+        { ofertaId: slug as string, token },
         { onError: () => setOptimisticIsFavorite(isFavoriteFromServer) }
       );
     } else {
       removeFavoriteMutation.mutate(
-        { ofertaId: id as string, token },
+        { ofertaId: slug as string, token },
         { onError: () => setOptimisticIsFavorite(isFavoriteFromServer) }
       );
     }
