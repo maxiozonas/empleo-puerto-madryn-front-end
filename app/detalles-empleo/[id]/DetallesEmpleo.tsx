@@ -37,6 +37,17 @@ import { useDropzone } from "react-dropzone";
 import style from '../../../components/contacto.module.css';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+const DEFAULT_LOGO_URL = "https://example.com/default-logo.png";
+
+const getLogoUrl = (logoUrl: string | null | undefined): string | null => {
+  if (!logoUrl || logoUrl === DEFAULT_LOGO_URL) {
+    return null;
+  }
+
+  const isExternalUrl = logoUrl.startsWith("http://") || logoUrl.startsWith("https://");
+  return isExternalUrl ? logoUrl : `${process.env.NEXT_PUBLIC_API_URL}${logoUrl}`;
+};
+
 export default function OfertaDetalle() {
   const router = useRouter();
   const { id } = useParams();
@@ -48,6 +59,7 @@ export default function OfertaDetalle() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [logoError, setLogoError] = useState(false);
   const { data: session, status } = useSession();
   const token = session?.backendToken || "";
   const userEmail = session?.user?.email || "";
@@ -238,16 +250,17 @@ export default function OfertaDetalle() {
                 </div>
               </div>
               <div className="p-3 bg-white/20 rounded-full self-center md:self-start hidden md:block">
-                {oferta.logoUrl ? (
+                {logoError || !getLogoUrl(oferta.logoUrl) ? (
+                  <Building className="h-8 w-8 md:h-10 md:w-10" />
+                ) : (
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_API_URL}${oferta.logoUrl}`}
+                    src={getLogoUrl(oferta.logoUrl) as string}
                     alt={oferta.empresaConsultora}
                     width={80}
                     height={80}
                     className="h-12 w-12 md:h-16 md:w-16 rounded-full object-cover"
+                    onError={() => setLogoError(true)} 
                   />
-                ) : (
-                  <Building className="h-8 w-8 md:h-10 md:w-10" />
                 )}
               </div>
             </div>
@@ -553,8 +566,7 @@ export default function OfertaDetalle() {
             <CardContent>
               <div
                 {...getRootProps()}
-                className={`border-2 cursor-pointer border-dashed p-6 rounded-lg text-center ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300"
-                  }`}
+                className={`border-2 cursor-pointer border-dashed p-6 rounded-lg text-center ${isDragActive ? "border-primary bg-primary/10" : "border-gray-300"}`}
               >
                 <input {...getInputProps()} />
                 {selectedFile ? (

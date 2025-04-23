@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import logo from "@/public/lib/logo.jpeg";
 import { Separator } from "../ui/separator";
+import { useState } from "react";
 
 interface OfertaCardProps {
   oferta: Oferta;
@@ -18,7 +19,20 @@ interface OfertaCardProps {
   onDelete?: (ofertaId: string) => void;
 }
 
+const DEFAULT_LOGO_URL = "https://example.com/default-logo.png";
+
+const getLogoUrl = (logoUrl: string | null | undefined, defaultLogo: string): string => {
+  if (!logoUrl || logoUrl === DEFAULT_LOGO_URL) {
+    return defaultLogo;
+  }
+
+  const isExternalUrl = logoUrl.startsWith("http://") || logoUrl.startsWith("https://");
+  return isExternalUrl ? logoUrl : `${process.env.NEXT_PUBLIC_API_URL}${logoUrl}`;
+};
+
 export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, onDelete }: OfertaCardProps) {
+  const [logoError, setLogoError] = useState(false); // Estado para manejar errores de carga del logo
+
   const calculateDaysAgo = (date: string) => {
     const publicationDate = new Date(date);
     const currentDate = new Date();
@@ -27,7 +41,6 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
     if (differenceInDays <= 0) return "Hoy";
     if (differenceInDays === 1) return "Hace 1 día";
     if (differenceInDays > 1) return `Hace ${differenceInDays} días`;
-    
   };
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -52,11 +65,12 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
         <CardHeader className="pb-2 pt-5">
           <div className="flex justify-between items-center gap-2 mb-1">
             <Image
-              src={oferta.logoUrl ? `${process.env.NEXT_PUBLIC_API_URL}${oferta.logoUrl}` : logo}
+              src={logoError ? logo : getLogoUrl(oferta.logoUrl, logo.src)}
               alt={oferta.empresaConsultora || "Logo de la empresa"}
               width={60}
               height={60}
               className="rounded-full h-12 w-12 object-cover"
+              onError={() => setLogoError(true)} 
             />
             <Badge
               className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-md"

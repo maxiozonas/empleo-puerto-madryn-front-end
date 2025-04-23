@@ -26,6 +26,12 @@ const nextConfig: NextConfig = {
         hostname: "madryn-empleos-backend.onrender.com",
         port: "",
         pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "serpapi.com",
+        port: "",
+        pathname: "/**",
       }
     ],
   },
