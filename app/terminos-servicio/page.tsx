@@ -1,27 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
+import VolverButton from "@/components/ui/volver";
 
 export default function TerminosServicioPage() {
-  const router = useRouter();
-
-  const handleBack = () => {
-    router.push("/");
-  };
-
   return (
     <div className="container mx-auto min-h-screen py-6 px-4">
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
 
       <h1 className="text-2xl font-bold text-primary mb-6 text-center uppercase">Términos de Servicio</h1>
       <section className="space-y-6 text-gray-700 text-justify">

@@ -44,7 +44,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="google-adsense-account" content="ca-pub-5932421257314184" />
       </head>
       <body className={inter.className}>
-        {/* Scripts de Google Analytics */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-58EP2GP6X3"
           strategy="afterInteractive"

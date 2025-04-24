@@ -1,35 +1,22 @@
 "use client";
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useOfertas } from "@/lib/hooks/useOfertas";
 import Link from "next/link";
-import { Loader2, ArrowLeft, Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, Wrench, Truck, Scissors } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Anchor, CircleDollarSign, Fish, Briefcase, Factory, Building, Coffee, Book, HeartPulse, Hammer, Laptop, BicepsFlexed, SquareChartGantt, Warehouse, BookUser, ChartArea, Waypoints, Handshake, Wrench, Truck, Scissors } from "lucide-react";
 import { cn } from "@/lib/utils";
+import VolverButton from "@/components/ui/volver";
+import Loader from "@/components/ui/loader";
+import Error from "@/components/ui/error";
 
 export default function CategoriasPage() {
   const { data: categorias, isLoading: categoriasLoading, error: categoriasError } = useCategorias();
   const { data: allOfertas, isLoading: ofertasLoading, error: ofertasError } = useOfertas();
-  const router = useRouter();
 
-  if (categoriasLoading || ofertasLoading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-2 text-muted-foreground">Cargando</p>
-      </div>
-    );
-  }
+  if (categoriasLoading || ofertasLoading) { return ( <Loader /> ); }
 
-  if (categoriasError || ofertasError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-destructive">
-        <p>{categoriasError?.message || ofertasError?.message || "Error al cargar las categorías u ofertas"}</p>
-      </div>
-    );
-  }
+  if (categoriasError || ofertasError) { return <Error error={categoriasError || ofertasError} />; }
 
   if (!categorias || categorias.length === 0) {
     return (
@@ -73,21 +60,9 @@ export default function CategoriasPage() {
     return acc;
   }, {} as { [key: string]: number }) || {};
 
-  const handleBack = () => {
-    router.push("/");
-  };
-
   return (
     <section className="container mx-auto py-6 px-4">
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
 
       <div className="text-center mb-10">
         <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-2 uppercase">Categorías Destacadas</h1>

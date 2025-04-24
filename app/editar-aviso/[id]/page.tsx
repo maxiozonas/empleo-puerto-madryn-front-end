@@ -13,7 +13,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { useOfertaById } from "@/lib/hooks/useOfertas";
 import { updateOferta } from "@/lib/api/ofertas";
-import { ArrowLeft, Loader2, Ship, X, CheckCircle2 } from "lucide-react";
+import { Loader2, Ship, X, CheckCircle2 } from "lucide-react";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -21,6 +21,9 @@ import RteEditor from "@/components/ui/RteEditor";
 import { Oferta } from "@/lib/types/iOferta";
 import { Categoria } from "@/lib/types/iCategoria";
 import { Session } from "next-auth";
+import VolverButton from "@/components/ui/volver";
+import Loader from "@/components/ui/loader";
+import Error from "@/components/ui/error";
 
 const formSchema = z
   .object({
@@ -134,28 +137,9 @@ export default function EditarAvisoPage() {
     return null;
   }
 
-  if (status === "loading" || ofertaLoading || categoriasLoading) {
-    return (
-      <div className="min-h-screen flex flex-col justify-center items-center py-6 px-4">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-        <p className="mt-2 text-muted-foreground">Cargando</p>
-      </div>
-    );
-  }
+  if (status === "loading" || ofertaLoading || categoriasLoading) {return <Loader />;}
 
-  if (ofertaError || categoriasError || !oferta) {
-    return (
-      <div className="text-center text-destructive py-8">
-        <p>{ofertaError?.message || categoriasError?.message || "No se pudo cargar la oferta"}</p>
-        <Button
-          variant="outline"
-          className="mt-4 border-primary text-primary hover:bg-primary/10"
-          onClick={() => router.refresh()}
-        >
-          Reintentar
-        </Button>
-      </div>
-    );
+  if (ofertaError || categoriasError || !oferta) {return <Error error={ofertaError || categoriasError} message={!oferta ? "No se pudo cargar la oferta" : undefined} />;
   }
 
   if (!categorias || categorias.length === 0) {
@@ -265,10 +249,6 @@ function EditForm({ oferta: oferta, categorias, session, id, router }: EditFormP
     }
   };
 
-  const handleBack = () => {
-    router.push("/mis-avisos");
-  };
-
   const handleCloseSuccess = () => {
     setSubmitSuccess(null);
     router.push("/mis-avisos");
@@ -276,15 +256,7 @@ function EditForm({ oferta: oferta, categorias, session, id, router }: EditFormP
 
   return (
     <>
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
       <header className="mb-8 space-y-4">
         <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Editar Aviso</h1>
         <p className="text-center text-muted-foreground">

@@ -3,9 +3,11 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { OfertaList } from "@/components/ofertas/OfertaList";
-import { Anchor, ArrowLeft, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Anchor } from "lucide-react";
 import { useUserOfertas, useDeleteOferta } from "@/lib/hooks/useOfertas";
+import VolverButton from "@/components/ui/volver";
+import Loader from "@/components/ui/loader";
+import Error from "@/components/ui/error";
 
 export default function MisAvisosPage() {
   const { data: session, status } = useSession();
@@ -14,26 +16,14 @@ export default function MisAvisosPage() {
   const { data: ofertas, isLoading, error } = useUserOfertas(token);
   const deleteMutation = useDeleteOferta();
 
-  if (status === "loading" || isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center py-6 px-4">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <p className="mt-2 text-muted-foreground">Cargando</p>
-      </div>
-    );
-  }
-
   if (status === "unauthenticated") {
     router.push("/login");
     return null;
   }
 
+  if (status === "loading" || isLoading) { return <Loader />; }
   if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-destructive">
-        <p>{error.message}</p>
-      </div>
-    );
+    return <Error error={error instanceof Error ? error : null} message={!error || !(error instanceof Error) ? "Ha ocurrido un error" : undefined} />;
   }
 
   const handleEdit = (ofertaId: string) => {
@@ -55,21 +45,9 @@ export default function MisAvisosPage() {
     );
   };
 
-  const handleBack = () => {
-    router.push("/");
-  };
-
   return (
     <div className="container mx-auto min-h-screen py-6 px-4">
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
       <div className="text-center mb-10">
         <h1 className="text-2xl lg:text-2xl font-bold text-primary mb-2 uppercase">Mis avisos</h1>
         <p className="text-muted-foreground">Aqui podras gestionar todos los avisos que publicaste desde tu cuenta.</p>

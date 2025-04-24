@@ -9,6 +9,9 @@ export function useAddFavorito() {
       queryClient.invalidateQueries({ queryKey: ["favorites", token] });
       queryClient.invalidateQueries({ queryKey: ["isFavorite", ofertaId, token] });
     },
+    onError: (error, { ofertaId }) => {
+      console.error(`Error al añadir oferta ${ofertaId} a favoritos:`, error);
+    }
   });
 }
 
@@ -20,6 +23,9 @@ export function useRemoveFavorito() {
       queryClient.invalidateQueries({ queryKey: ["favorites", token] });
       queryClient.invalidateQueries({ queryKey: ["isFavorite", ofertaId, token] });
     },
+    onError: (error, { ofertaId }) => {
+      console.error(`Error al eliminar oferta ${ofertaId} de favoritos:`, error);
+    }
   });
 }
 
@@ -28,6 +34,8 @@ export function useUserFavoritos(token: string) {
     queryKey: ["favorites", token],
     queryFn: () => fetchUserFavorites(token),
     enabled: !!token,
+    staleTime: 2 * 60 * 1000,
+    retry: 2
   });
 }
 
@@ -36,5 +44,7 @@ export function useIsFavoritos(ofertaId: string, token: string) {
     queryKey: ["isFavorite", ofertaId, token],
     queryFn: () => checkIsFavorite(ofertaId, token),
     enabled: !!token && !!ofertaId,
+    staleTime: 2 * 60 * 1000,
+    retry: 1
   });
 }

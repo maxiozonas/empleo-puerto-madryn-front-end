@@ -18,6 +18,9 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import RteEditor from "@/components/ui/RteEditor";
+import VolverButton from "@/components/ui/volver";
+import Loader from "@/components/ui/loader";
+import Error from "@/components/ui/error";
 
 const formSchema = z
   .object({
@@ -174,29 +177,9 @@ export default function PublicarEmpleoPage() {
     return null;
   }
 
-  if (status === "loading" || categoriasLoading) {
-    return (
-      <div className="text-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-        <p className="mt-2 text-muted-foreground">Cargando...</p>
-      </div>
-    );
-  }
+  if (categoriasLoading) { return <Loader />; }
 
-  if (categoriasError) {
-    return (
-      <div className="text-center text-destructive py-8">
-        <p>{categoriasError.message}</p>
-        <Button
-          variant="outline"
-          className="mt-4 border-primary text-primary hover:bg-primary/10"
-          onClick={() => router.refresh()}
-        >
-          Reintentar
-        </Button>
-      </div>
-    );
-  }
+  if (categoriasError) { return <Error error={categoriasError instanceof Error ? categoriasError : null} />; }
 
   if (!categorias || categorias.length === 0) {
     return <div className="text-center py-8">No hay categorías disponibles.</div>;
@@ -230,10 +213,6 @@ export default function PublicarEmpleoPage() {
     }
   };
 
-  const handleBack = () => {
-    router.push("/");
-  };
-
   const handleCloseSuccess = () => {
     setSubmitSuccess(null);
     router.push("/");
@@ -241,15 +220,7 @@ export default function PublicarEmpleoPage() {
 
   return (
     <div className="container mx-auto py-6 px-4">
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
       <header className="mb-8 space-y-4">
         <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Publicar empleo</h1>
         <p className="text-center text-muted-foreground">

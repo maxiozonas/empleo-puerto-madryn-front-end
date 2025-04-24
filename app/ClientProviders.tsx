@@ -3,7 +3,7 @@
 import type React from "react";
 import { SessionProvider } from "next-auth/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Header from "@/components/navbar/Header";
+import Header from "@/components/header/Header";
 import FooterSection from "@/components/home-page/FooterSection";
 import { Analytics } from "@vercel/analytics/react";
 

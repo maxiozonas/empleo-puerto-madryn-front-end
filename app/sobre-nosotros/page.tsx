@@ -1,13 +1,9 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
-import { ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
+import VolverButton from "@/components/ui/volver";
 
 export default function SobreNosotrosPage() {
-  const router = useRouter();
 
   const images = {
     maxifoto: "/lib/maxifoto.jpg",
@@ -20,23 +16,9 @@ export default function SobreNosotrosPage() {
     github: "/icons/github.svg",
   };
 
-  useAuthCheck();
-
-  const handleBack = () => {
-    router.push("/");
-  };
-
   return (
     <section className="container min-h-screen mx-auto py-6 px-4">
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
       <div className="flex flex-col gap-8">
         <h1 className="text-2xl lg:text-3xl font-bold text-center text-primary uppercase">Sobre Nosotros</h1>
         <p className="text-muted-foreground ">
