@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   },
   description: "Encuentra empleo en Puerto Madryn, Chubut, Patagonia Argentina. Madryn Empleos ofrece ofertas laborales actualizadas en una ciudad costera reconocida por su belleza natural.",
   icons: {
-    icon: "/public/logo.ico",
+    icon: "/logo.ico",
   },
   keywords: ["Madryn Empleos, empleos Puerto Madryn, trabajos puerto madryn,ofertas laborales Madryn, trabajo Madryn, empleo Madryn, empleo Patagonia, trabajo Patagonia, empleos Patagonia, trabajos Patagonia, ofertas laborales Patagonia, trabajos Patagonia, empleo Argentina, trabajo Argentina, empleos Argentina, trabajos Argentina, ofertas laborales Argentina"],
   authors: [{ name: "Madryn Empleos, Maximo Ozonas, Juan Ignacio Rodriguez Mariani" }],

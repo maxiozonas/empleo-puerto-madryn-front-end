@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Madryn Empleos - Documentación Interna
 
-## Getting Started
+## 📋 Descripción del Proyecto
 
-First, run the development server:
+Madryn Empleos es una plataforma digital desarrollada para conectar a empleadores y buscadores de empleo en Puerto Madryn, Chubut. El objetivo principal es centralizar las ofertas laborales de la ciudad en un único portal, facilitando tanto la búsqueda de empleo como la publicación de nuevas oportunidades laborales.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🏗️ Estructura del Proyecto
+
+### Directorios Principales
+
+- `/app`: Contiene las páginas y rutas de la aplicación (Next.js App Router)
+- `/components`: Componentes reutilizables organizados por funcionalidad
+- `/lib`: Utilidades, hooks, tipos y funciones auxiliares
+- `/public`: Archivos estáticos como imágenes y logos
+- `/styles`: Estilos globales y configuraciones de Tailwind CSS
+
+### Páginas Principales
+
+- `/`: Página de inicio con secciones destacadas
+- `/avisos`: Listado de ofertas laborales disponibles
+- `/detalles-empleo/[slug]`: Detalles de una oferta específica
+- `/categorias`: Exploración de empleos por categoría
+- `/nuevo-aviso`: Formulario para publicar nuevos avisos
+- `/mis-avisos`: Gestión de avisos publicados por el usuario
+- `/admin`: Panel de administración (acceso restringido)
+
+## 💻 Stack Tecnológico
+
+- **Framework**: Next.js 15 con TypeScript y App Router
+- **Autenticación**: NextAuth.js con integración de Google
+- **UI/UX**: 
+  - Tailwind CSS para estilos
+  - Componentes de Radix UI (Dialog, Dropdown, etc.)
+  - Lucide React y React Icons para iconografía
+- **Estado y Datos**:
+  - React Query para gestión de estado y peticiones
+  - React Hook Form para formularios
+  - Zod para validación de datos
+- **Contenido**: 
+  - Tiptap para edición de texto enriquecido
+  - React Dropzone para carga de imágenes
+
+## ⚙️ Configuración y Variables de Entorno
+
+El proyecto requiere las siguientes variables de entorno en un archivo `.env`:
+
+```
+NEXT_PUBLIC_API_URL=<URL_del_backend>
+NEXTAUTH_URL=<URL_de_la_aplicación>
+NEXTAUTH_SECRET=<Secreto_para_NextAuth>
+GOOGLE_CLIENT_ID=<ID_de_cliente_de_Google>
+GOOGLE_CLIENT_SECRET=<Secreto_de_cliente_de_Google>
+NEXT_PUBLIC_ADMIN_EMAILS=<emails_de_administradores>
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔄 Flujos Principales
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Publicación de Avisos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Usuario inicia sesión con Google
+2. Accede a "Publicar aviso"
+3. Completa formulario con detalles del empleo
+4. El aviso queda pendiente de aprobación por administradores
+5. Una vez aprobado, aparece en el listado público
 
-## Learn More
+### Administración
 
-To learn more about Next.js, take a look at the following resources:
+- Los usuarios con email en `NEXT_PUBLIC_ADMIN_EMAILS` tienen acceso al panel de administración
+- Pueden aprobar/rechazar avisos, editar categorías y gestionar contenido
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🚀 Comandos Útiles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Desarrollo local
+pnpm dev
 
-## Deploy on Vercel
+# Construir para producción
+pnpm build
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Iniciar versión de producción
+pnpm start
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Verificar errores de linting
+pnpm lint
+```
+
+## 📱 Diseño Responsivo
+
+La aplicación está optimizada para:
+- Dispositivos móviles (< 768px)
+- Tablets (768px - 1024px)
+- Escritorio (> 1024px)
+
+Se utilizan clases de Tailwind como `md:` y `lg:` para adaptar la interfaz.
+
+## 🔍 SEO y Metadatos
+
+Los metadatos están configurados en `app/layout.tsx` con optimizaciones para:
+- Títulos y descripciones relevantes
+- Open Graph para compartir en redes sociales
+- Palabras clave relacionadas con empleo en Puerto Madryn
+
+## 📊 Analítica
+
+Se utiliza Google Analytics (G-58EP2GP6X3) para seguimiento de usuarios y comportamiento.
+
+## 🧠 Notas para Desarrollo Futuro
+
+- Considerar implementar sistema de notificaciones por email
+- Mejorar filtros de búsqueda avanzada
+- Añadir funcionalidad de CV/perfil para postulantes
+- Optimizar carga de imágenes y logos de empresas
+
+---
+
+**Desarrollado por:**
+- Maximo Ozonas
+- Juan Ignacio Rodriguez Mariani
