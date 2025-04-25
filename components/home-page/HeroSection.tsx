@@ -41,20 +41,8 @@ export function HeroSection() {
       ))}
       <div className="absolute inset-0 flex flex-col justify-center items-center px-6 md:items-start md:px-12 z-20 container mx-auto">
         <div className="max-w-2xl text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-3 mb-4">
-            <div className="bg-white/20 backdrop-blur-sm rounded-full">
-              <Image
-                src="/lib/logoPage.png"
-                alt="Empleos Madryn"
-                width={128}
-                height={128}
-                className="h-16 w-16"
-              />
-            </div>
-            <h2 className="text-white font-medium">Madryn Empleos</h2>
-          </div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
-            Descubre tu futuro en Puerto Madryn
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 uppercase">
+            tu futuro en Puerto Madryn
           </h1>
           <p className="text-white/90 text-lg sm:text-xl mb-8">
             Donde el mar patagónico y las oportunidades laborales se encuentran.

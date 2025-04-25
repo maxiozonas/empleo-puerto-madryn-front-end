@@ -75,7 +75,6 @@ export default function OfertaDetails({ oferta }: OfertaDetailsProps) {
           </div>
         ) : (
           <div className="flex flex-col space-y-2">
-            <p className="text-gray-700">Postúlate a través del siguiente enlace:</p>
             <Button
               className="bg-primary hover:bg-primary/90 text-primary-foreground w-full md:w-auto"
               asChild

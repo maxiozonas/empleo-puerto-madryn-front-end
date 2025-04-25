@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "./ClientProviders";
 import Script from "next/script";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({ weight: ["500"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
@@ -43,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="google-adsense-account" content="ca-pub-5932421257314184" />
       </head>
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-58EP2GP6X3"
           strategy="afterInteractive"
