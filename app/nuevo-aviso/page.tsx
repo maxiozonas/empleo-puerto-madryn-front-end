@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useCategorias } from "@/lib/hooks/useCategorias";
 import { createOferta } from "@/lib/api/ofertas";
-import { Loader2, Anchor, ArrowLeft, X, CheckCircle2 } from "lucide-react";
+import { Loader2, Anchor, X, CheckCircle2 } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

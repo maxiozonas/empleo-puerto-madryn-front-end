@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Loader2 } from "lucide-react";
 import { useOfertaBySlug } from "@/lib/hooks/useOfertas";
 import OfertaHeader from "@/components/ofertas/detalles/OfertaHeader";
 import OfertaActions from "@/components/ofertas/detalles/OfertaActions";
@@ -15,7 +14,6 @@ import VolverButton from "@/components/ui/volver";
 import Loader from "@/components/ui/loader";
 
 export default function OfertaDetalle() {
-  2
   const router = useRouter();
   const { slug } = useParams();
   const { data: session, status } = useSession();
@@ -25,8 +23,6 @@ export default function OfertaDetalle() {
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const isOwnPost = oferta?.usuarioPublicador?.email === userEmail;
-
-  const handleBack = () => router.push("/avisos");
 
   const handleApply = () => {
     if (status === "unauthenticated") {
