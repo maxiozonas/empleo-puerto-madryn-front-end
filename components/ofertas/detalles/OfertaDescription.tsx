@@ -28,8 +28,8 @@ export default function OfertaDescription({ oferta }: OfertaDescriptionProps) {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 md:p-8 mb-6">
-      <h2 className="text-xl md:text-2xl font-bold text-primary mb-4">Descripción del empleo</h2>
-      <div className="text-gray-700 whitespace-pre-line mb-8">
+      <h2 className="text-xl md:text-2xl font-bold text-primary mb-4 uppercase">Descripción del empleo</h2>
+      <div className="text-gray-700 whitespace-pre-line text-sm lg:text-base">
         <EditorContent editor={editor} />
       </div>
     </div>

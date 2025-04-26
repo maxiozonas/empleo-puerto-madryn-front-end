@@ -34,31 +34,31 @@ export function DesktopHeader() {
           href="/"
           className="flex items-center text-2xl font-bold  text-primary hover:text-primary/90 transition-colors"
         >
-          <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={100} height={100} />
+          {/* <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={140} height={100} /> */}
           <span className="bg-clip-text text-lg md:text-xl">Madryn Empleos</span>
         </Link>
       </div>
 
       <div className="flex flex-1 items-center justify-center gap-5 ml-5">
-        <Button asChild className="text-muted-foreground hover:text-primary">
+        <Button asChild className="text-muted-foreground hover:text-primary text-base">
           <Link href="/avisos">Avisos</Link>
         </Button>
-        <Button asChild className="text-muted-foreground hover:text-primary">
+        <Button asChild className="text-muted-foreground hover:text-primary text-base">
           <Link href="/categorias">Categorías</Link>
         </Button>
-        <Button asChild className="text-muted-foreground hover:text-primary">
+        <Button asChild className="text-muted-foreground hover:text-primary text-base">
           <Link href="/contactanos">Contáctanos</Link>
         </Button>
       </div>
 
       <div className="flex items-center gap-4">
         {isAuthenticated && process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string) && (
-          <Button asChild className="text-muted-foreground hover:text-primary">
+          <Button asChild className="text-muted-foreground hover:text-primary text-base">
             <Link href="/admin">Administrar</Link>
           </Button>
         )}
         <Button
-          className="bg-ocean-gradient text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
+          className="bg-ocean-gradient text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform text-base"
           onClick={handlePublicarEmpleo}
         >
           <Ship className="mr-2 h-4 w-4" />
@@ -102,7 +102,7 @@ export function DesktopHeader() {
         ) : (
           <Button
             variant="outline"
-            className="border-primary text-primary hover:text-primary hover:bg-primary/10 border-2 border-primary/30 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform"
+            className="border-primary text-primary hover:text-primary hover:bg-primary/10 border-2 border-primary/30 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform text-base"
             onClick={() => signIn("google")}
           >
             Iniciar sesión

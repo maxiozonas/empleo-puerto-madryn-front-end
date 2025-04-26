@@ -31,7 +31,7 @@ export default function OfertaHeader({ oferta }: OfertaHeaderProps) {
           <div className="flex justify-between md:flex-col">
             <p className="text-xs uppercase md:text-base text-white/90 font-medium">{oferta.empresaConsultora}</p>
             <div className="inline-flex md:mt-2">
-              <Badge className="bg-white hover:bg-primary hover:text-white text-primary text-xs md:text-base font-medium">
+              <Badge className="bg-white text-primary text-xs md:text-base font-medium">
                 {oferta.categoria.nombre}
               </Badge>
             </div>

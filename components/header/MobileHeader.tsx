@@ -29,7 +29,7 @@ export function MobileHeader({ isMenuOpen, setIsMenuOpen }: { isMenuOpen: boolea
           href="/"
           className="flex items-center text-2xl font-bold text-primary hover:text-primary/90 transition-colors"
         >
-          <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={40} height={40} />
+          {/* <Image src="/lib/logoPage.png" alt="EmpleosMadryn" width={40} height={40} /> */}
           <span className="ml-2 text-lg">Madryn Empleos</span>
         </Link>
 

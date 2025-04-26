@@ -1,6 +1,6 @@
 import { Oferta } from "@/lib/types/iOferta";
 import { Button } from "@/components/ui/button";
-import { Calendar, Clock, Briefcase, MapPin, Mail, Link as LinkIcon } from "lucide-react";
+import { Calendar, Clock, MapPin, Mail, Link as LinkIcon } from "lucide-react";
 
 interface OfertaDetailsProps {
   oferta: Oferta;
@@ -26,7 +26,7 @@ export default function OfertaDetails({ oferta }: OfertaDetailsProps) {
           </div>
         </div>
 
-        {oferta.fechaCierre && (
+        {oferta.fechaCierre ? (
           <div className="flex items-center gap-3 text-gray-700">
             <Clock className="h-5 w-5 text-primary" />
             <div>
@@ -34,15 +34,14 @@ export default function OfertaDetails({ oferta }: OfertaDetailsProps) {
               <p>Cierra {formatDate(oferta.fechaCierre)}</p>
             </div>
           </div>
-        )}
-
-        <div className="flex items-center gap-3 text-gray-700">
-          <Briefcase className="h-5 w-5 text-primary" />
-          <div>
-            <p className="text-sm font-medium text-gray-500">Empresa</p>
-            <p>{oferta.empresaConsultora}</p>
+        ) : (
+          <div className="flex items-center gap-3 text-gray-700">
+            <Clock className="h-5 w-5 text-primary" />
+            <div>
+              <p className="text-sm font-medium text-gray-500">Sin fecha de cierre</p>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="flex items-center gap-3 text-gray-700">
           <MapPin className="h-5 w-5 text-primary" />

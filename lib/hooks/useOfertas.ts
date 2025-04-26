@@ -17,7 +17,10 @@ export function useOfertaById(id: string) {
         queryKey: ["jobPost", id],
         queryFn: () => fetchOfertaById(id),
         enabled: !!id,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 30 * 1000, 
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
         retry: 2
     });
 }
@@ -27,7 +30,10 @@ export function useOfertaBySlug(slug: string) {
         queryKey: ["jobPostBySlug", slug],
         queryFn: () => fetchOfertaBySlug(slug),
         enabled: !!slug,
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 30 * 1000,
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
         retry: 2
     });
 }
@@ -36,7 +42,11 @@ export function useOfertas() {
     return useQuery<Oferta[], Error>({
         queryKey: ["jobPosts"],
         queryFn: fetchOfertas,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 30 * 1000, 
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchInterval: 60 * 1000, 
         retry: 2
     });
 }
@@ -46,19 +56,27 @@ export function useUserOfertas(token: string) {
         queryKey: ["userJobPosts", token],
         queryFn: () => fetchUserOfertas(token),
         enabled: !!token,
-        staleTime: 2 * 60 * 1000,
+        staleTime: 30 * 1000, 
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchInterval: 60 * 1000, 
         retry: 2
     });
 }
 
 export function useOfertasByCategory(categoryId: string) {
-    return useQuery<Oferta[], Error>({
-        queryKey: ["jobPostsByCategory", categoryId],
-        queryFn: async () => {
+  return useQuery({
+    queryKey: ["jobPostsByCategory", categoryId],
+    queryFn: async () => {
             const allJobs = await fetchOfertas();
             return allJobs.filter((job) => job.categoria.id === categoryId);
         },
-        staleTime: 5 * 60 * 1000, 
+        staleTime: 30 * 1000, 
+        refetchOnMount: true,
+        refetchOnWindowFocus: true,
+        refetchOnReconnect: true,
+        refetchInterval: 60 * 1000, 
         retry: 2
     });
 }

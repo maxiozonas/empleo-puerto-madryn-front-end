@@ -8,7 +8,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="border-b bg-white sticky top-0 z-50 shadow-sm">
+    <header className="border-b bg-white sticky top-0 z-50 shadow-sm py-2">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <DesktopHeader />
         <MobileHeader isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
