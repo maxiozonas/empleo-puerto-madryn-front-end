@@ -10,6 +10,7 @@ import { useOfertas } from "@/lib/hooks/useOfertas";
 import { useSession } from "next-auth/react";
 import { enableOfertaAdmin, deleteOfertaAdmin } from "@/lib/api/ofertas";
 import Image from "next/image";
+import VolverButton from "@/components/ui/volver";
 
 export default function AdminPage() {
   const { data: session, status } = useSession();
@@ -40,10 +41,7 @@ export default function AdminPage() {
 
   if (status === "loading" || isLoading) {
     return (
-      <div className="min-h-screen flex flex-col justify-center items-center py-8">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-        <p className="mt-2 text-muted-foreground">Cargando...</p>
-      </div>
+      <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
     );
   }
 
@@ -71,15 +69,7 @@ export default function AdminPage() {
 
   return (
     <section className="container mx-auto py-6 px-4 min-h-screen">
-      <div className="flex items-center mb-6">
-        <Button
-          onClick={handleBack}
-          className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          <span>Volver</span>
-        </Button>
-      </div>
+      <VolverButton />
       <header className="mb-8 space-y-4">
         <h1 className="text-3xl font-bold text-center text-primary">Avisos Pendientes de Habilitación</h1>
         <p className="text-center text-muted-foreground">

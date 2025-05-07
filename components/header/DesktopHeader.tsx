@@ -53,9 +53,24 @@ export function DesktopHeader() {
 
       <div className="flex items-center gap-4">
         {isAuthenticated && process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(",").includes(session?.user.email as string) && (
-          <Button asChild className="text-muted-foreground hover:text-primary text-base">
-            <Link href="/admin">Administrar</Link>
-          </Button>
+          <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              className="text-muted-foreground hover:text-primary flex items-center gap-2 border-2 border-primary/30 rounded-md"
+            >
+              Administrar
+              <ChevronDown className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuItem asChild>
+              <Link href="/admin/imagenes">Gestionar Imágenes</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/admin">Gestionar Ofertas</Link>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         )}
         <Button
           className="bg-ocean-gradient text-white font-semibold py-2 px-6 rounded-md transition-all duration-300 hover:shadow-lg hover:scale-105 transform text-base"
