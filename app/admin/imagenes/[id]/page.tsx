@@ -2,8 +2,6 @@
 
 import { useParams } from "next/navigation";
 import { useCategorias, useCategoriaImages } from "@/lib/hooks/useCategorias";
-import Loader from "@/components/ui/loader";
-import Error from "@/components/ui/error";
 import VolverButton from "@/components/ui/volver";
 import Link from "next/link"; 
 import { CardContent } from "@/components/ui/card";
@@ -60,7 +58,7 @@ export default function CategoryPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {images?.map((imagen, index) => (
-            <Link key={index} href={`/admin/imagenes/${id}/${imagen}`}>
+            <Link key={index} href={`${imagen}`}>
               <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full hover:bg-gray-100 transition-colors">
                 {imagen}
               </CardContent>

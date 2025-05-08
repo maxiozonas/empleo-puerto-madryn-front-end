@@ -12,7 +12,7 @@ export function useCategorias() {
 }
 
 export function useCategoriaImages(id: string, token: string) {
-  return useQuery<String[], Error>({
+  return useQuery<string[], Error>({
     queryKey: ["categories", id],
     queryFn: () => fetchaAllCategoriasImages(id, token),
     staleTime: 5 * 60 * 1000,

@@ -1,8 +1,8 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect,useState } from "react";
-import { Anchor, BicepsFlexed, Book, BookUser, Briefcase, Building, ChartArea, CircleDollarSign, Coffee, Factory, Fish, Hammer, Handshake, HeartPulse, Laptop, Link, Loader2, Scissors, SquareChartGantt, Truck, Warehouse, Waypoints, Wrench } from "lucide-react";
+import { useEffect } from "react";
+import { Anchor, BicepsFlexed, Book, BookUser, Briefcase, Building, ChartArea, CircleDollarSign, Coffee, Factory, Fish, Hammer, Handshake, HeartPulse, Laptop, Loader2, Scissors, SquareChartGantt, Truck, Warehouse, Waypoints, Wrench } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useCategorias } from "@/lib/hooks/useCategorias";
@@ -12,8 +12,7 @@ import VolverButton from "@/components/ui/volver";
 
 export default function AdminImages() {
     const { data: session, status } = useSession();
-    const { data: categorias, isLoading: categoriasLoading } = useCategorias();
-    const [images, setImages] = useState([]);
+    const { data: categorias, isLoading: categoriasLoading } = useCategorias(); 
     const router = useRouter();
     
     useAuthCheck();

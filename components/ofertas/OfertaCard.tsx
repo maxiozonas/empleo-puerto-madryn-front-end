@@ -8,7 +8,7 @@ import { MapPin, Calendar, Edit, Trash2, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import logo from "@/public/lib/logo.jpeg";
+import logo from "@/public/logo.png";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
 
@@ -74,7 +74,7 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
               onError={() => setLogoError(true)} 
             />
             <Badge
-              className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-md"
+              className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-md line-clamp-1"
             >
               {oferta.categoria.nombre}
             </Badge>

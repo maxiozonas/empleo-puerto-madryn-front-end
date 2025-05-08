@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useAuthCheck } from "@/lib/hooks/useAuthCheck";
 import { useEffect, useState, useMemo } from "react";
 import { Oferta } from "@/lib/types/iOferta";
@@ -44,10 +44,6 @@ export default function AdminPage() {
       <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
     );
   }
-
-  const handleBack = () => {
-    router.push("/");
-  };
 
   const handleHabilitar = async (data: Oferta) => {
     try {
