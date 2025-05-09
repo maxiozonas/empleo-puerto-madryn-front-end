@@ -1,11 +1,25 @@
 import { Metadata } from "next";
 import { fetchOfertaBySlug } from "@/lib/api/ofertas";
+import { fetchRandomCategoriaImage } from "@/lib/api/categorias";
 import { Oferta } from "@/lib/types/iOferta";
 import OfertaDetalle from "./DetallesEmpleo";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     const resolvedParams = await params;
     const oferta: Oferta = await fetchOfertaBySlug(resolvedParams.slug);
+    
+    let ogImage = "/lib/logo.jpeg";
+    if (oferta.categoria?.id) {
+        try {
+            const randomImage = await fetchRandomCategoriaImage(oferta.categoria.id);
+            if (randomImage && randomImage !== "/lib/logo.jpeg") {
+                ogImage = randomImage;
+            }
+        } catch (error) {
+            console.error("Error fetching random category image:", error);
+        }
+    }
+    
     const title = `${oferta.titulo} - ${oferta.empresaConsultora} | Madryn Empleos`;
     const description = `Oferta laboral para ${oferta.titulo} en ${oferta.empresaConsultora}, Puerto Madryn, Chubut, Argentina. Postúlate ahora en Madryn Empleos.`;
 
@@ -19,12 +33,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             siteName: "Madryn Empleos",
             images: [
                 {
-                    url: oferta.logoUrl
-                        ? `${process.env.NEXT_PUBLIC_API_URL}${oferta.logoUrl}`
-                        : "/lib/logo.jpeg",
+                    url: ogImage.startsWith("http") 
+                        ? ogImage 
+                        : ogImage === "/lib/logo.jpeg"
+                            ? ogImage
+                            : `${process.env.NEXT_PUBLIC_API_URL}${ogImage}`,
                     width: 1200,
                     height: 630,
-                    alt: `Logo de ${oferta.empresaConsultora}`,
+                    alt: `${oferta.titulo} - ${oferta.empresaConsultora}`,
                 },
             ],
             locale: "es_AR",
@@ -34,9 +50,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
             card: "summary_large_image",
             title,
             description,
-            images: oferta.logoUrl
-                ? `${process.env.NEXT_PUBLIC_API_URL}${oferta.logoUrl}`
-                : "/lib/logo.jpeg",
+            images: ogImage.startsWith("http") 
+                ? ogImage 
+                : ogImage === "/lib/logo.jpeg"
+                    ? ogImage
+                    : `${process.env.NEXT_PUBLIC_API_URL}${ogImage}`,
         },
     };
 }

@@ -2,6 +2,24 @@ import { Categoria } from "../types/iCategoria";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
+export async function fetchRandomCategoriaImage(id: string): Promise<string> {
+    try {
+        const response = await fetch(`${apiUrl}/api/categorias/imagenes/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (!response.ok) {
+            return "/lib/logo.jpeg";
+        }
+        const data = await response.text();
+        return data;
+    } catch (err) {
+        throw new Error(err instanceof Error ? err.message : "Error desconocido al cargar las categorías");
+    }
+}
+
 
 export async function fetchCategorias(): Promise<Categoria[]> {
     try {
