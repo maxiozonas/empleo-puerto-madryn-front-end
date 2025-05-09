@@ -9,6 +9,7 @@ import { useCategorias } from "@/lib/hooks/useCategorias";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import VolverButton from "@/components/ui/volver";
+import Link from "next/link";
 
 export default function AdminImages() {
     const { data: session, status } = useSession();
@@ -71,13 +72,16 @@ export default function AdminImages() {
       }
 
     return (
-        <div className="mb-8">
+        <section className="container mx-auto py-6 px-4">
             <VolverButton />
-            <h1 className="text-3xl font-bold text-center text-primary">Gestionar Imágenes</h1>
-            <p className="text-center text-muted-foreground">
-                Revisa y gestiona las imágenes de las categorías de la app.
-            </p>
-            {categorias?.map((categoria) => (
+
+            <div className="text-center mb-10">
+                <h1 className="text-2xl lg:text-3xl font-bold text-primary mb-2 uppercase">Gestionar Imágenes</h1>
+                <p className="text-muted-foreground">Revisa y gestiona las imágenes de las categorías de la app.</p>
+            </div>
+    
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                {categorias?.map((categoria) => (
                 <Card
                     key={categoria.id}
                     className={cn(
@@ -86,18 +90,19 @@ export default function AdminImages() {
                     "bg-gradient-to-b from-white to-secondary/10 min-w-[280px]"
                     )}
                 >
-                    <a href={`/admin/imagenes/${categoria.id}`}>
+                    <Link href={`/admin/imagenes/${categoria.id}`}>
                         <CardContent className="p-6 flex flex-col items-center justify-center text-center h-full">
                             <div className="mb-4 rounded-full p-3 group-hover:text-primary">
                             {categoriasIcons[categoria.nombre] || <Briefcase className="h-6 w-6 text-blue-600" />}
                             </div>
                             <CardTitle className="text-lg font-semibold group-hover:text-primary text-foreground mb-2">
                             {categoria.nombre}
-                            </CardTitle>                
+                            </CardTitle>
                         </CardContent>
-                    </a>
+                    </Link>
                 </Card>
-            ))}
-        </div>
+                ))}
+            </div>
+        </section>
     );
 }

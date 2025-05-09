@@ -74,7 +74,7 @@ export async function createCategoriaImage(id: string, imageUrl: string, token: 
             headers: {
                 "Authorization": `Bearer ${token}`,
             },
-            body: JSON.stringify({ imageUrl }),
+            body:imageUrl as string,
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -82,8 +82,10 @@ export async function createCategoriaImage(id: string, imageUrl: string, token: 
         }
         const data = await response.json();
         return data as string;
-    } catch (err) {
-        throw new Error(err instanceof Error ? err.message : "Error desconocido al crear la categoría");
+    } catch (error) {
+        throw error instanceof Error 
+            ? error
+            : new Error(error instanceof Error ? error.message : "Error desconocido al crear la imagen de la categoría");
     }
 }
 
@@ -94,7 +96,7 @@ export async function deleteCategoriaImage(id: string, imageUrl: string, token: 
             headers: {
                 "Authorization": `Bearer ${token}`,
               },
-            body: JSON.stringify({ imageUrl }),
+            body: imageUrl as string,
         });
         if (!response.ok) {
             const errorText = await response.text();
@@ -102,28 +104,10 @@ export async function deleteCategoriaImage(id: string, imageUrl: string, token: 
         }
         const data = await response.json();
         return data as string;
-    } catch (err) {
-        throw new Error(err instanceof Error ? err.message : "Error desconocido al eliminar la categoría");
-    }
-}
-
-export async function updateCategoria(id: string, data: Partial<Categoria>, token: string): Promise<string> {
-    try {
-        const response = await fetch(`${apiUrl}/api/categorias/imagenes/${id}`, {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-              },
-            body: JSON.stringify(data),
-        });
-        if (!response.ok) {
-            const errorText = await response.text();
-            throw new Error(`Error ${response.status}: ${errorText}`);
-        }
-        const updatedData = await response.json();
-        return updatedData as string;
-    } catch (err) {
-        throw new Error(err instanceof Error ? err.message : "Error desconocido al actualizar la categoría");
+    } catch (error) {
+        throw error instanceof Error 
+            ? error
+            : new Error(error instanceof Error ? error.message : "Error desconocido al eliminar la imagen de la categoría");
     }
 }
 
