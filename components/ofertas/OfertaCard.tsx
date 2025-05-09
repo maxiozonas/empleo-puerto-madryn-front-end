@@ -4,11 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Oferta } from "@/lib/types/iOferta";
-import { MapPin, Calendar, Edit, Trash2, ArrowRight } from "lucide-react";
+import { MapPin, Calendar, Edit, Trash2, ArrowRight, Building } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import logo from "@/public/logo.png";
 import { Separator } from "../ui/separator";
 import { useState } from "react";
 
@@ -21,9 +20,9 @@ interface OfertaCardProps {
 
 const DEFAULT_LOGO_URL = "https://example.com/default-logo.png";
 
-const getLogoUrl = (logoUrl: string | null | undefined, defaultLogo: string): string => {
+const getLogoUrl = (logoUrl: string | null | undefined): string | null => {
   if (!logoUrl || logoUrl === DEFAULT_LOGO_URL) {
-    return defaultLogo;
+    return null;
   }
 
   const isExternalUrl = logoUrl.startsWith("http://") || logoUrl.startsWith("https://");
@@ -65,14 +64,20 @@ export function OfertaCard({ oferta: oferta, showEditOptions = false, onEdit, on
       >
         <CardHeader className="pb-2 pt-5">
           <div className="flex justify-between items-center gap-2 mb-1">
-            <Image
-              src={logoError ? logo : getLogoUrl(oferta.logoUrl, logo.src)}
-              alt={oferta.empresaConsultora || "Logo de la empresa"}
-              width={60}
-              height={60}
-              className="rounded-full h-12 w-12 object-cover"
-              onError={() => setLogoError(true)} 
-            />
+            {logoError || !getLogoUrl(oferta.logoUrl) ? (
+              <div className="rounded-full h-12 w-12 flex items-center justify-center bg-primary/10">
+                <Building className="h-6 w-6 text-primary" />
+              </div>
+            ) : (
+              <Image
+                src={getLogoUrl(oferta.logoUrl) as string}
+                alt={oferta.empresaConsultora || "Logo de la empresa"}
+                width={60}
+                height={60}
+                className="rounded-full h-12 w-12 object-cover"
+                onError={() => setLogoError(true)} 
+              />
+            )}
             <Badge
               className="bg-primary text-white border-primary font-semibold px-3 py-1 rounded-md line-clamp-1"
             >
