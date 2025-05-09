@@ -48,7 +48,7 @@ export default function CategoryPage() {
     deleteMutation.mutate(
       {categoriaId: id as string, imageUrl: imageUrl, token: session?.backendToken as string },
       {
-        onError: (err: { message: any; }) => {
+        onError: (err) => {
           console.error("Error al eliminar:", err);
           alert(err instanceof Error ? err.message : "Error desconocido al eliminar la imagen");
         },
